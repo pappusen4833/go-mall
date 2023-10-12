@@ -1,0 +1,9 @@
+.idea/
+*/.DS_Store
+runtime/logs/
+lastupdate.tmp
+yshop
+*.exe
+yshop.tar.gz
+go-mall.iml
+tmp/
