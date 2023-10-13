@@ -6,8 +6,8 @@
 package {{.BusinessName}}_service
 
 import (
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
 )
 
 type {{.ClassName}} struct {
