@@ -20,7 +20,7 @@ type StoreCart struct {
 }
 
 func (StoreCart) TableName() string {
-	return "yshop_store_cart"
+	return "store_cart"
 }
 
 // get all

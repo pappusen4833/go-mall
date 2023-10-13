@@ -18,7 +18,7 @@ type WechatMenu struct {
 }
 
 func (WechatMenu) TableName() string {
-	return "yshop_wechat_menu"
+	return "wechat_menu"
 }
 
 // get all

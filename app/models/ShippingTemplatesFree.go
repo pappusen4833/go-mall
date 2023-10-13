@@ -17,7 +17,7 @@ type ShippingTemplatesFree struct {
 }
 
 func (ShippingTemplatesFree) TableName() string {
-	return "yshop_shipping_templates_free"
+	return "shipping_templates_free"
 }
 
 func AddShippingTemplatesFree(m *ShippingTemplatesFree) error {

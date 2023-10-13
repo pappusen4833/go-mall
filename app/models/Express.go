@@ -14,7 +14,7 @@ type Express struct {
 }
 
 func (Express) TableName() string {
-	return "yshop_express"
+	return "express"
 }
 
 // get all

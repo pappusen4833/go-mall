@@ -24,7 +24,7 @@ type WechatArticle struct {
 }
 
 func (WechatArticle) TableName() string {
-	return "yshop_wechat_article"
+	return "wechat_article"
 }
 
 func (a *WechatArticle) Valid(v *validation.Validation) {

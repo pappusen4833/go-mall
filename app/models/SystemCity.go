@@ -20,7 +20,7 @@ type SystemCity struct {
 }
 
 func (SystemCity) TableName() string {
-	return "yshop_system_city"
+	return "system_city"
 }
 
 func GetAllSystemCity(maps interface{}) []SystemCity {
