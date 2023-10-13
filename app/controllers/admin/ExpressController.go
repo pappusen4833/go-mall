@@ -46,7 +46,7 @@ func (e *ExpressController) GetAll(c *gin.Context) {
 // @router / [post]
 func (e *ExpressController) Post(c *gin.Context) {
 	var (
-		model models.YshopExpress
+		model models.Express
 		appG  = app.Gin{C: c}
 	)
 
@@ -75,7 +75,7 @@ func (e *ExpressController) Post(c *gin.Context) {
 // @router / [put]
 func (e *ExpressController) Put(c *gin.Context) {
 	var (
-		model models.YshopExpress
+		model models.Express
 		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)

@@ -132,12 +132,12 @@ func PaySuccess(tx *gorm.DB, orderId, payType string) error {
 	orderInfo, _ := orderService.GetOrderInfo()
 
 	//修改订单状态
-	updateOrder := &models.YshopStoreOrder{
+	updateOrder := &models.StoreOrder{
 		Paid:    orderEnum.PAY_STATUS_1,
 		PayType: payType,
 		PayTime: time.Now(),
 	}
-	err = tx.Model(&models.YshopStoreOrder{}).Where("order_id = ?", orderId).Updates(updateOrder).Error
+	err = tx.Model(&models.StoreOrder{}).Where("order_id = ?", orderId).Updates(updateOrder).Error
 
 	if err != nil {
 		global.YSHOP_LOG.Error(err)

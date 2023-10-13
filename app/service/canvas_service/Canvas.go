@@ -17,14 +17,14 @@ type Canvas struct {
 
 	Enabled int
 
-	M *models.YshopStoreCanvas
+	M *models.StoreCanvas
 
 	Ids []int64
 }
 
 func (d *Canvas) Get() vo.ResultList {
-	var data models.YshopStoreCanvas
-	err := global.YSHOP_DB.Model(&models.YshopStoreCanvas{}).Where("terminal = ?", d.Terminal).First(&data).Error
+	var data models.StoreCanvas
+	err := global.YSHOP_DB.Model(&models.StoreCanvas{}).Where("terminal = ?", d.Terminal).First(&data).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 	}
@@ -35,12 +35,12 @@ func (d *Canvas) Save() error {
 	if d.M.Id == 0 {
 		return models.AddCanvas(d.M)
 	} else {
-		data := &models.YshopStoreCanvas{
+		data := &models.StoreCanvas{
 			Name:     d.M.Name,
 			Terminal: d.M.Terminal,
 			Json:     d.M.Json,
 		}
-		return global.YSHOP_DB.Model(&models.YshopStoreCanvas{}).Where("id = ?", d.M.Id).Updates(data).Error
+		return global.YSHOP_DB.Model(&models.StoreCanvas{}).Where("id = ?", d.M.Id).Updates(data).Error
 	}
 
 }

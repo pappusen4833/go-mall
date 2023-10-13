@@ -40,7 +40,7 @@ type User struct {
 	UserInfo *user.Info
 
 	Ip string
-	//M *models.YshopUser
+	//M *models.User
 	Dto *wechatUserDto.YshopUser
 
 	Money *userDto.UserMoney
@@ -51,15 +51,15 @@ type User struct {
 	RegParam    *params.RegParam
 	VerityParam *params.VerityParam
 
-	User *models.YshopUser
+	User *models.User
 }
 
 func (u *User) GetUserInfo() *wechatUserVo.User {
 	var (
 		userVO wechatUserVo.User
-		user   models.YshopUser
+		user   models.User
 	)
-	global.YSHOP_DB.Model(&models.YshopUser{}).Where("id = ?", u.Id).First(&user)
+	global.YSHOP_DB.Model(&models.User{}).Where("id = ?", u.Id).First(&user)
 	copier.Copy(&userVO, user)
 
 	return &userVO
@@ -78,11 +78,11 @@ func (u *User) GetUserDetail() *wechatUserVo.User {
 
 func (u *User) Reg() error {
 	var (
-		user models.YshopUser
+		user models.User
 		err  error
 	)
 	err = global.YSHOP_DB.
-		Model(&models.YshopUser{}).
+		Model(&models.User{}).
 		Where("username = ?", u.RegParam.Account).First(&user).Error
 	if err == nil {
 		return errors.New("用户已经存在")
@@ -93,7 +93,7 @@ func (u *User) Reg() error {
 		return errors.New("验证码不对")
 	}
 
-	uu := models.YshopUser{
+	uu := models.User{
 		Username: u.RegParam.Account,
 		Nickname: u.RegParam.Account,
 		Password: util.HashAndSalt([]byte(u.RegParam.Password)),
@@ -113,11 +113,11 @@ func (u *User) Reg() error {
 
 func (u *User) Verify() (string, error) {
 	var (
-		user models.YshopUser
+		user models.User
 		err  error
 	)
 	err = global.YSHOP_DB.
-		Model(&models.YshopUser{}).
+		Model(&models.User{}).
 		Where("username = ?", u.VerityParam.Phone).First(&user).Error
 	if err == nil {
 		return "", errors.New("手机已经注册过")
@@ -159,7 +159,7 @@ func (u *User) GetUserAll() vo.ResultList {
 
 func (u *User) Insert() error {
 	result, _ := json.Marshal(u.UserInfo)
-	user := models.YshopUser{
+	user := models.User{
 		Username:  u.UserInfo.OpenID,
 		Nickname:  u.UserInfo.Nickname,
 		Password:  util.HashAndSalt([]byte("123456")),
@@ -174,7 +174,7 @@ func (u *User) Insert() error {
 }
 
 func (u *User) Save() error {
-	user := models.YshopUser{
+	user := models.User{
 		RealName: u.Dto.RealName,
 		Mark:     u.Dto.Mark,
 		Phone:    u.Dto.Phone,
@@ -187,25 +187,25 @@ func (u *User) SaveMony() error {
 	var err error
 	if u.Money.Ptype == 1 {
 		err = global.YSHOP_DB.
-			Model(&models.YshopUser{}).
+			Model(&models.User{}).
 			Where("id = ?", u.Money.Id).
 			Update("now_money", gorm.Expr("now_money + ?", u.Money.Money)).Error
 	} else {
 		err = global.YSHOP_DB.
-			Model(&models.YshopUser{}).
+			Model(&models.User{}).
 			Where("id = ? and now_money >= ?", u.Money.Id, u.Money.Money).
 			Update("now_money", gorm.Expr("now_money - ?", u.Money.Money)).Error
 	}
 	return err
 }
 
-func (u *User) HLogin() (*models.YshopUser, error) {
+func (u *User) HLogin() (*models.User, error) {
 	var (
-		user models.YshopUser
+		user models.User
 		err  error
 	)
 	err = global.YSHOP_DB.
-		Model(&models.YshopUser{}).
+		Model(&models.User{}).
 		Where("username = ?", u.HLoginParam.Username).First(&user).Error
 	if err != nil {
 		return nil, errors.New("用户不存在")

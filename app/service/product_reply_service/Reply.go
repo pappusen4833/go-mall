@@ -23,7 +23,7 @@ type Reply struct {
 	PageNum  int
 	PageSize int
 
-	M *models.YshopStoreProductReply
+	M *models.StoreProductReply
 
 	Ids []int64
 

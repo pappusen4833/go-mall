@@ -5,33 +5,32 @@
  */
 package models
 
-
-type YshopExpress struct {
-	Code     string `json:"code"`
-	Name    string `json:"name"`
-	Sort     int `json:"sort"`
-	IsShow  int8    `json:"is_show"`
+type Express struct {
+	Code   string `json:"code"`
+	Name   string `json:"name"`
+	Sort   int    `json:"sort"`
+	IsShow int8   `json:"is_show"`
 	BaseModel
 }
 
-func (YshopExpress) TableName() string {
+func (Express) TableName() string {
 	return "yshop_express"
 }
 
 // get all
-func GetAllExpress(pageNUm int,pageSize int,maps interface{}) (int64,[]YshopExpress)  {
+func GetAllExpress(pageNUm int, pageSize int, maps interface{}) (int64, []Express) {
 	var (
 		total int64
-		lists []YshopExpress
+		lists []Express
 	)
 
-	db.Model(&YshopExpress{}).Where(maps).Count(&total)
+	db.Model(&Express{}).Where(maps).Count(&total)
 	db.Where(maps).Offset(pageNUm).Limit(pageSize).Find(&lists)
 
-	return total,lists
+	return total, lists
 }
 
-func AddExpress(m *YshopExpress) error {
+func AddExpress(m *Express) error {
 	var err error
 	if err = db.Create(m).Error; err != nil {
 		return err
@@ -40,7 +39,7 @@ func AddExpress(m *YshopExpress) error {
 	return err
 }
 
-func UpdateByExpress(m *YshopExpress) error {
+func UpdateByExpress(m *Express) error {
 	var err error
 	err = db.Updates(m).Error
 	if err != nil {
@@ -52,7 +51,7 @@ func UpdateByExpress(m *YshopExpress) error {
 
 func DelByExpress(ids []int64) error {
 	var err error
-	err = db.Where("id in (?)", ids).Delete(&YshopExpress{}).Error
+	err = db.Where("id in (?)", ids).Delete(&Express{}).Error
 	if err != nil {
 		return err
 	}

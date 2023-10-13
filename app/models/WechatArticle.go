@@ -7,49 +7,49 @@ package models
 
 import "github.com/astaxie/beego/validation"
 
-type YshopWechatArticle struct {
+type WechatArticle struct {
 	Title     string `json:"title"`
 	Author    string `json:"author"`
 	Image     string `json:"image"`
-	Synopsis  string    `json:"synopsis"`
+	Synopsis  string `json:"synopsis"`
 	Content   string `json:"content"`
-	Visit     int `json:"visit"`
-	Sort      int `json:"sort"`
+	Visit     int    `json:"visit"`
+	Sort      int    `json:"sort"`
 	Url       string `json:"url"`
-	Status    int `json:"status"`
-	ProductId int `json:"product_id"`
-	MediaId string `json:"media_id"`
-	IsPub int `json:"is_pub"`
+	Status    int    `json:"status"`
+	ProductId int    `json:"product_id"`
+	MediaId   string `json:"media_id"`
+	IsPub     int    `json:"is_pub"`
 	BaseModel
 }
 
-func (YshopWechatArticle) TableName() string {
+func (WechatArticle) TableName() string {
 	return "yshop_wechat_article"
 }
 
-func (a *YshopWechatArticle) Valid(v *validation.Validation) {
-  if a.Title == "" {
-  	v.SetError("title","标题不能为空")
-  }
+func (a *WechatArticle) Valid(v *validation.Validation) {
+	if a.Title == "" {
+		v.SetError("title", "标题不能为空")
+	}
 	if a.Author == "" {
-		v.SetError("author","作者不能为空")
+		v.SetError("author", "作者不能为空")
 	}
 }
 
 // get all
-func GetAllWechatArticle(pageNUm int, pageSize int, maps interface{}) (int64, []YshopWechatArticle) {
+func GetAllWechatArticle(pageNUm int, pageSize int, maps interface{}) (int64, []WechatArticle) {
 	var (
 		total int64
-		data  []YshopWechatArticle
+		data  []WechatArticle
 	)
 
-	db.Model(&YshopWechatArticle{}).Where(maps).Count(&total)
+	db.Model(&WechatArticle{}).Where(maps).Count(&total)
 	db.Where(maps).Offset(pageNUm).Limit(pageSize).Order("id desc").Find(&data)
 
 	return total, data
 }
 
-func AddWechatArticle(m *YshopWechatArticle) error {
+func AddWechatArticle(m *WechatArticle) error {
 	var err error
 	if err = db.Create(m).Error; err != nil {
 		return err
@@ -58,7 +58,7 @@ func AddWechatArticle(m *YshopWechatArticle) error {
 	return err
 }
 
-func UpdateByWechatArticle(m *YshopWechatArticle) error {
+func UpdateByWechatArticle(m *WechatArticle) error {
 	var err error
 	err = db.Save(m).Error
 	if err != nil {
@@ -70,7 +70,7 @@ func UpdateByWechatArticle(m *YshopWechatArticle) error {
 
 func DelByWechatArticle(ids []int64) error {
 	var err error
-	err = db.Where("id in (?)", ids).Delete(&YshopWechatArticle{}).Error
+	err = db.Where("id in (?)", ids).Delete(&WechatArticle{}).Error
 	if err != nil {
 		return err
 	}

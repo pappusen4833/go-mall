@@ -26,7 +26,7 @@ type Address struct {
 	PageNum  int
 	PageSize int
 
-	M *models.YshopUserAddress
+	M *models.UserAddress
 
 	Ids []int64
 
@@ -39,7 +39,7 @@ func (d *Address) DelAddress() error {
 	err := global.YSHOP_DB.
 		Where("uid = ?", d.Uid).
 		Where("id = ?", d.Id).
-		Delete(&models.YshopUserAddress{}).Error
+		Delete(&models.UserAddress{}).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 		return errors.New("操作失败")
@@ -59,13 +59,13 @@ func (d *Address) SetDefault() error {
 			tx.Commit()
 		}
 	}()
-	err = tx.Model(&models.YshopUserAddress{}).
+	err = tx.Model(&models.UserAddress{}).
 		Where("uid = ?", d.Uid).Update("is_default", 0).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 		return errors.New("操作失败")
 	}
-	err = tx.Model(&models.YshopUserAddress{}).
+	err = tx.Model(&models.UserAddress{}).
 		Where("id = ?", d.Id).Update("is_default", 1).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
@@ -75,7 +75,7 @@ func (d *Address) SetDefault() error {
 }
 
 // get list
-func (d *Address) GetList() ([]models.YshopUserAddress, int, int) {
+func (d *Address) GetList() ([]models.UserAddress, int, int) {
 	maps := make(map[string]interface{})
 	maps["uid"] = d.Uid
 	total, list := models.GetAllUserAddress(d.PageNum, d.PageSize, maps)
@@ -96,7 +96,7 @@ func (d *Address) AddOrUpdate() (int64, error) {
 			tx.Commit()
 		}
 	}()
-	userAddress := &models.YshopUserAddress{
+	userAddress := &models.UserAddress{
 		City:     d.Param.Address.City,
 		CityId:   d.Param.Address.CityId,
 		District: d.Param.Address.District,
@@ -109,7 +109,7 @@ func (d *Address) AddOrUpdate() (int64, error) {
 	}
 	if d.Param.IsDefault {
 		userAddress.IsDefault = 1
-		err = tx.Model(&models.YshopUserAddress{}).
+		err = tx.Model(&models.UserAddress{}).
 			Where("uid = ?", d.Uid).Update("is_default", 0).Error
 		if err != nil {
 			global.YSHOP_LOG.Error(err)
@@ -123,7 +123,7 @@ func (d *Address) AddOrUpdate() (int64, error) {
 			return 0, errors.New("操作失败")
 		}
 	} else {
-		err = tx.Model(&models.YshopUserAddress{}).
+		err = tx.Model(&models.UserAddress{}).
 			Where("id = ?", d.Param.Id).
 			Updates(userAddress).Error
 		if err != nil {
@@ -135,10 +135,10 @@ func (d *Address) AddOrUpdate() (int64, error) {
 }
 
 // get city list
-func (d *Address) GetCitys() []models.YshopSystemCity {
+func (d *Address) GetCitys() []models.SystemCity {
 	key := constant.CITY_LIST
 	if b, err := redis.Get(key); err == nil {
-		var city []models.YshopSystemCity
+		var city []models.SystemCity
 		err = json.Unmarshal(b, &city)
 		return city
 	}

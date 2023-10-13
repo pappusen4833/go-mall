@@ -11,20 +11,20 @@ import (
 	"time"
 )
 
-type YshopWechatMenu struct {
+type WechatMenu struct {
 	Key     string         `json:"key"`
 	Result  datatypes.JSON `json:"result"`
 	AddTime time.Time      `json:"addTIme" gorm:"autoCreateTime"`
 }
 
-func (YshopWechatMenu) TableName() string {
+func (WechatMenu) TableName() string {
 	return "yshop_wechat_menu"
 }
 
 // get all
-func GetWechatMenu(maps interface{}) YshopWechatMenu {
+func GetWechatMenu(maps interface{}) WechatMenu {
 	var (
-		data YshopWechatMenu
+		data WechatMenu
 	)
 
 	db.Where(maps).First(&data)
@@ -32,7 +32,7 @@ func GetWechatMenu(maps interface{}) YshopWechatMenu {
 	return data
 }
 
-func AddWechatMenu(m *YshopWechatMenu) error {
+func AddWechatMenu(m *WechatMenu) error {
 	var err error
 	if err = db.Create(m).Error; err != nil {
 		return err
@@ -41,9 +41,9 @@ func AddWechatMenu(m *YshopWechatMenu) error {
 	return err
 }
 
-func UpdateByWechatMenu(m *YshopWechatMenu) error {
+func UpdateByWechatMenu(m *WechatMenu) error {
 	var err error
-	err = db.Model(&YshopWechatMenu{}).Where("key", constant.YSHOP_WEICHAT_MENU).Updates(m).Error
+	err = db.Model(&WechatMenu{}).Where("key", constant.YSHOP_WEICHAT_MENU).Updates(m).Error
 	if err != nil {
 		return err
 	}

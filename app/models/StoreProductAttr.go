@@ -10,14 +10,14 @@ import (
 	"strings"
 )
 
-type YshopStoreProductAttr struct {
+type StoreProductAttr struct {
 	Id         int64  `json:"id"`
 	ProductId  int64  `json:"productId" valid:"Required;"`
 	AttrName   string `json:"attrName" valid:"Required;"`
 	AttrValues string `json:"attrValues" valid:"Required;"`
 }
 
-func (YshopStoreProductAttr) TableName() string {
+func (StoreProductAttr) TableName() string {
 	return "yshop_store_product_attr"
 }
 
@@ -32,10 +32,10 @@ func AddProductAttr(items []dto2.FormatDetail, productId int64) error {
 		}
 	}()
 
-	var attrGroup []YshopStoreProductAttr
+	var attrGroup []StoreProductAttr
 	for _, val := range items {
 		detailStr := strings.Join(val.Detail, ",")
-		var storeProductAttr = YshopStoreProductAttr{
+		var storeProductAttr = StoreProductAttr{
 			ProductId:  productId,
 			AttrName:   val.Value,
 			AttrValues: detailStr,
@@ -52,6 +52,6 @@ func AddProductAttr(items []dto2.FormatDetail, productId int64) error {
 }
 
 func DelByProductttr(productId int64) (err error) {
-	err = db.Where("product_id = ?", productId).Delete(YshopStoreProductAttr{}).Error
+	err = db.Where("product_id = ?", productId).Delete(StoreProductAttr{}).Error
 	return err
 }

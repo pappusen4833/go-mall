@@ -22,7 +22,7 @@ type Menu struct {
 
 	Dto menuDto.WechatMenu
 
-	M *models.YshopWechatMenu
+	M *models.WechatMenu
 }
 
 func (d *Menu) GetAll() vo.ResultList {
@@ -48,7 +48,7 @@ func (d *Menu) Insert() error {
 	}
 
 	result, _ := json.Marshal(d.Dto.Buttons)
-	model := models.YshopWechatMenu{
+	model := models.WechatMenu{
 		Key:    constant.YSHOP_WEICHAT_MENU,
 		Result: datatypes.JSON(result),
 	}

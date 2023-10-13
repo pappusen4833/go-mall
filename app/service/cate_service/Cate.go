@@ -15,7 +15,7 @@ type Cate struct {
 	Name    string
 	Enabled int
 
-	M *models.YshopStoreCategory
+	M *models.StoreCategory
 
 	Ids []int64
 }

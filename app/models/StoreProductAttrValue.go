@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-type YshopStoreProductAttrValue struct {
+type StoreProductAttrValue struct {
 	ID           int64   `json:"id"`
 	ProductId    int64   `json:"productId" valid:"Required;"`
 	Sku          string  `json:"sku" valid:"Required;"`
@@ -37,12 +37,12 @@ type YshopStoreProductAttrValue struct {
 	Integral     int     `json:"integral"`
 }
 
-func (YshopStoreProductAttrValue) TableName() string {
+func (StoreProductAttrValue) TableName() string {
 	return "yshop_store_product_attr_value"
 }
 
-func GetAttrValueByProductIdAndSku(productId int64, sku string) *YshopStoreProductAttrValue {
-	var attrValue YshopStoreProductAttrValue
+func GetAttrValueByProductIdAndSku(productId int64, sku string) *StoreProductAttrValue {
+	var attrValue StoreProductAttrValue
 	db.Where("product_id = ?", productId).Where("sku = ?", sku).First(&attrValue)
 
 	return &attrValue
@@ -58,7 +58,7 @@ func AddProductttrValue(attrs []dto2.ProductFormat, productId int64) error {
 			tx.Commit()
 		}
 	}()
-	var valueGroup []YshopStoreProductAttrValue
+	var valueGroup []StoreProductAttrValue
 	for _, val := range attrs {
 		stringList := util.GetValues(val.Detail)
 		sort.Strings(stringList)
@@ -72,7 +72,7 @@ func AddProductttrValue(attrs []dto2.ProductFormat, productId int64) error {
 		brokerageTwo, _ := strconv.ParseFloat(val.BrokerageTwo, 64)
 		stock, _ := strconv.Atoi(val.Stock)
 		uuid := ksuid.New()
-		var storeProductAttrValue = YshopStoreProductAttrValue{
+		var storeProductAttrValue = StoreProductAttrValue{
 			ProductId:    productId,
 			Sku:          str,
 			Price:        price,
@@ -105,6 +105,6 @@ func AddProductttrValue(attrs []dto2.ProductFormat, productId int64) error {
 }
 
 func DelByProductttrValue(productId int64) (err error) {
-	err = db.Where("product_id = ?", productId).Delete(YshopStoreProductAttrValue{}).Error
+	err = db.Where("product_id = ?", productId).Delete(StoreProductAttrValue{}).Error
 	return err
 }

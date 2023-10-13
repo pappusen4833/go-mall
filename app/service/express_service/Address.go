@@ -19,7 +19,7 @@ type Express struct {
 	PageNum  int
 	PageSize int
 
-	M *models.YshopExpress
+	M *models.Express
 
 	Ids []int64
 

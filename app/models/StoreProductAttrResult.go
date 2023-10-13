@@ -12,20 +12,20 @@ import (
 	"time"
 )
 
-type YshopStoreProductAttrResult struct {
+type StoreProductAttrResult struct {
 	ID         int64     `json:"id"`
 	ProductId  int64     `json:"productId" valid:"Required;"`
 	Result     string    `json:"sliderImage" valid:"Required;"`
 	ChangeTime time.Time `json:"change_time" gorm:"autoCreateTime"`
 }
 
-func (YshopStoreProductAttrResult) TableName() string {
+func (StoreProductAttrResult) TableName() string {
 	return "yshop_store_product_attr_result"
 }
 
 func GetProductAttrResult(productId int64) map[string]interface{} {
 	var (
-		result YshopStoreProductAttrResult
+		result StoreProductAttrResult
 		data   map[string]interface{}
 	)
 	db.Where("product_id = ?", productId).First(&result)
@@ -54,14 +54,14 @@ func AddProductAttrResult(items []dto2.FormatDetail, attrs []dto2.ProductFormat,
 		"value": attrs,
 	}
 	b, _ := json.Marshal(mapData)
-	db.Model(&YshopStoreProductAttrResult{}).Where("product_id = ?", productId).Count(&count)
+	db.Model(&StoreProductAttrResult{}).Where("product_id = ?", productId).Count(&count)
 	if count > 0 {
 		err = DelByProductAttrResult(productId)
 		if err != nil {
 			return err
 		}
 	}
-	var result = YshopStoreProductAttrResult{
+	var result = StoreProductAttrResult{
 		ProductId: productId,
 		Result:    string(b),
 	}
@@ -74,6 +74,6 @@ func AddProductAttrResult(items []dto2.FormatDetail, attrs []dto2.ProductFormat,
 }
 
 func DelByProductAttrResult(productId int64) (err error) {
-	err = db.Where("product_id = ?", productId).Delete(YshopStoreProductAttrResult{}).Error
+	err = db.Where("product_id = ?", productId).Delete(StoreProductAttrResult{}).Error
 	return err
 }

@@ -36,7 +36,7 @@ type Product struct {
 	PageNum  int
 	PageSize int
 
-	//M *models.YshopStoreProductRule
+	//M *models.StoreProductRule
 
 	Ids []int64
 
@@ -62,8 +62,8 @@ type Product struct {
 
 // get stock
 func (d *Product) GetStock() int {
-	var productAttrValue models.YshopStoreProductAttrValue
-	err := global.YSHOP_DB.Model(&models.YshopStoreProductAttrValue{}).
+	var productAttrValue models.StoreProductAttrValue
+	err := global.YSHOP_DB.Model(&models.StoreProductAttrValue{}).
 		Where("`unique` = ?", d.Unique).
 		Where("product_id = ?", d.Id).First(&productAttrValue).Error
 	if err != nil {
@@ -131,11 +131,11 @@ func (d *Product) GetList() ([]proVo.Product, int, int) {
 
 func (d *Product) GetDetail() (*proVo.ProductDetail, error) {
 	var (
-		storeProduct models.YshopStoreProduct
+		storeProduct models.StoreProduct
 		productVo    proVo.Product
 		err          error
 	)
-	err = global.YSHOP_DB.Model(&models.YshopStoreProduct{}).
+	err = global.YSHOP_DB.Model(&models.StoreProduct{}).
 		Where("id = ?", d.Id).
 		Where("is_show", 1).
 		First(&storeProduct).Error
@@ -169,7 +169,7 @@ func (d *Product) GetDetail() (*proVo.ProductDetail, error) {
 	detail := proVo.ProductDetail{
 		StoreInfo:    productVo,
 		ProductAttr:  returnMap["productAttr"].([]proVo.ProductAttr),
-		ProductValue: returnMap["productValue"].(map[string]models.YshopStoreProductAttrValue),
+		ProductValue: returnMap["productValue"].(map[string]models.StoreProductAttrValue),
 	}
 
 	return &detail, nil
@@ -178,20 +178,20 @@ func (d *Product) GetDetail() (*proVo.ProductDetail, error) {
 // 获取商品sku
 func getProductAttrDetail(productId int64) (map[string]interface{}, error) {
 	var (
-		storeProductAttrs    []models.YshopStoreProductAttr
-		productAttrValues    []models.YshopStoreProductAttrValue
-		mapp                 map[string]models.YshopStoreProductAttrValue
+		storeProductAttrs    []models.StoreProductAttr
+		productAttrValues    []models.StoreProductAttrValue
+		mapp                 map[string]models.StoreProductAttrValue
 		storeProductAttrList []proVo.ProductAttr
 		err                  error
 	)
-	err = global.YSHOP_DB.Model(&models.YshopStoreProductAttr{}).
+	err = global.YSHOP_DB.Model(&models.StoreProductAttr{}).
 		Where("product_id = ?", productId).
 		Order("attr_values asc").Find(&storeProductAttrs).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 		return nil, err
 	}
-	err = global.YSHOP_DB.Model(&models.YshopStoreProductAttrValue{}).
+	err = global.YSHOP_DB.Model(&models.StoreProductAttrValue{}).
 		Where("product_id = ?", productId).
 		Find(&productAttrValues).Error
 	if err != nil {
@@ -238,7 +238,7 @@ func (d *Product) PublicFormatAttr() map[string]interface{} {
 
 func (d *Product) AddOrSaveProduct() (err error) {
 	var (
-		model     models.YshopStoreProduct
+		model     models.StoreProduct
 		productId int64
 	)
 	m := d.Dto
@@ -282,7 +282,7 @@ func (d *Product) AddOrSaveProduct() (err error) {
 func (d *Product) GetProductInfo() map[string]interface{} {
 	var (
 		mapData           = make(map[string]interface{})
-		yshopStoreProduct models.YshopStoreProduct
+		yshopStoreProduct models.StoreProduct
 		productDto        productDto.StoreProductInfo
 	)
 	cateService := cate_service.Cate{}

@@ -24,14 +24,14 @@ type Article struct {
 	PageNum  int
 	PageSize int
 
-	M *models.YshopWechatArticle
+	M *models.WechatArticle
 
 	Ids []int64
 }
 
 func (d *Article) Get() vo.ResultList {
-	var data models.YshopWechatArticle
-	err := global.YSHOP_DB.Model(&models.YshopWechatArticle{}).Where("id = ?", d.Id).First(&data).Error
+	var data models.WechatArticle
+	err := global.YSHOP_DB.Model(&models.WechatArticle{}).Where("id = ?", d.Id).First(&data).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 	}
@@ -49,8 +49,8 @@ func (d *Article) GetAll() vo.ResultList {
 }
 
 func (d *Article) Pub() error {
-	var data models.YshopWechatArticle
-	err := global.YSHOP_DB.Model(&models.YshopWechatArticle{}).Where("id = ?", d.Id).First(&data).Error
+	var data models.WechatArticle
+	err := global.YSHOP_DB.Model(&models.WechatArticle{}).Where("id = ?", d.Id).First(&data).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 	}

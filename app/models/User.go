@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type YshopUser struct {
+type User struct {
 	Username       string         `json:"username"`
 	Password       string         `json:"password"`
 	RealName       string         `json:"real_name"`
@@ -22,15 +22,15 @@ type YshopUser struct {
 	Phone          string         `json:"phone"`
 	AddIp          string         `json:"add_ip"`
 	LastIp         string         `json:"last_ip"`
-	NowMoney       float64         `json:"nowMoney"`
+	NowMoney       float64        `json:"nowMoney"`
 	BrokeragePrice float64        `json:"brokeragePrice"`
-	Integral       int        `json:"integral"`
+	Integral       int            `json:"integral"`
 	SignNum        int            `json:"sign_num"`
 	Status         int8           `json:"status"`
 	Level          int8           `json:"level"`
 	SpreadUid      string         `json:"spreadUid"`
-	SpreadTime     time.Time            `json:"spread_time"`
-	UserType       string           `json:"userType"`
+	SpreadTime     time.Time      `json:"spread_time"`
+	UserType       string         `json:"userType"`
 	PayCount       int            `json:"payCount"`
 	SpreadCount    int            `json:"spread_count"`
 	Address        string         `json:"address"`
@@ -39,37 +39,35 @@ type YshopUser struct {
 	BaseModel
 }
 
-func (YshopUser) TableName() string {
-	return "yshop_user"
+func (User) TableName() string {
+	return "user"
 }
 
 // get all
-func GetAllWechatUser(pageNUm int, pageSize int, maps interface{}) (int64, []YshopUser) {
+func GetAllWechatUser(pageNUm int, pageSize int, maps interface{}) (int64, []User) {
 	var (
 		total int64
-		data  []YshopUser
+		data  []User
 	)
 
-	db.Model(&YshopUser{}).Where(maps).Count(&total)
+	db.Model(&User{}).Where(maps).Count(&total)
 	db.Where(maps).Offset(pageNUm).Limit(pageSize).Order("id desc").Find(&data)
 
 	return total, data
 }
 
-
-
-func AddWechatUser(m *YshopUser) error {
+func AddWechatUser(m *User) error {
 	var err error
-	if err = db.Select("username","nickname","password","real_name","avatar","add_ip","last_ip","user_type","wx_profile").Create(m).Error; err != nil {
+	if err = db.Select("username", "nickname", "password", "real_name", "avatar", "add_ip", "last_ip", "user_type", "wx_profile").Create(m).Error; err != nil {
 		return err
 	}
 
 	return err
 }
 
-func UpdateByWechatUsere(id int64,m *YshopUser) error {
+func UpdateByWechatUsere(id int64, m *User) error {
 	var err error
-	err = db.Model(&YshopUser{}).Where("id = ?",id).Updates(m).Error
+	err = db.Model(&User{}).Where("id = ?", id).Updates(m).Error
 	if err != nil {
 		return err
 	}
@@ -79,7 +77,7 @@ func UpdateByWechatUsere(id int64,m *YshopUser) error {
 
 func DelByWechatUser(ids []int64) error {
 	var err error
-	err = db.Where("id in (?)", ids).Delete(&YshopUser{}).Error
+	err = db.Where("id in (?)", ids).Delete(&User{}).Error
 	if err != nil {
 		return err
 	}

@@ -40,7 +40,7 @@ type Order struct {
 	PageNum  int
 	PageSize int
 
-	M *models.YshopStoreOrder
+	M *models.StoreOrder
 
 	Ids []int64
 
@@ -50,7 +50,7 @@ type Order struct {
 
 	Type string
 
-	User *models.YshopUser
+	User *models.User
 
 	ComputeParam *params.ComputeOrderParam
 	Key          string
@@ -139,7 +139,7 @@ func (d *Order) CancelOrder() error {
 	}
 
 	//删除订单
-	err = tx.Where("id = ?", order.Id).Delete(&models.YshopStoreOrder{}).Error
+	err = tx.Where("id = ?", order.Id).Delete(&models.StoreOrder{}).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 		return errors.New("取消失败-002")
@@ -190,9 +190,9 @@ func (d *Order) OrderComment() error {
 	if err != nil {
 		return errors.New("订单不存在")
 	}
-	var replys []models.YshopStoreProductReply
+	var replys []models.StoreProductReply
 	for _, data := range d.ReplyParam {
-		reply := models.YshopStoreProductReply{
+		reply := models.StoreProductReply{
 			Uid:          d.Uid,
 			Oid:          order.Id,
 			ProductId:    data.ProductId,
@@ -204,13 +204,13 @@ func (d *Order) OrderComment() error {
 		}
 		replys = append(replys, reply)
 	}
-	err = tx.Model(&models.YshopStoreProductReply{}).Select("uid", "oid", "product_id",
+	err = tx.Model(&models.StoreProductReply{}).Select("uid", "oid", "product_id",
 		"product_score", "service_score", "comment", "pics", "unique").Create(replys).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 		return errors.New("评价失败-0001")
 	}
-	err = tx.Model(&models.YshopStoreOrder{}).Where("id = ?", order.Id).Update("status", 3).Error
+	err = tx.Model(&models.StoreOrder{}).Where("id = ?", order.Id).Update("status", 3).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 		return errors.New("评价失败-0002")
@@ -238,7 +238,7 @@ func (d *Order) TakeOrder() error {
 	}
 
 	//修改订单状态
-	err = tx.Model(&models.YshopStoreOrder{}).Where("id = ?", order.Id).Update("status", 2).Error
+	err = tx.Model(&models.StoreOrder{}).Where("id = ?", order.Id).Update("status", 2).Error
 	//增加状态
 	err = models.AddStoreOrderStatus(tx, order.Id, "user_take_delivery", "用户已收货")
 
@@ -267,7 +267,7 @@ func (d *Order) TakeOrder() error {
 }
 
 // 创建订单
-func (d *Order) CreateOrder() (*models.YshopStoreOrder, error) {
+func (d *Order) CreateOrder() (*models.StoreOrder, error) {
 	var err error
 	tx := global.YSHOP_DB.Begin()
 	defer func() {
@@ -291,13 +291,13 @@ func (d *Order) CreateOrder() (*models.YshopStoreOrder, error) {
 	//todo 门店
 
 	var (
-		userAddress models.YshopUserAddress
+		userAddress models.UserAddress
 		totalNum    = 0
 		cartIds     = make([]string, 0)
 		//integral = 0
 		gainIntegral = 0
 	)
-	err = global.YSHOP_DB.Model(&models.YshopUserAddress{}).
+	err = global.YSHOP_DB.Model(&models.UserAddress{}).
 		Where("uid = ?", d.Uid).
 		Where("id = ?", d.OrderParam.AddressId).
 		First(&userAddress).Error
@@ -325,7 +325,7 @@ func (d *Order) CreateOrder() (*models.YshopStoreOrder, error) {
 	worker, _ := util.NewWorker(int64(1))
 	orderSn := worker.GetId()
 	detailAddr := userAddress.Province + " " + userAddress.City + " " + userAddress.District + " " + userAddress.Detail
-	storeOrder := &models.YshopStoreOrder{
+	storeOrder := &models.StoreOrder{
 		Uid:            d.Uid,
 		OrderId:        strconv.FormatInt(orderSn, 10),
 		RealName:       userAddress.RealName,
@@ -350,7 +350,7 @@ func (d *Order) CreateOrder() (*models.YshopStoreOrder, error) {
 		ShippingType:   d.OrderParam.ShippingType,
 		PayType:        d.OrderParam.PayType,
 	}
-	err = tx.Model(&models.YshopStoreOrder{}).
+	err = tx.Model(&models.StoreOrder{}).
 		Select("uid", "order_id", "real_name", "user_phone", "user_address", "cart_id", "total_num",
 			"total_price", "total_postage", "coupon_id", "coupon_price", "pay_price", "pay_postage", "deduction_price",
 			"paid", "use_integral", "back_integral", "gain_integral", "mark", "unique", "shipping_type", "pay_type").
@@ -360,7 +360,7 @@ func (d *Order) CreateOrder() (*models.YshopStoreOrder, error) {
 	}
 	//todo 扣积分
 	//todo 消费优惠券
-	orderInfoList := make([]models.YshopStoreOrderCartInfo, 0)
+	orderInfoList := make([]models.StoreOrderCartInfo, 0)
 	//减库存加销量
 	for _, vo := range cartInfo {
 		err = tx.Exec("update yshop_store_product_attr_value set stock=stock - ?, sales=sales + ?"+
@@ -378,7 +378,7 @@ func (d *Order) CreateOrder() (*models.YshopStoreOrder, error) {
 
 		b, _ := json.Marshal(vo)
 		uuid := ksuid.New()
-		orderCartInfo := models.YshopStoreOrderCartInfo{
+		orderCartInfo := models.StoreOrderCartInfo{
 			Oid:          storeOrder.Id,
 			OrderId:      storeOrder.OrderId,
 			CartId:       vo.Id,
@@ -391,7 +391,7 @@ func (d *Order) CreateOrder() (*models.YshopStoreOrder, error) {
 	}
 
 	//保存购物车商品信息
-	err = tx.Model(&models.YshopStoreOrderCartInfo{}).Create(orderInfoList).Error
+	err = tx.Model(&models.StoreOrderCartInfo{}).Create(orderInfoList).Error
 	if err != nil {
 		return nil, errors.New("订单创建失败-00001")
 	}
@@ -409,7 +409,7 @@ func (d *Order) CreateOrder() (*models.YshopStoreOrder, error) {
 
 func (d *Order) GetOrderInfo() (*ordervo.StoreOrder, error) {
 	var (
-		order *models.YshopStoreOrder
+		order *models.StoreOrder
 		vo    ordervo.StoreOrder
 	)
 
@@ -418,7 +418,7 @@ func (d *Order) GetOrderInfo() (*ordervo.StoreOrder, error) {
 	if d.Uid > 0 {
 		maps["uid"] = d.Uid
 	}
-	err := global.YSHOP_DB.Model(&models.YshopStoreOrder{}).
+	err := global.YSHOP_DB.Model(&models.StoreOrder{}).
 		Where(maps).First(&order).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
@@ -432,11 +432,11 @@ func (d *Order) GetOrderInfo() (*ordervo.StoreOrder, error) {
 // 处理订单状态
 func HandleOrder(order *ordervo.StoreOrder) *ordervo.StoreOrder {
 	var (
-		orderInfoList []models.YshopStoreOrderCartInfo
+		orderInfoList []models.StoreOrderCartInfo
 		cart          cartVo.Cart
 		statusDto     orderDto.Status
 	)
-	global.YSHOP_DB.Model(&models.YshopStoreOrderCartInfo{}).Where("oid = ?", order.Id).Find(&orderInfoList)
+	global.YSHOP_DB.Model(&models.StoreOrderCartInfo{}).Where("oid = ?", order.Id).Find(&orderInfoList)
 	cartInfo := make([]cartVo.Cart, 0)
 	for _, orderInfo := range orderInfoList {
 		json.Unmarshal([]byte(orderInfo.CartInfo), &cart)
@@ -494,8 +494,8 @@ func (d *Order) Check() (map[string]interface{}, error) {
 	if d.Key == "" {
 		return nil, errors.New("参数错误")
 	}
-	var order *models.YshopStoreOrder
-	error := global.YSHOP_DB.Model(&models.YshopStoreOrder{}).
+	var order *models.StoreOrder
+	error := global.YSHOP_DB.Model(&models.StoreOrder{}).
 		Where("`unique` = ?", d.Key).
 		Where("uid = ?", d.Uid).First(&order).Error
 	if error == nil {
@@ -574,10 +574,10 @@ func (d *Order) ConfirmOrder() (*ordervo.ConfirmOrder, error) {
 	var (
 		deduction      = false //抵扣
 		enableIntegral = true  //积分
-		userAddress    models.YshopUserAddress
+		userAddress    models.UserAddress
 	)
 	//获取默认地址
-	global.YSHOP_DB.Model(&models.YshopUserAddress{}).
+	global.YSHOP_DB.Model(&models.UserAddress{}).
 		Where("uid = ?", d.Uid).
 		Where("is_default = ?", 1).
 		First(&userAddress)
@@ -631,7 +631,7 @@ func delCacheOrderInfo(uid int64, key string) {
 	redis.Delete(newKey)
 }
 
-func getOrderPriceGroup(cartInfo []cartVo.Cart, userAddress *models.YshopUserAddress) orderDto.PriceGroup {
+func getOrderPriceGroup(cartInfo []cartVo.Cart, userAddress *models.UserAddress) orderDto.PriceGroup {
 	var (
 		//storePostage float64
 		//storeFreePostage float64
@@ -705,12 +705,12 @@ func (d *Order) GetAll() vo.ResultList {
 	total, list := models.GetAdminAllOrder(d.PageNum, d.PageSize, maps)
 
 	var (
-		orderInfoList []models.YshopStoreOrderCartInfo
+		orderInfoList []models.StoreOrderCartInfo
 		cart          cartVo.Cart
-		newList       []models.YshopStoreOrder
+		newList       []models.StoreOrder
 	)
 	for _, order := range list {
-		global.YSHOP_DB.Model(&models.YshopStoreOrderCartInfo{}).Where("oid = ?", order.Id).Find(&orderInfoList)
+		global.YSHOP_DB.Model(&models.StoreOrderCartInfo{}).Where("oid = ?", order.Id).Find(&orderInfoList)
 		cartInfo := make([]cartVo.Cart, 0)
 		for _, orderInfo := range orderInfoList {
 			json.Unmarshal([]byte(orderInfo.CartInfo), &cart)
@@ -807,8 +807,8 @@ func (d *Order) Deliver() error {
 	if d.M.Status != 0 {
 		return errors.New("订单状态错误")
 	}
-	var express models.YshopExpress
-	err := global.YSHOP_DB.Model(&models.YshopExpress{}).Where("name = ?", d.M.DeliveryName).First(&express).Error
+	var express models.Express
+	err := global.YSHOP_DB.Model(&models.Express{}).Where("name = ?", d.M.DeliveryName).First(&express).Error
 	if err != nil {
 		return errors.New("请先添加快递公司")
 	}

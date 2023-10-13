@@ -21,7 +21,7 @@ type Rule struct {
 	PageNum  int
 	PageSize int
 
-	M *models.YshopStoreProductRule
+	M *models.StoreProductRule
 
 	Ids []int64
 
@@ -42,13 +42,13 @@ func (d *Rule) AddOrSave() error {
 	jsonstr, _ := json.Marshal(d.Dto.RuleValue)
 	ruleValue := string(jsonstr)
 	if d.Id > 0 {
-		model := &models.YshopStoreProductRule{
+		model := &models.StoreProductRule{
 			RuleName:  d.Dto.RuleName,
 			RuleValue: ruleValue,
 		}
 		return models.UpdateByProductRule(d.Id, model)
 	} else {
-		model := &models.YshopStoreProductRule{
+		model := &models.StoreProductRule{
 			RuleName:  d.Dto.RuleName,
 			RuleValue: ruleValue,
 		}

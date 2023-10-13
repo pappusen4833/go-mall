@@ -31,7 +31,7 @@ type Cart struct {
 	PageNum  int
 	PageSize int
 
-	M *models.YshopStoreCart
+	M *models.StoreCart
 
 	Ids []int64
 
@@ -47,10 +47,10 @@ type Cart struct {
 // update cart num
 func (d *Cart) ChangeCartNum() error {
 	var (
-		cart models.YshopStoreCart
+		cart models.StoreCart
 		err  error
 	)
-	err = global.YSHOP_DB.Model(&models.YshopStoreCart{}).
+	err = global.YSHOP_DB.Model(&models.StoreCart{}).
 		Where("uid = ?", d.Uid).
 		Where("id = ?", d.NumParam.Id).
 		First(&cart).Error
@@ -66,7 +66,7 @@ func (d *Cart) ChangeCartNum() error {
 		return nil
 	}
 
-	err = global.YSHOP_DB.Model(&models.YshopStoreCart{}).
+	err = global.YSHOP_DB.Model(&models.StoreCart{}).
 		Where("id = ?", cart.Id).
 		Update("cart_num", d.NumParam.Number).Error
 	if err != nil {
@@ -91,12 +91,12 @@ func (d *Cart) GetCartList() map[string]interface{} {
 	//	maps["id"] = d.Ids
 	//}
 	var (
-		carts   []models.YshopStoreCart
+		carts   []models.StoreCart
 		valid   = make([]cartVo.Cart, 0)
 		invalid = make([]cartVo.Cart, 0)
 		error   error
 	)
-	error = global.YSHOP_DB.Model(&models.YshopStoreCart{}).
+	error = global.YSHOP_DB.Model(&models.StoreCart{}).
 		Where(maps).Find(&carts).Error
 	if error != nil {
 		global.YSHOP_LOG.Error(error)
@@ -108,18 +108,18 @@ func (d *Cart) GetCartList() map[string]interface{} {
 
 	for _, cart := range carts {
 		var (
-			storeProduct models.YshopStoreProduct
+			storeProduct models.StoreProduct
 			productVo    productVo.Product
 			cartVo       cartVo.Cart
 		)
-		err := global.YSHOP_DB.Model(&models.YshopStoreProduct{}).
+		err := global.YSHOP_DB.Model(&models.StoreProduct{}).
 			Where("id = ?", cart.ProductId).
 			First(&storeProduct).Error
 		copier.Copy(&productVo, storeProduct)
 		copier.Copy(&cartVo, cart)
 		if err != nil {
 			global.YSHOP_LOG.Error(err)
-			global.YSHOP_DB.Where("id = ?", cart.Id).Delete(&models.YshopStoreCart{})
+			global.YSHOP_DB.Where("id = ?", cart.Id).Delete(&models.StoreCart{})
 			continue
 		}
 		ee := CheckStock(cart.ProductId, cart.CartNum, cart.ProductAttrUnique)
@@ -129,8 +129,8 @@ func (d *Cart) GetCartList() map[string]interface{} {
 			continue
 		}
 		//获取有效购物车
-		var productAttrValue models.YshopStoreProductAttrValue
-		global.YSHOP_DB.Model(&models.YshopStoreProductAttrValue{}).
+		var productAttrValue models.StoreProductAttrValue
+		global.YSHOP_DB.Model(&models.StoreProductAttrValue{}).
 			Where("`unique` = ?", cart.ProductAttrUnique).First(&productAttrValue)
 		productVo.AttrInfo = productAttrValue
 		cartVo.ProductInfo = productVo
@@ -167,8 +167,8 @@ func (d *Cart) AddCart() (int64, error) {
 	if err != nil {
 		return 0, err
 	}
-	var cart models.YshopStoreCart
-	whereCart := &models.YshopStoreCart{
+	var cart models.StoreCart
+	whereCart := &models.StoreCart{
 		Uid:               d.Uid,
 		IsPay:             orderEnum.PAY_STATUS_0,
 		ProductAttrUnique: d.Param.UniqueId,
@@ -178,13 +178,13 @@ func (d *Cart) AddCart() (int64, error) {
 		CombinationId:     d.Param.CombinationId,
 		SeckillId:         d.Param.SeckillId,
 	}
-	err = global.YSHOP_DB.Model(&models.YshopStoreCart{}).
+	err = global.YSHOP_DB.Model(&models.StoreCart{}).
 		Where(whereCart).
 		Where("is_new = ?", d.Param.IsNew).
 		Order("id desc").First(&cart).Error
 	if err != nil {
 		whereCart.CartNum = d.Param.CartNum
-		err = global.YSHOP_DB.Model(&models.YshopStoreCart{}).Create(whereCart).Error
+		err = global.YSHOP_DB.Model(&models.StoreCart{}).Create(whereCart).Error
 		if err != nil {
 			return 0, errors.New("加入购物车失败")
 		}
@@ -194,7 +194,7 @@ func (d *Cart) AddCart() (int64, error) {
 		if cartEnum.NEW_O == d.Param.IsNew {
 			cart.CartNum = cart.CartNum + d.Param.CartNum
 		}
-		err = global.YSHOP_DB.Model(&models.YshopStoreCart{}).
+		err = global.YSHOP_DB.Model(&models.StoreCart{}).
 			Where("id = ?", cart.Id).Save(cart).Error
 		if err != nil {
 			return 0, errors.New("加入购物车失败")
@@ -206,10 +206,10 @@ func (d *Cart) AddCart() (int64, error) {
 
 func CheckStock(productId int64, cartNum int, unique string) error {
 	var (
-		storeProduct models.YshopStoreProduct
+		storeProduct models.StoreProduct
 		err          error
 	)
-	err = global.YSHOP_DB.Model(&models.YshopStoreProduct{}).
+	err = global.YSHOP_DB.Model(&models.StoreProduct{}).
 		Where("id = ?", productId).
 		Where("is_show", 1).
 		First(&storeProduct).Error

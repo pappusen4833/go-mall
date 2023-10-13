@@ -12,13 +12,13 @@ import (
 
 //
 
-type YshopStoreProductRule struct {
+type StoreProductRule struct {
 	RuleName  string `json:"ruleName" valid:"Required;"`
 	RuleValue string `json:"ruleValue" valid:"Required;"`
 	BaseModel
 }
 
-func (YshopStoreProductRule) TableName() string {
+func (StoreProductRule) TableName() string {
 	return "yshop_store_product_rule"
 }
 
@@ -26,10 +26,10 @@ func (YshopStoreProductRule) TableName() string {
 func GetAllProductRule(pageNUm int, pageSize int, maps interface{}) (int64, []dto2.ProductRule) {
 	var (
 		total   int64
-		data    []YshopStoreProductRule
+		data    []StoreProductRule
 		retData []dto2.ProductRule
 	)
-	db.Model(&YshopStoreProductRule{}).Where(maps).Count(&total)
+	db.Model(&StoreProductRule{}).Where(maps).Count(&total)
 	db.Where(maps).Offset(pageNUm).Limit(pageSize).Order("id desc").Find(&data)
 
 	for _, rule := range data {
@@ -48,7 +48,7 @@ func GetAllProductRule(pageNUm int, pageSize int, maps interface{}) (int64, []dt
 	return total, retData
 }
 
-func AddProductRule(m *YshopStoreProductRule) error {
+func AddProductRule(m *StoreProductRule) error {
 	var err error
 	if err = db.Create(m).Error; err != nil {
 		return err
@@ -57,9 +57,9 @@ func AddProductRule(m *YshopStoreProductRule) error {
 	return err
 }
 
-func UpdateByProductRule(id int64, m *YshopStoreProductRule) error {
+func UpdateByProductRule(id int64, m *StoreProductRule) error {
 	var err error
-	err = db.Model(&YshopStoreProductRule{}).Where("id = ?", id).Updates(m).Error
+	err = db.Model(&StoreProductRule{}).Where("id = ?", id).Updates(m).Error
 	if err != nil {
 		return err
 	}
@@ -69,7 +69,7 @@ func UpdateByProductRule(id int64, m *YshopStoreProductRule) error {
 
 func DelByProductRulee(ids []int64) error {
 	var err error
-	err = db.Model(&YshopStoreProductRule{}).Where("id in (?)", ids).Update("is_del", 1).Error
+	err = db.Model(&StoreProductRule{}).Where("id in (?)", ids).Update("is_del", 1).Error
 	if err != nil {
 		return err
 	}
