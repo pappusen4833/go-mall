@@ -8,8 +8,8 @@ package front
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
-	"go-mall/app/service/canvas_service"
-	"go-mall/app/service/product_service"
+	"go-mall/app/services/canvas_service"
+	"go-mall/app/services/product_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	productEnum "go-mall/pkg/enums/product"

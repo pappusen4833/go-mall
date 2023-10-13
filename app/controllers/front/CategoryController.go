@@ -7,7 +7,7 @@ package front
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-mall/app/service/cate_service"
+	"go-mall/app/services/cate_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	"net/http"

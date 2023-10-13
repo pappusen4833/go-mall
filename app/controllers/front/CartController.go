@@ -8,7 +8,7 @@ package front
 import (
 	"github.com/gin-gonic/gin"
 	"go-mall/app/params"
-	"go-mall/app/service/cart_service"
+	"go-mall/app/services/cart_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	"go-mall/pkg/global"

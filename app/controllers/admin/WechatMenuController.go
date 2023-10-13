@@ -7,8 +7,8 @@ package admin
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-mall/app/service/wechat_menu_service"
-	dto2 "go-mall/app/service/wechat_menu_service/dto"
+	"go-mall/app/services/wechat_menu_service"
+	dto2 "go-mall/app/services/wechat_menu_service/dto"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	"net/http"

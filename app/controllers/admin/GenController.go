@@ -10,7 +10,7 @@ import (
 	"github.com/unknwon/com"
 	"go-mall/app/models"
 	"go-mall/app/params/admin"
-	"go-mall/app/service/gen_service"
+	"go-mall/app/services/gen_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	"go-mall/pkg/util"

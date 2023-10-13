@@ -7,7 +7,7 @@ package admin
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-mall/app/service/log_service"
+	"go-mall/app/services/log_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	"go-mall/pkg/util"

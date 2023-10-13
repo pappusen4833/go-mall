@@ -6,7 +6,7 @@
 package models
 
 import (
-	dto2 "go-mall/app/service/menu_service/dto"
+	dto2 "go-mall/app/services/menu_service/dto"
 	"go-mall/pkg/constant"
 	"go-mall/pkg/runtime"
 )

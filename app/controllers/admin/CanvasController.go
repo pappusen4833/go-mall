@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
 	"go-mall/app/models"
-	"go-mall/app/service/canvas_service"
+	"go-mall/app/services/canvas_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	"net/http"

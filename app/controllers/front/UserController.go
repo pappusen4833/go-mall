@@ -7,8 +7,8 @@ package front
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-mall/app/service/product_relation_service"
-	"go-mall/app/service/wechat_user_service"
+	"go-mall/app/services/product_relation_service"
+	"go-mall/app/services/wechat_user_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	"go-mall/pkg/jwt"

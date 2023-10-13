@@ -8,7 +8,7 @@ package front
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/silenceper/wechat/v2/officialaccount/message"
-	"go-mall/app/service/wechat_user_service"
+	"go-mall/app/services/wechat_user_service"
 	"go-mall/pkg/global"
 	"go-mall/pkg/util"
 )

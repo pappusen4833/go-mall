@@ -6,7 +6,7 @@
 package models
 
 import (
-	dto2 "go-mall/app/service/product_service/dto"
+	dto2 "go-mall/app/services/product_service/dto"
 	"strings"
 )
 

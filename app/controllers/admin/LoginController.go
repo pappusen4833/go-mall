@@ -10,7 +10,7 @@ import (
 	"github.com/mojocn/base64Captcha"
 	"go-mall/app/models/dto"
 	"go-mall/app/models/vo"
-	"go-mall/app/service/user_service"
+	"go-mall/app/services/user_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	"go-mall/pkg/jwt"
