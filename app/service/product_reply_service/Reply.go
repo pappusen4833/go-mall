@@ -7,30 +7,29 @@ package product_reply_service
 
 import (
 	"github.com/jinzhu/copier"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
-	vo2 "yixiang.co/go-mall/app/service/product_service/vo"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/util"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
+	vo2 "go-mall/app/service/product_service/vo"
+	"go-mall/pkg/global"
+	"go-mall/pkg/util"
 )
 
 type Reply struct {
-	Id int64
+	Id   int64
 	Name string
 
 	Enabled int
 
-	PageNum int
+	PageNum  int
 	PageSize int
 
 	M *models.YshopStoreProductReply
 
 	Ids []int64
 
-	Uid int64
+	Uid       int64
 	ProductId int64
-	Type int
-
+	Type      int
 }
 
 ////add collect
@@ -86,8 +85,8 @@ type Reply struct {
 //	return true
 //}
 
-//评论列表
-func (d *Reply) GetList() ([]vo2.ProductReply,int,int) {
+// 评论列表
+func (d *Reply) GetList() ([]vo2.ProductReply, int, int) {
 	maps := make(map[string]interface{})
 	if d.Name != "" {
 		maps["name"] = d.Name
@@ -96,18 +95,16 @@ func (d *Reply) GetList() ([]vo2.ProductReply,int,int) {
 		maps["product_id"] = d.ProductId
 	}
 
-
 	var replyVo []vo2.ProductReply
 
-
-	total,list := models.GetAllProductReply(d.PageNum,d.PageSize,maps)
+	total, list := models.GetAllProductReply(d.PageNum, d.PageSize, maps)
 	e := copier.Copy(&replyVo, list)
 	if e != nil {
 		global.YSHOP_LOG.Error(e)
 	}
 	totalNum := util.Int64ToInt(total)
-	totalPage := util.GetTotalPage(totalNum,d.PageSize)
-	return  replyVo,totalNum,totalPage
+	totalPage := util.GetTotalPage(totalNum, d.PageSize)
+	return replyVo, totalNum, totalPage
 }
 
 func (d *Reply) GetAll() vo.ResultList {
@@ -119,11 +116,9 @@ func (d *Reply) GetAll() vo.ResultList {
 		maps["product_id"] = d.ProductId
 	}
 
-	total,list := models.GetAllProductReply(d.PageNum,d.PageSize,maps)
-	return vo.ResultList{Content: list,TotalElements: total}
+	total, list := models.GetAllProductReply(d.PageNum, d.PageSize, maps)
+	return vo.ResultList{Content: list, TotalElements: total}
 }
-
-
 
 func (d *Reply) Insert() error {
 	return models.AddStoreProductReply(d.M)

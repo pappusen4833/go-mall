@@ -3,19 +3,17 @@ package admin
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
+	"go-mall/app/service/product_service"
+	dto2 "go-mall/app/service/product_service/dto"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/util"
 	"net/http"
-	"yixiang.co/go-mall/app/service/product_service"
-	dto2 "yixiang.co/go-mall/app/service/product_service/dto"
-	"yixiang.co/go-mall/pkg/app"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 // 商品 api
 type StoreProductController struct {
 }
-
-
 
 // @Title 商品列表
 // @Description 商品列表
@@ -25,16 +23,16 @@ func (e *StoreProductController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
 	)
-	enabled := com.StrTo(c.DefaultQuery("isShow","-1")).MustInt()
-	name := c.DefaultQuery("blurry","")
+	enabled := com.StrTo(c.DefaultQuery("isShow", "-1")).MustInt()
+	name := c.DefaultQuery("blurry", "")
 	productService := product_service.Product{
-		Enabled: enabled,
-		Name: name,
+		Enabled:  enabled,
+		Name:     name,
 		PageSize: util.GetSize(c),
-		PageNum: util.GetPage(c),
+		PageNum:  util.GetPage(c),
 	}
 	vo := productService.GetAll()
-	appG.Response(http.StatusOK,constant.SUCCESS,vo)
+	appG.Response(http.StatusOK, constant.SUCCESS, vo)
 }
 
 // @Title 获取商品信息
@@ -50,7 +48,7 @@ func (e *StoreProductController) GetInfo(c *gin.Context) {
 		Id: id,
 	}
 	vo := productService.GetProductInfo()
-	appG.Response(http.StatusOK,constant.SUCCESS,vo)
+	appG.Response(http.StatusOK, constant.SUCCESS, vo)
 }
 
 // @Title 商品添加
@@ -62,9 +60,9 @@ func (e *StoreProductController) Post(c *gin.Context) {
 		dto  dto2.StoreProduct
 		appG = app.Gin{C: c}
 	)
-	httpCode, errCode := app.BindAndValid(c,&dto)
+	httpCode, errCode := app.BindAndValid(c, &dto)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
 	productService := product_service.Product{
@@ -72,11 +70,11 @@ func (e *StoreProductController) Post(c *gin.Context) {
 	}
 
 	if err := productService.AddOrSaveProduct(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 
 }
 
@@ -92,15 +90,15 @@ func (e *StoreProductController) OnSale(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt64()
 	productService := product_service.Product{
 		SaleDto: dto,
-		Id: id,
+		Id:      id,
 	}
 
 	if err := productService.OnSaleByProduct(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 
 }
 
@@ -110,7 +108,7 @@ func (e *StoreProductController) OnSale(c *gin.Context) {
 // @router /:id [delete]
 func (e *StoreProductController) Delete(c *gin.Context) {
 	var (
-		ids []int64
+		ids  []int64
 		appG = app.Gin{C: c}
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
@@ -118,13 +116,12 @@ func (e *StoreProductController) Delete(c *gin.Context) {
 
 	productService := product_service.Product{Ids: ids}
 	if err := productService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
-
 
 // @Title 商品sku生成
 // @Description 商品sku生成
@@ -132,15 +129,15 @@ func (e *StoreProductController) Delete(c *gin.Context) {
 // @router /isFormatAttr/:id [post]
 func (e *StoreProductController) FormatAttr(c *gin.Context) {
 	var (
-		appG = app.Gin{C: c}
+		appG    = app.Gin{C: c}
 		jsonObj map[string]interface{}
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	c.BindJSON(&jsonObj)
 	productService := product_service.Product{
-		Id: id,
+		Id:      id,
 		JsonObj: jsonObj,
 	}
 	vo := productService.PublicFormatAttr()
-	appG.Response(http.StatusOK,constant.SUCCESS,vo)
+	appG.Response(http.StatusOK, constant.SUCCESS, vo)
 }

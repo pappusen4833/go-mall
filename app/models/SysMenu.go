@@ -6,8 +6,8 @@
 package models
 
 import (
-	"yixiang.co/go-mall/pkg/logging"
-	"yixiang.co/go-mall/pkg/util"
+	"go-mall/pkg/logging"
+	"go-mall/pkg/util"
 )
 
 type SysMenu struct {
@@ -34,14 +34,13 @@ type RoleIdList struct {
 	Id int64
 }
 
-func (SysMenu) TableName() string  {
+func (SysMenu) TableName() string {
 	return "sys_menu"
 }
 
-
 func GetOneMenuById(id int64) SysMenu {
 	var res SysMenu
-	db.Where("id = ?",id).First(&res)
+	db.Where("id = ?", id).First(&res)
 	return res
 }
 
@@ -53,7 +52,7 @@ func GetAllMenus(maps interface{}) []SysMenu {
 	return RecursionMenuList(menus, 0)
 }
 
-//递归函数
+// 递归函数
 func RecursionMenuList(data []SysMenu, pid int64) []SysMenu {
 	var listTree = make([]SysMenu, 0)
 	for _, value := range data {
@@ -86,11 +85,10 @@ func UpdateByMenu(m *SysMenu) error {
 
 func DelByMenu(ids []int64) error {
 	var err error
-	err = db.Where("id in (?)",ids).Delete(&SysMenu{}).Error
+	err = db.Where("id in (?)", ids).Delete(&SysMenu{}).Error
 	if err != nil {
 		return err
 	}
-
 
 	return err
 }
@@ -102,15 +100,15 @@ func FindMenuByRouterAndMethod(url string, method string) SysMenu {
 }
 
 func BuildMenus(uid int64) []SysMenu {
-	var lists = make([]RoleIdList,0)
-	var roleIds = make([]int64,0)
+	var lists = make([]RoleIdList, 0)
+	var roleIds = make([]int64, 0)
 	err := db.Raw("SELECT r.* FROM sys_role r, sys_users_roles u "+
 		"WHERE r.id = u.sys_role_id AND u.sys_user_id = ?", uid).Find(&lists).Error
 	if err != nil {
 		logging.Error(err)
 	}
 	for i := 0; i < len(lists); i++ {
-		roleIds = append(roleIds,lists[i].Id)
+		roleIds = append(roleIds, lists[i].Id)
 	}
 	idsStr := util.Convert(roleIds)
 	logging.Info(idsStr)
@@ -127,4 +125,3 @@ func BuildMenus(uid int64) []SysMenu {
 	return menus
 
 }
-

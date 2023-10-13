@@ -6,26 +6,23 @@
 package material_group_service
 
 import (
-	"yixiang.co/go-mall/app/models"
+	"go-mall/app/models"
 )
 
 type MaterialGroup struct {
-	Id int64
+	Id   int64
 	Name string
 
 	Enabled int
 	GroupId int64
 
-	PageNum int
+	PageNum  int
 	PageSize int
 
 	M *models.SysMaterialGroup
 
 	Ids []int64
-
 }
-
-
 
 func (d *MaterialGroup) GetAll() []models.SysMaterialGroup {
 	maps := make(map[string]interface{})

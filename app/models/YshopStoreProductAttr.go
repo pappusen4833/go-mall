@@ -6,8 +6,8 @@
 package models
 
 import (
+	dto2 "go-mall/app/service/product_service/dto"
 	"strings"
-	dto2 "yixiang.co/go-mall/app/service/product_service/dto"
 )
 
 type YshopStoreProductAttr struct {
@@ -17,10 +17,9 @@ type YshopStoreProductAttr struct {
 	AttrValues string `json:"attrValues" valid:"Required;"`
 }
 
-func (YshopStoreProductAttr) TableName() string  {
+func (YshopStoreProductAttr) TableName() string {
 	return "yshop_store_product_attr"
 }
-
 
 func AddProductAttr(items []dto2.FormatDetail, productId int64) error {
 	var err error
@@ -28,7 +27,7 @@ func AddProductAttr(items []dto2.FormatDetail, productId int64) error {
 	defer func() {
 		if err != nil {
 			tx.Rollback()
-		}else{
+		} else {
 			tx.Commit()
 		}
 	}()
@@ -44,15 +43,15 @@ func AddProductAttr(items []dto2.FormatDetail, productId int64) error {
 		attrGroup = append(attrGroup, storeProductAttr)
 	}
 
-		err = tx.Create(&attrGroup).Error
-		if err != nil {
-			return err
-		}
+	err = tx.Create(&attrGroup).Error
+	if err != nil {
+		return err
+	}
 
 	return err
 }
 
 func DelByProductttr(productId int64) (err error) {
-	err = db.Where("product_id = ?",productId).Delete(YshopStoreProductAttr{}).Error
+	err = db.Where("product_id = ?", productId).Delete(YshopStoreProductAttr{}).Error
 	return err
 }

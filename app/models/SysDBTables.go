@@ -6,8 +6,8 @@
 package models
 
 import (
+	"go-mall/pkg/global"
 	"gorm.io/gorm"
-	"yixiang.co/go-mall/pkg/global"
 )
 
 type SysDBTables struct {

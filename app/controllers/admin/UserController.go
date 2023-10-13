@@ -8,23 +8,21 @@ package admin
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
+	"go-mall/app/models"
+	"go-mall/app/service/user_service"
+	dto2 "go-mall/app/service/user_service/dto"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/jwt"
+	"go-mall/pkg/logging"
+	"go-mall/pkg/upload"
+	"go-mall/pkg/util"
 	"net/http"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/service/user_service"
-	dto2 "yixiang.co/go-mall/app/service/user_service/dto"
-	"yixiang.co/go-mall/pkg/app"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/jwt"
-	"yixiang.co/go-mall/pkg/logging"
-	"yixiang.co/go-mall/pkg/upload"
-	"yixiang.co/go-mall/pkg/util"
 )
-
 
 // 用户 API
 type UserController struct {
 }
-
 
 // @Title 用户列表
 // @Description 用户列表
@@ -34,34 +32,34 @@ func (e *UserController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
 	)
-	deptId := com.StrTo(c.DefaultQuery("deptId","-1")).MustInt64()
-	enabled := com.StrTo(c.DefaultQuery("enabled","-1")).MustInt()
-	blurry := c.DefaultQuery("blurry","")
+	deptId := com.StrTo(c.DefaultQuery("deptId", "-1")).MustInt64()
+	enabled := com.StrTo(c.DefaultQuery("enabled", "-1")).MustInt()
+	blurry := c.DefaultQuery("blurry", "")
 
 	userService := user_service.User{
 		Username: blurry,
-		DeptId: deptId,
-		Enabled: enabled,
+		DeptId:   deptId,
+		Enabled:  enabled,
 		PageSize: util.GetSize(c),
-		PageNum: util.GetPage(c),
+		PageNum:  util.GetPage(c),
 	}
 
 	vo := userService.GetUserAll()
-	appG.Response(http.StatusOK,constant.SUCCESS,vo)
+	appG.Response(http.StatusOK, constant.SUCCESS, vo)
 }
 
 // @Title 用户添加
 // @Description 用户添加
 // @Success 200 {object} app.Response
 // @router / [post]
-func (e *UserController) Post(c *gin.Context)  {
+func (e *UserController) Post(c *gin.Context) {
 	var (
 		model models.SysUser
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	httpCode, errCode := app.BindAndValid(c,&model)
+	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
 	userService := user_service.User{
@@ -69,26 +67,26 @@ func (e *UserController) Post(c *gin.Context)  {
 	}
 
 	if err := userService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 
 }
-//
+
 // @Title 用户编辑
 // @Description 用户编辑
 // @Success 200 {object} app.Response
 // @router / [put]
-func (e *UserController) Put(c *gin.Context)  {
+func (e *UserController) Put(c *gin.Context) {
 	var (
 		model models.SysUser
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	httpCode, errCode := app.BindAndValid(c,&model)
+	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
 	userService := user_service.User{
@@ -96,11 +94,11 @@ func (e *UserController) Put(c *gin.Context)  {
 	}
 
 	if err := userService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
 
 // @Title 用户删除
@@ -109,18 +107,18 @@ func (e *UserController) Put(c *gin.Context)  {
 // @router / [delete]
 func (e *UserController) Delete(c *gin.Context) {
 	var (
-		ids []int64
+		ids  []int64
 		appG = app.Gin{C: c}
 	)
 	c.BindJSON(&ids)
 	userService := user_service.User{Ids: ids}
 
 	if err := userService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 
 }
 
@@ -128,7 +126,7 @@ func (e *UserController) Delete(c *gin.Context) {
 // @Description 用户上传图像
 // @Success 200 {object} app.Response
 // @router /updateAvatar [post]
-func (e *UserController) Avatar(c *gin.Context)  {
+func (e *UserController) Avatar(c *gin.Context) {
 	appG := app.Gin{C: c}
 	file, image, err := c.Request.FormFile("file")
 	if err != nil {
@@ -164,64 +162,62 @@ func (e *UserController) Avatar(c *gin.Context)  {
 		return
 	}
 
-
 	uid, _ := jwt.GetAdminUserId(c)
-	userService := user_service.User{ImageUrl: upload.GetImageFullUrl(imageName),Id: uid}
+	userService := user_service.User{ImageUrl: upload.GetImageFullUrl(imageName), Id: uid}
 	if err := userService.UpdateImage(); err != nil {
-		appG.Response(http.StatusInternalServerError,err.Error(),nil)
+		appG.Response(http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
-//
+
 // @Title 用户修改密码
 // @Description 用户修改密码
 // @Success 200 {object} app.Response
 // @router /updatePass [post]
-func (e *UserController) Pass(c *gin.Context)  {
+func (e *UserController) Pass(c *gin.Context) {
 	var (
 		model dto2.UserPass
 		appG  = app.Gin{C: c}
 	)
-	httpCode, errCode := app.BindAndValid(c,&model)
+	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
 	uid, _ := jwt.GetAdminUserId(c)
-	userService := user_service.User{UserPass: model,Id: uid}
+	userService := user_service.User{UserPass: model, Id: uid}
 	if err := userService.UpdatePass(); err != nil {
-		appG.Response(http.StatusInternalServerError,err.Error(),nil)
+		appG.Response(http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
-
 
 // @Title 用户修改个人信息
 // @Description 用户修改个人信息
 // @Success 200 {object} app.Response
 // @router /center [put]
-func (e *UserController) Center(c *gin.Context)  {
+func (e *UserController) Center(c *gin.Context) {
 	var (
 		model dto2.UserPost
 		appG  = app.Gin{C: c}
 	)
-	httpCode, errCode := app.BindAndValid(c,&model)
+	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
 	uid, _ := jwt.GetAdminUserId(c)
-	userService := user_service.User{UserPost: model,Id: uid}
+	userService := user_service.User{UserPost: model, Id: uid}
 	if err := userService.UpdateProfile(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
 
 // @Summary Import Image

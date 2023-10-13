@@ -7,11 +7,10 @@ package models
 
 import (
 	"encoding/json"
+	dto2 "go-mall/app/service/product_service/dto"
+	"go-mall/pkg/logging"
 	"time"
-	dto2 "yixiang.co/go-mall/app/service/product_service/dto"
-	"yixiang.co/go-mall/pkg/logging"
 )
-
 
 type YshopStoreProductAttrResult struct {
 	ID         int64     `json:"id"`
@@ -20,33 +19,32 @@ type YshopStoreProductAttrResult struct {
 	ChangeTime time.Time `json:"change_time" gorm:"autoCreateTime"`
 }
 
-func (YshopStoreProductAttrResult) TableName() string  {
+func (YshopStoreProductAttrResult) TableName() string {
 	return "yshop_store_product_attr_result"
 }
 
 func GetProductAttrResult(productId int64) map[string]interface{} {
 	var (
 		result YshopStoreProductAttrResult
-		data map[string]interface{}
+		data   map[string]interface{}
 	)
-	db.Where("product_id = ?",productId).First(&result)
+	db.Where("product_id = ?", productId).First(&result)
 
-	e := json.Unmarshal([]byte(result.Result),&data)
+	e := json.Unmarshal([]byte(result.Result), &data)
 	if e != nil {
 		logging.Error(e)
 	}
 
-
 	return data
 }
 
-func AddProductAttrResult(items []dto2.FormatDetail, attrs []dto2.ProductFormat, productId int64)  error {
+func AddProductAttrResult(items []dto2.FormatDetail, attrs []dto2.ProductFormat, productId int64) error {
 	var err error
 	tx := db.Begin()
 	defer func() {
 		if err != nil {
 			tx.Rollback()
-		}else{
+		} else {
 			tx.Commit()
 		}
 	}()
@@ -76,7 +74,6 @@ func AddProductAttrResult(items []dto2.FormatDetail, attrs []dto2.ProductFormat,
 }
 
 func DelByProductAttrResult(productId int64) (err error) {
-	err = db.Where("product_id = ?",productId).Delete(YshopStoreProductAttrResult{}).Error
+	err = db.Where("product_id = ?", productId).Delete(YshopStoreProductAttrResult{}).Error
 	return err
 }
-

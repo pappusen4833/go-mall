@@ -2,18 +2,18 @@
 * Copyright (C) 2020-2021
 * All rights reserved, Designed By www.yixiang.co
 * 注意：本软件为www.yixiang.co开发研制
-*/
+ */
 package front
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-mall/app/params"
+	"go-mall/app/service/address_service"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/jwt"
+	"go-mall/pkg/util"
 	"net/http"
-	"yixiang.co/go-mall/app/params"
-	"yixiang.co/go-mall/app/service/address_service"
-	"yixiang.co/go-mall/pkg/app"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/jwt"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 // Address api
@@ -27,25 +27,25 @@ type UserAddressController struct {
 func (e *UserAddressController) Del(c *gin.Context) {
 	var (
 		param params.IdParam
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	paramErr:= app.BindAndValidate(c,&param)
+	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest,paramErr.Error(),nil)
+		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
 		return
 	}
 
-	uid,_ := jwt.GetAppUserId(c)
-	addressService := address_service.Address {
-		Id: param.Id,
+	uid, _ := jwt.GetAppUserId(c)
+	addressService := address_service.Address{
+		Id:  param.Id,
 		Uid: uid,
 	}
 	err := addressService.DelAddress()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError,err.Error(),nil)
+		appG.Response(http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
-	appG.Response(http.StatusOK,constant.SUCCESS,"ok")
+	appG.Response(http.StatusOK, constant.SUCCESS, "ok")
 
 }
 
@@ -56,25 +56,25 @@ func (e *UserAddressController) Del(c *gin.Context) {
 func (e *UserAddressController) SetDefault(c *gin.Context) {
 	var (
 		param params.IdParam
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	paramErr:= app.BindAndValidate(c,&param)
+	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest,paramErr.Error(),nil)
+		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
 		return
 	}
 
-	uid,_ := jwt.GetAppUserId(c)
-	addressService := address_service.Address {
-		Id: param.Id,
+	uid, _ := jwt.GetAppUserId(c)
+	addressService := address_service.Address{
+		Id:  param.Id,
 		Uid: uid,
 	}
 	err := addressService.SetDefault()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError,err.Error(),nil)
+		appG.Response(http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
-	appG.Response(http.StatusOK,constant.SUCCESS,"ok")
+	appG.Response(http.StatusOK, constant.SUCCESS, "ok")
 
 }
 
@@ -86,18 +86,17 @@ func (e *UserAddressController) GetList(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
 	)
-	uid,_ := jwt.GetAppUserId(c)
-	addressService := address_service.Address {
-		Enabled: 1,
-		PageNum: util.GetFrontPage(c),
+	uid, _ := jwt.GetAppUserId(c)
+	addressService := address_service.Address{
+		Enabled:  1,
+		PageNum:  util.GetFrontPage(c),
 		PageSize: util.GetFrontLimit(c),
-		Uid: uid,
+		Uid:      uid,
 	}
 
-	vo,total,page := addressService.GetList()
+	vo, total, page := addressService.GetList()
 
-
-	appG.ResponsePage(http.StatusOK,constant.SUCCESS,vo,total,page)
+	appG.ResponsePage(http.StatusOK, constant.SUCCESS, vo, total, page)
 
 }
 
@@ -108,25 +107,25 @@ func (e *UserAddressController) GetList(c *gin.Context) {
 func (e *UserAddressController) SaveAddress(c *gin.Context) {
 	var (
 		param params.AddressParan
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	paramErr:= app.BindAndValidate(c,&param)
+	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest,paramErr.Error(),nil)
+		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
 		return
 	}
 
-	uid,_ := jwt.GetAppUserId(c)
-	addressService := address_service.Address {
+	uid, _ := jwt.GetAppUserId(c)
+	addressService := address_service.Address{
 		Param: &param,
-		Uid: uid,
+		Uid:   uid,
 	}
-	id,err := addressService.AddOrUpdate()
+	id, err := addressService.AddOrUpdate()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError,err.Error(),nil)
+		appG.Response(http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
-	appG.Response(http.StatusOK,constant.SUCCESS,gin.H{"id":id})
+	appG.Response(http.StatusOK, constant.SUCCESS, gin.H{"id": id})
 
 }
 
@@ -140,12 +139,6 @@ func (e *UserAddressController) GetCityList(c *gin.Context) {
 	)
 	addressService := address_service.Address{Enabled: 1}
 	vo := addressService.GetCitys()
-	appG.Response(http.StatusOK,constant.SUCCESS,vo)
+	appG.Response(http.StatusOK, constant.SUCCESS, vo)
 
 }
-
-
-
-
-
-

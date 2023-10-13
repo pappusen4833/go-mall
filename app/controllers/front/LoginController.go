@@ -2,26 +2,23 @@
 * Copyright (C) 2020-2021
 * All rights reserved, Designed By www.yixiang.co
 * 注意：本软件为www.yixiang.co开发研制
-*/
+ */
 package front
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-mall/app/params"
+	"go-mall/app/service/wechat_user_service"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/jwt"
 	"net/http"
 	"time"
-	"yixiang.co/go-mall/app/params"
-	"yixiang.co/go-mall/app/service/wechat_user_service"
-	"yixiang.co/go-mall/pkg/app"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/jwt"
 )
 
 // 登录api
 type LoginController struct {
 }
-
-
-
 
 // @Title 登录
 // @Description 登录
@@ -30,29 +27,28 @@ type LoginController struct {
 func (e *LoginController) Login(c *gin.Context) {
 	var (
 		param params.HLoginParam
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	paramErr:= app.BindAndValidate(c,&param)
+	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest,paramErr.Error(),nil)
+		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
 		return
 	}
 	userService := wechat_user_service.User{HLoginParam: &param}
-	user,err := userService.HLogin()
+	user, err := userService.HLogin()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError,err.Error(),nil)
+		appG.Response(http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
 
-	d := time.Now().Add(time.Hour*24*100)
+	d := time.Now().Add(time.Hour * 24 * 100)
 	token, _ := jwt.GenerateAppToken(user, d)
-	appG.Response(http.StatusOK,constant.SUCCESS,gin.H{
-		"token" : token,
-		"expires_time" : d.Unix(),
+	appG.Response(http.StatusOK, constant.SUCCESS, gin.H{
+		"token":        token,
+		"expires_time": d.Unix(),
 	})
 
 }
-
 
 // @Title 短信验证码
 // @Description 短信验证码
@@ -61,21 +57,21 @@ func (e *LoginController) Login(c *gin.Context) {
 func (e *LoginController) Verify(c *gin.Context) {
 	var (
 		param params.VerityParam
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	paramErr:= app.BindAndValidate(c,&param)
+	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest,paramErr.Error(),nil)
+		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
 		return
 	}
 	userService := wechat_user_service.User{VerityParam: &param}
-	str,err := userService.Verify()
+	str, err := userService.Verify()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError,err.Error(),nil)
+		appG.Response(http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,str)
+	appG.Response(http.StatusOK, constant.SUCCESS, str)
 
 }
 
@@ -86,20 +82,20 @@ func (e *LoginController) Verify(c *gin.Context) {
 func (e *LoginController) Reg(c *gin.Context) {
 	var (
 		param params.RegParam
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	paramErr:= app.BindAndValidate(c,&param)
+	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest,paramErr.Error(),nil)
+		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
 		return
 	}
-	userService := wechat_user_service.User{RegParam: &param,Ip: c.ClientIP()}
-	if err := userService.Reg();err != nil {
-		appG.Response(http.StatusInternalServerError,err.Error(),nil)
+	userService := wechat_user_service.User{RegParam: &param, Ip: c.ClientIP()}
+	if err := userService.Reg(); err != nil {
+		appG.Response(http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,"success")
+	appG.Response(http.StatusOK, constant.SUCCESS, "success")
 
 }
 
@@ -111,7 +107,7 @@ func (e *LoginController) Info(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
 	)
-	appG.Response(http.StatusOK,constant.SUCCESS, jwt.GetAdminDetailUser(c))
+	appG.Response(http.StatusOK, constant.SUCCESS, jwt.GetAdminDetailUser(c))
 }
 
 // @Title 退出登录
@@ -124,10 +120,9 @@ func (e *LoginController) Logout(c *gin.Context) {
 	)
 	err := jwt.RemoveUser(c)
 	if err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_LOGOUT_USER,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_LOGOUT_USER, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
-

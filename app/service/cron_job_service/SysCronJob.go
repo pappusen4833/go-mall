@@ -7,11 +7,11 @@ package cron_job_service
 
 import (
 	"errors"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
-	"yixiang.co/go-mall/app/service/cron_job_service/task"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/util/cron"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
+	"go-mall/app/service/cron_job_service/task"
+	"go-mall/pkg/global"
+	"go-mall/pkg/util/cron"
 )
 
 type SysCronJob struct {

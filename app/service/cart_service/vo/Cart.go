@@ -6,7 +6,7 @@
 package vo
 
 import (
-	"yixiang.co/go-mall/app/service/product_service/vo"
+	"go-mall/app/service/product_service/vo"
 )
 
 type Cart struct {
@@ -27,4 +27,3 @@ type Cart struct {
 	Unique            string     `json:"unique"`
 	IsReply           int        `json:"isReply"`
 }
-

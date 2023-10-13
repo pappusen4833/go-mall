@@ -8,12 +8,12 @@ package admin
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
+	"go-mall/app/models"
+	"go-mall/app/service/dict_detail_service"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/util"
 	"net/http"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/service/dict_detail_service"
-	"yixiang.co/go-mall/pkg/app"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 // 字典详情api
@@ -28,16 +28,16 @@ func (e *DictDetailController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
 	)
-	dictName := c.DefaultQuery("dictName","")
-	dictId := com.StrTo(c.DefaultQuery("dictId","-1")).MustInt64()
+	dictName := c.DefaultQuery("dictName", "")
+	dictId := com.StrTo(c.DefaultQuery("dictId", "-1")).MustInt64()
 	detailService := dict_detail_service.DictDetail{
 		DictName: dictName,
-		DictId: dictId,
+		DictId:   dictId,
 		PageSize: util.GetSize(c),
-		PageNum: util.GetPage(c),
+		PageNum:  util.GetPage(c),
 	}
 	vo := detailService.GetAll()
-	appG.Response(http.StatusOK,constant.SUCCESS,vo)
+	appG.Response(http.StatusOK, constant.SUCCESS, vo)
 }
 
 // @Title 添加字典详情
@@ -47,11 +47,11 @@ func (e *DictDetailController) GetAll(c *gin.Context) {
 func (e *DictDetailController) Post(c *gin.Context) {
 	var (
 		model models.SysDictDetail
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	httpCode, errCode := app.BindAndValid(c,&model)
+	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
 	dictDetailService := dict_detail_service.DictDetail{
@@ -59,11 +59,11 @@ func (e *DictDetailController) Post(c *gin.Context) {
 	}
 
 	if err := dictDetailService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
 
 // @Title 修改字典详情
@@ -73,11 +73,11 @@ func (e *DictDetailController) Post(c *gin.Context) {
 func (e *DictDetailController) Put(c *gin.Context) {
 	var (
 		model models.SysDictDetail
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	httpCode, errCode := app.BindAndValid(c,&model)
+	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
 	dictDetailService := dict_detail_service.DictDetail{
@@ -85,11 +85,11 @@ func (e *DictDetailController) Put(c *gin.Context) {
 	}
 
 	if err := dictDetailService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
 
 // @Title 删除字典详情
@@ -98,7 +98,7 @@ func (e *DictDetailController) Put(c *gin.Context) {
 // @router /:id [delete]
 func (e *DictDetailController) Delete(c *gin.Context) {
 	var (
-		ids []int64
+		ids  []int64
 		appG = app.Gin{C: c}
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
@@ -106,9 +106,9 @@ func (e *DictDetailController) Delete(c *gin.Context) {
 
 	dictDetailService := dict_detail_service.DictDetail{Ids: ids}
 	if err := dictDetailService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }

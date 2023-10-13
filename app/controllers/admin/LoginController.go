@@ -2,23 +2,23 @@
 * Copyright (C) 2020-2021
 * All rights reserved, Designed By www.yixiang.co
 * 注意：本软件为www.yixiang.co开发研制
-*/
+ */
 package admin
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
+	"go-mall/app/models/dto"
+	"go-mall/app/models/vo"
+	"go-mall/app/service/user_service"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/jwt"
+	"go-mall/pkg/logging"
+	"go-mall/pkg/util"
 	"image/color"
 	"net/http"
 	"time"
-	"yixiang.co/go-mall/app/models/dto"
-	"yixiang.co/go-mall/app/models/vo"
-	"yixiang.co/go-mall/app/service/user_service"
-	"yixiang.co/go-mall/pkg/app"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/jwt"
-	"yixiang.co/go-mall/pkg/logging"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 // 登录api
@@ -34,7 +34,6 @@ type CaptchaResult struct {
 // 设置自带的store
 var store = base64Captcha.DefaultMemStore
 
-
 // @Title 登录
 // @Description 登录
 // @Success 200 {object} app.Response
@@ -42,41 +41,40 @@ var store = base64Captcha.DefaultMemStore
 func (e *LoginController) Login(c *gin.Context) {
 	var (
 		authUser dto.AuthUser
-		appG = app.Gin{C: c}
+		appG     = app.Gin{C: c}
 	)
 
 	//body, _ := ioutil.ReadAll(c.Request.Body)
 	//logging.Info(string(body))
 
-	httpCode, errCode := app.BindAndValid(c,&authUser)
+	httpCode, errCode := app.BindAndValid(c, &authUser)
 	logging.Info(authUser)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
-
 
 	userService := user_service.User{Username: authUser.Username}
 	currentUser, err := userService.GetUserOneByName()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError,constant.ERROR_NOT_EXIST_USER,nil)
+		appG.Response(http.StatusInternalServerError, constant.ERROR_NOT_EXIST_USER, nil)
 		return
 	}
 
 	//校验验证码
 	if !store.Verify(authUser.Id, authUser.Code, true) {
-		appG.Response(http.StatusInternalServerError,constant.ERROR_CAPTCHA_USER,nil)
+		appG.Response(http.StatusInternalServerError, constant.ERROR_CAPTCHA_USER, nil)
 		return
 	}
 	if !util.ComparePwd(currentUser.Password, []byte(authUser.Password)) {
-		appG.Response(http.StatusInternalServerError,constant.ERROR_PASS_USER,nil)
+		appG.Response(http.StatusInternalServerError, constant.ERROR_PASS_USER, nil)
 		return
 	}
 	token, _ := jwt.GenerateToken(currentUser, time.Hour*24*100)
 	var loginVO = new(vo.LoginVo)
 	loginVO.Token = token
 	loginVO.User = currentUser
-	appG.Response(http.StatusOK,constant.SUCCESS,loginVO)
+	appG.Response(http.StatusOK, constant.SUCCESS, loginVO)
 
 }
 
@@ -88,7 +86,7 @@ func (e *LoginController) Info(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
 	)
-	appG.Response(http.StatusOK,constant.SUCCESS, jwt.GetAdminDetailUser(c))
+	appG.Response(http.StatusOK, constant.SUCCESS, jwt.GetAdminDetailUser(c))
 }
 
 // @Title 退出登录
@@ -101,11 +99,11 @@ func (e *LoginController) Logout(c *gin.Context) {
 	)
 	err := jwt.RemoveUser(c)
 	if err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_LOGOUT_USER,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_LOGOUT_USER, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
 
 // @Title 获取验证码
@@ -118,8 +116,8 @@ func (e *LoginController) Captcha(c *gin.Context) {
 // 生成图形化验证码  ctx *context.Context
 func GenerateCaptcha(c *gin.Context) {
 	var (
-		appG = app.Gin{C: c}
-		driver base64Captcha.Driver
+		appG         = app.Gin{C: c}
+		driver       base64Captcha.Driver
 		driverString base64Captcha.DriverMath
 	)
 
@@ -152,5 +150,5 @@ func GenerateCaptcha(c *gin.Context) {
 		Base64Blob: b64s,
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,captchaResult)
+	appG.Response(http.StatusOK, constant.SUCCESS, captchaResult)
 }

@@ -7,7 +7,7 @@ package models
 
 import (
 	"encoding/json"
-	dto2 "yixiang.co/go-mall/app/service/product_service/dto"
+	dto2 "go-mall/app/service/product_service/dto"
 )
 
 //
@@ -18,16 +18,16 @@ type YshopStoreProductRule struct {
 	BaseModel
 }
 
-func (YshopStoreProductRule) TableName() string  {
+func (YshopStoreProductRule) TableName() string {
 	return "yshop_store_product_rule"
 }
 
 // get all
-func GetAllProductRule(pageNUm int,pageSize int,maps interface{}) (int64, []dto2.ProductRule) {
+func GetAllProductRule(pageNUm int, pageSize int, maps interface{}) (int64, []dto2.ProductRule) {
 	var (
-		total int64
-		data      []YshopStoreProductRule
-		retData   []dto2.ProductRule
+		total   int64
+		data    []YshopStoreProductRule
+		retData []dto2.ProductRule
 	)
 	db.Model(&YshopStoreProductRule{}).Where(maps).Count(&total)
 	db.Where(maps).Offset(pageNUm).Limit(pageSize).Order("id desc").Find(&data)
@@ -54,13 +54,12 @@ func AddProductRule(m *YshopStoreProductRule) error {
 		return err
 	}
 
-
 	return err
 }
 
-func UpdateByProductRule(id int64,m *YshopStoreProductRule)  error {
+func UpdateByProductRule(id int64, m *YshopStoreProductRule) error {
 	var err error
-	err = db.Model(&YshopStoreProductRule{}).Where("id = ?",id).Updates(m).Error
+	err = db.Model(&YshopStoreProductRule{}).Where("id = ?", id).Updates(m).Error
 	if err != nil {
 		return err
 	}
@@ -70,12 +69,10 @@ func UpdateByProductRule(id int64,m *YshopStoreProductRule)  error {
 
 func DelByProductRulee(ids []int64) error {
 	var err error
-	err = db.Model(&YshopStoreProductRule{}).Where("id in (?)",ids).Update("is_del",1).Error
+	err = db.Model(&YshopStoreProductRule{}).Where("id in (?)", ids).Update("is_del", 1).Error
 	if err != nil {
 		return err
 	}
 
-
 	return err
 }
-

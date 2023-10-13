@@ -4,12 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"go-mall/app/controllers/admin"
+	"go-mall/app/controllers/front"
+	_ "go-mall/docs"
+	"go-mall/middleware"
+	"go-mall/pkg/upload"
 	"net/http"
-	"yixiang.co/go-mall/app/controllers/admin"
-	"yixiang.co/go-mall/app/controllers/front"
-	_ "yixiang.co/go-mall/docs"
-	"yixiang.co/go-mall/middleware"
-	"yixiang.co/go-mall/pkg/upload"
 )
 
 func InitRouter() *gin.Engine {

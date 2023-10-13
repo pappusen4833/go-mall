@@ -2,14 +2,14 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/jwt"
+	"go-mall/pkg/logging"
+	"go-mall/pkg/runtime"
 	"net/http"
 	"regexp"
 	"strings"
-	"yixiang.co/go-mall/pkg/app"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/jwt"
-	"yixiang.co/go-mall/pkg/logging"
-	"yixiang.co/go-mall/pkg/runtime"
 )
 
 const bearerLength = len("Bearer ")
@@ -21,7 +21,7 @@ func AppJwt() gin.HandlerFunc {
 
 		mytoken := c.Request.Header.Get("Authorization")
 		if len(mytoken) < bearerLength {
-			appG.Response(http.StatusUnauthorized,constant.ERROR_AUTH,data)
+			appG.Response(http.StatusUnauthorized, constant.ERROR_AUTH, data)
 			c.Abort()
 			return
 		}
@@ -29,7 +29,7 @@ func AppJwt() gin.HandlerFunc {
 		usr, err := jwt.ValidateToken(token)
 		if err != nil {
 			logging.Info(err)
-			appG.Response(http.StatusUnauthorized,constant.ERROR_AUTH_CHECK_TOKEN_FAIL,data)
+			appG.Response(http.StatusUnauthorized, constant.ERROR_AUTH_CHECK_TOKEN_FAIL, data)
 			c.Abort()
 			return
 		}
@@ -59,7 +59,7 @@ func Jwt() gin.HandlerFunc {
 
 		mytoken := c.Request.Header.Get("Authorization")
 		if len(mytoken) < bearerLength {
-			appG.Response(http.StatusUnauthorized,constant.ERROR_AUTH,data)
+			appG.Response(http.StatusUnauthorized, constant.ERROR_AUTH, data)
 			c.Abort()
 			return
 		}
@@ -67,7 +67,7 @@ func Jwt() gin.HandlerFunc {
 		usr, err := jwt.ValidateToken(token)
 		if err != nil {
 			logging.Info(err)
-			appG.Response(http.StatusUnauthorized,constant.ERROR_AUTH_CHECK_TOKEN_FAIL,data)
+			appG.Response(http.StatusUnauthorized, constant.ERROR_AUTH_CHECK_TOKEN_FAIL, data)
 			c.Abort()
 			return
 		}
@@ -95,7 +95,7 @@ func Jwt() gin.HandlerFunc {
 			//logging.Info(res)
 
 			if !res {
-				appG.Response(http.StatusForbidden,constant.ERROR_AUTH_CHECK_FAIL,data)
+				appG.Response(http.StatusForbidden, constant.ERROR_AUTH_CHECK_FAIL, data)
 				c.Abort()
 				return
 			}
@@ -103,12 +103,10 @@ func Jwt() gin.HandlerFunc {
 
 		c.Next()
 
-
 	}
 }
 
-
-//url排除
+// url排除
 func urlExclude(url string) bool {
 	//公共路由直接放行
 	reg := regexp.MustCompile(`[0-9]+`)

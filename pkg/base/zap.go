@@ -2,21 +2,22 @@ package base
 
 import (
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
+	"go-mall/pkg/global"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"io"
 	"time"
-	"yixiang.co/go-mall/pkg/global"
 )
+
 //@author: [liuhongdi](https://github.com/liuhongdi)
 
-func SetupLogger() (*zap.SugaredLogger) {
-	filepath:= global.YSHOP_CONFIG.Zap.LogFilePath
-	infofilename:= global.YSHOP_CONFIG.Zap.LogInfoFileName
-	warnfilename:= global.YSHOP_CONFIG.Zap.LogWarnFileName
-	fileext:= global.YSHOP_CONFIG.Zap.LogFileExt
+func SetupLogger() *zap.SugaredLogger {
+	filepath := global.YSHOP_CONFIG.Zap.LogFilePath
+	infofilename := global.YSHOP_CONFIG.Zap.LogInfoFileName
+	warnfilename := global.YSHOP_CONFIG.Zap.LogWarnFileName
+	fileext := global.YSHOP_CONFIG.Zap.LogFileExt
 
-	Logger,_ := getInitLogger(filepath,infofilename,warnfilename,fileext)
+	Logger, _ := getInitLogger(filepath, infofilename, warnfilename, fileext)
 
 	defer Logger.Sync()
 
@@ -24,8 +25,8 @@ func SetupLogger() (*zap.SugaredLogger) {
 
 }
 
-//get logger
-func getInitLogger(filepath,infofilename,warnfilename,fileext string) (*zap.SugaredLogger,error) {
+// get logger
+func getInitLogger(filepath, infofilename, warnfilename, fileext string) (*zap.SugaredLogger, error) {
 	encoder := getEncoder()
 	//两个判断日志等级的interface
 	//warnlevel以下属于info
@@ -37,13 +38,13 @@ func getInitLogger(filepath,infofilename,warnfilename,fileext string) (*zap.Suga
 		return lvl >= zapcore.WarnLevel
 	})
 
-	infoWriter,err := getLogWriter(filepath+"/"+infofilename,fileext)
-	if (err != nil) {
-		return nil,err
+	infoWriter, err := getLogWriter(filepath+"/"+infofilename, fileext)
+	if err != nil {
+		return nil, err
 	}
-	warnWriter,err2 := getLogWriter(filepath+"/"+warnfilename,fileext)
-	if (err2 != nil) {
-		return nil,err2
+	warnWriter, err2 := getLogWriter(filepath+"/"+warnfilename, fileext)
+	if err2 != nil {
+		return nil, err2
 	}
 
 	//创建具体的Logger
@@ -53,19 +54,19 @@ func getInitLogger(filepath,infofilename,warnfilename,fileext string) (*zap.Suga
 	)
 	loggerres := zap.New(core, zap.AddCaller())
 
-	return loggerres.Sugar(),nil
+	return loggerres.Sugar(), nil
 }
 
-//get logger
-func GetInitAccessLogger(filepath,filename,fileext string) (*zap.SugaredLogger,error) {
+// get logger
+func GetInitAccessLogger(filepath, filename, fileext string) (*zap.SugaredLogger, error) {
 
-	warnWriter,err2 := getLogWriter(filepath+"/"+filename,fileext)
-	if (err2 != nil) {
-		return nil,err2
+	warnWriter, err2 := getLogWriter(filepath+"/"+filename, fileext)
+	if err2 != nil {
+		return nil, err2
 	}
 
 	var cfg zap.Config
-	cfg =zap.Config{
+	cfg = zap.Config{
 		Level:       zap.NewAtomicLevelAt(zap.DebugLevel),
 		Development: true,
 		Encoding:    "console",
@@ -81,9 +82,8 @@ func GetInitAccessLogger(filepath,filename,fileext string) (*zap.SugaredLogger,e
 		panic(err)
 	}
 
-	return l.Sugar(),nil
+	return l.Sugar(), nil
 }
-
 
 func SetOutput(ws zapcore.WriteSyncer, conf zap.Config) zap.Option {
 	var enc zapcore.Encoder
@@ -100,8 +100,7 @@ func SetOutput(ws zapcore.WriteSyncer, conf zap.Config) zap.Option {
 	})
 }
 
-
-//Encoder
+// Encoder
 func getEncoder() zapcore.Encoder {
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
@@ -109,17 +108,17 @@ func getEncoder() zapcore.Encoder {
 	return zapcore.NewConsoleEncoder(encoderConfig)
 }
 
-//LogWriter
-func getLogWriter(filePath,fileext string) (zapcore.WriteSyncer,error) {
-	warnIoWriter,err := getWriter(filePath,fileext)
-	if (err != nil) {
-		return nil,err
+// LogWriter
+func getLogWriter(filePath, fileext string) (zapcore.WriteSyncer, error) {
+	warnIoWriter, err := getWriter(filePath, fileext)
+	if err != nil {
+		return nil, err
 	}
-	return zapcore.AddSync(warnIoWriter),nil
+	return zapcore.AddSync(warnIoWriter), nil
 }
 
-//日志文件切割，按天
-func getWriter(filename,fileext string) (io.Writer,error) {
+// 日志文件切割，按天
+func getWriter(filename, fileext string) (io.Writer, error) {
 	// 保存30天内的日志，每24小时(整点)分割一次日志
 	hook, err := rotatelogs.New(
 		filename+"_%Y%m%d."+fileext,
@@ -129,7 +128,7 @@ func getWriter(filename,fileext string) (io.Writer,error) {
 	)
 	if err != nil {
 		//panic(err)
-		return nil,err
+		return nil, err
 	}
-	return hook,nil
+	return hook, nil
 }

@@ -2,11 +2,9 @@ package logging
 
 import (
 	"fmt"
+	"go-mall/pkg/global"
 	"time"
-	"yixiang.co/go-mall/pkg/global"
 )
-
-
 
 // getLogFilePath get the log file save path
 func getLogFilePath() string {

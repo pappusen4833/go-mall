@@ -3,18 +3,18 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"go-mall/app/listen"
+	"go-mall/app/models"
+	"go-mall/pkg/base"
+	"go-mall/pkg/global"
+	"go-mall/pkg/jwt"
+	"go-mall/pkg/logging"
+	"go-mall/pkg/redis"
+	"go-mall/pkg/wechat"
+	"go-mall/routers"
 	"log"
 	"net/http"
 	"time"
-	"yixiang.co/go-mall/app/listen"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/pkg/base"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/jwt"
-	"yixiang.co/go-mall/pkg/logging"
-	"yixiang.co/go-mall/pkg/redis"
-	"yixiang.co/go-mall/pkg/wechat"
-	"yixiang.co/go-mall/routers"
 )
 
 func init() {
@@ -48,11 +48,9 @@ func main() {
 		MaxHeaderBytes: maxHeaderBytes,
 	}
 
-
-	global.YSHOP_LOG.Info("[info] start http server listening %s",endPoint)
+	global.YSHOP_LOG.Info("[info] start http server listening %s", endPoint)
 	log.Printf("[info] start http server listening %s", endPoint)
 	fmt.Printf("欢迎使用yshop-gin,官网地址：https://www.yixiang.co\n")
-
 
 	server.ListenAndServe()
 

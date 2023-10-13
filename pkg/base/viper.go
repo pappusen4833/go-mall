@@ -5,24 +5,24 @@ import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
+	"go-mall/pkg/global"
 	"log"
-	"yixiang.co/go-mall/pkg/global"
 )
 
 func Viper(path ...string) *viper.Viper {
 	var config string
 	if len(path) == 0 {
-		flag.StringVar(&config,"c","","config file")
+		flag.StringVar(&config, "c", "", "config file")
 		flag.Parse()
 		if config == "" {
 			config = "config.yaml"
-			fmt.Printf("使用默认值，config的路径为%v\n",config)
-		}else {
-			fmt.Printf("使用-c传递的值，config的路径为%v\n",config)
+			fmt.Printf("使用默认值，config的路径为%v\n", config)
+		} else {
+			fmt.Printf("使用-c传递的值，config的路径为%v\n", config)
 		}
-	}else {
+	} else {
 		config = path[0]
-		fmt.Printf("使用传递单值，config的路径为%v\n",config)
+		fmt.Printf("使用传递单值，config的路径为%v\n", config)
 	}
 
 	v := viper.New()
@@ -35,13 +35,13 @@ func Viper(path ...string) *viper.Viper {
 	v.WatchConfig()
 
 	v.OnConfigChange(func(in fsnotify.Event) {
-		fmt.Println("config file changed:",in.Name)
-		if err := v.Unmarshal(&global.YSHOP_CONFIG); err != nil{
+		fmt.Println("config file changed:", in.Name)
+		if err := v.Unmarshal(&global.YSHOP_CONFIG); err != nil {
 			fmt.Println(err)
 		}
 	})
 
-	if err := v.Unmarshal(&global.YSHOP_CONFIG); err != nil{
+	if err := v.Unmarshal(&global.YSHOP_CONFIG); err != nil {
 		log.Printf("[err] err %s", err)
 		fmt.Println(err)
 	}

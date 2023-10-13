@@ -3,8 +3,8 @@ package redis
 import (
 	"encoding/json"
 	"github.com/gomodule/redigo/redis"
+	"go-mall/pkg/global"
 	"time"
-	"yixiang.co/go-mall/pkg/global"
 )
 
 var RedisConn *redis.Pool

@@ -2,20 +2,20 @@
 * Copyright (C) 2020-2021
 * All rights reserved, Designed By www.yixiang.co
 * 注意：本软件为www.yixiang.co开发研制
-*/
+ */
 package front
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
+	"go-mall/app/service/canvas_service"
+	"go-mall/app/service/product_service"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	productEnum "go-mall/pkg/enums/product"
+	"go-mall/pkg/logging"
+	"go-mall/pkg/upload"
 	"net/http"
-	"yixiang.co/go-mall/app/service/canvas_service"
-	"yixiang.co/go-mall/app/service/product_service"
-	"yixiang.co/go-mall/pkg/app"
-	"yixiang.co/go-mall/pkg/constant"
-	productEnum "yixiang.co/go-mall/pkg/enums/product"
-	"yixiang.co/go-mall/pkg/logging"
-	"yixiang.co/go-mall/pkg/upload"
 )
 
 // index api
@@ -31,37 +31,35 @@ func (e *IndexController) GetIndex(c *gin.Context) {
 		appG = app.Gin{C: c}
 	)
 
-	productService := product_service.Product {
-		Enabled: 1,
-		PageNum: 0,
+	productService := product_service.Product{
+		Enabled:  1,
+		PageNum:  0,
 		PageSize: 6,
-		Order: productEnum.STATUS_1,
+		Order:    productEnum.STATUS_1,
 	}
 
-	vo1,_,_ := productService.GetList()
+	vo1, _, _ := productService.GetList()
 
 	productService.PageSize = 10
 	productService.Order = productEnum.STATUS_2
-	vo2,_,_ := productService.GetList()
+	vo2, _, _ := productService.GetList()
 
 	productService.PageSize = 6
 	productService.Order = productEnum.STATUS_3
-	vo3,_,_ := productService.GetList()
+	vo3, _, _ := productService.GetList()
 
 	productService.PageSize = 10
 	productService.Order = productEnum.STATUS_4
-	vo4,_,_ := productService.GetList()
+	vo4, _, _ := productService.GetList()
 	res := gin.H{
-		"bastList" :vo1,
-		"likeInfo" :vo2,
-		"firstList" :vo3,
-		"benefit" :vo4,
-
+		"bastList":  vo1,
+		"likeInfo":  vo2,
+		"firstList": vo3,
+		"benefit":   vo4,
 	}
-	appG.Response(http.StatusOK,constant.SUCCESS,res)
+	appG.Response(http.StatusOK, constant.SUCCESS, res)
 
 }
-
 
 // @Title 获取画布数据
 // @Description 获取画布数据
@@ -71,15 +69,14 @@ func (e *IndexController) GetCanvas(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
 	)
-	terminal := com.StrTo(c.DefaultQuery("terminal","3")).MustInt()
-	canvasService := canvas_service.Canvas {
+	terminal := com.StrTo(c.DefaultQuery("terminal", "3")).MustInt()
+	canvasService := canvas_service.Canvas{
 		Terminal: terminal,
 	}
 	vo := canvasService.Get()
-	appG.Response(http.StatusOK,constant.SUCCESS,vo)
+	appG.Response(http.StatusOK, constant.SUCCESS, vo)
 
 }
-
 
 // @Title 上传图像
 // @Description 上传图像
@@ -128,8 +125,3 @@ func (e *IndexController) Upload(c *gin.Context) {
 	appG.Response(http.StatusOK, constant.SUCCESS, imageUrl)
 
 }
-
-
-
-
-

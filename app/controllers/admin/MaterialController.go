@@ -8,16 +8,16 @@ package admin
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
+	"go-mall/app/models"
+	"go-mall/app/service/material_service"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/global"
+	"go-mall/pkg/jwt"
+	"go-mall/pkg/logging"
+	"go-mall/pkg/upload"
+	"go-mall/pkg/util"
 	"net/http"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/service/material_service"
-	"yixiang.co/go-mall/pkg/app"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/jwt"
-	"yixiang.co/go-mall/pkg/logging"
-	"yixiang.co/go-mall/pkg/upload"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 // 素材api
@@ -32,16 +32,16 @@ func (e *MaterialController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
 	)
-	groupId := com.StrTo(c.DefaultQuery("groupId","-1")).MustInt64()
-	name := c.DefaultQuery("blurry","")
+	groupId := com.StrTo(c.DefaultQuery("groupId", "-1")).MustInt64()
+	name := c.DefaultQuery("blurry", "")
 	materialService := material_service.Material{
-		GroupId: groupId,
-		Name: name,
+		GroupId:  groupId,
+		Name:     name,
 		PageSize: util.GetSize(c),
-		PageNum: util.GetPage(c),
+		PageNum:  util.GetPage(c),
 	}
 	vo := materialService.GetAll()
-	appG.Response(http.StatusOK,constant.SUCCESS,vo)
+	appG.Response(http.StatusOK, constant.SUCCESS, vo)
 }
 
 // @Title 素材添加
@@ -51,11 +51,11 @@ func (e *MaterialController) GetAll(c *gin.Context) {
 func (e *MaterialController) Post(c *gin.Context) {
 	var (
 		model models.SysMaterial
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	httpCode, errCode := app.BindAndValid(c,&model)
+	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
 	uid, _ := jwt.GetAdminUserId(c)
@@ -65,11 +65,11 @@ func (e *MaterialController) Post(c *gin.Context) {
 	}
 
 	if err := materialService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
 
 // @Title 素材修改
@@ -79,11 +79,11 @@ func (e *MaterialController) Post(c *gin.Context) {
 func (e *MaterialController) Put(c *gin.Context) {
 	var (
 		model models.SysMaterial
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	httpCode, errCode := app.BindAndValid(c,&model)
+	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
 	uid, _ := jwt.GetAdminUserId(c)
@@ -93,11 +93,11 @@ func (e *MaterialController) Put(c *gin.Context) {
 	}
 
 	if err := materialService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
 
 // @Title 素材删除
@@ -106,7 +106,7 @@ func (e *MaterialController) Put(c *gin.Context) {
 // @router /:id [delete]
 func (e *MaterialController) Delete(c *gin.Context) {
 	var (
-		ids []int64
+		ids  []int64
 		appG = app.Gin{C: c}
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
@@ -116,11 +116,11 @@ func (e *MaterialController) Delete(c *gin.Context) {
 
 	if err := materialService.Del(); err != nil {
 		global.YSHOP_LOG.Error(err)
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
 
 // @Title 上传图像

@@ -6,21 +6,19 @@
 package dept_service
 
 import (
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
 )
 
 type Dept struct {
-	Id int64
-	Name string
+	Id      int64
+	Name    string
 	Enabled int
 
 	M *models.SysDept
 
 	Ids []int64
-
 }
-
 
 func (d *Dept) GetAll() vo.ResultList {
 	maps := make(map[string]interface{})
@@ -32,7 +30,7 @@ func (d *Dept) GetAll() vo.ResultList {
 	}
 
 	list := models.GetAllDepts(maps)
-	return vo.ResultList{Content: list,TotalElements: 0}
+	return vo.ResultList{Content: list, TotalElements: 0}
 }
 
 func (d *Dept) Insert() error {

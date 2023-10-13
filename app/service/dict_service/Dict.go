@@ -6,24 +6,22 @@
 package dict_service
 
 import (
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
 )
 
 type Dict struct {
-	Id int64
-	Name string
+	Id      int64
+	Name    string
 	Enabled int
 
-	PageNum int
+	PageNum  int
 	PageSize int
 
 	M *models.SysDict
 
 	Ids []int64
-
 }
-
 
 func (d *Dict) GetAll() vo.ResultList {
 	maps := make(map[string]interface{})
@@ -34,8 +32,8 @@ func (d *Dict) GetAll() vo.ResultList {
 		maps["name"] = d.Name
 	}
 
-	total,list := models.GetAllDict(d.PageNum,d.PageSize,maps)
-	return vo.ResultList{Content: list,TotalElements: total}
+	total, list := models.GetAllDict(d.PageNum, d.PageSize, maps)
+	return vo.ResultList{Content: list, TotalElements: total}
 }
 
 func (d *Dict) Insert() error {

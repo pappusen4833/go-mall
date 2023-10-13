@@ -5,11 +5,11 @@ import (
 	"errors"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/global"
+	"go-mall/pkg/logging"
 	"net/http"
 	"strings"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/logging"
 )
 
 // BindAndValid binds and validates data

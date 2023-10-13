@@ -6,17 +6,17 @@
 package menu_service
 
 import (
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
-	mVO "yixiang.co/go-mall/app/service/menu_service/vo"
-	"yixiang.co/go-mall/pkg/util"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
+	mVO "go-mall/app/service/menu_service/vo"
+	"go-mall/pkg/util"
 )
 
 type Menu struct {
 	Uid int64
 
-	Id int64
-	Name string
+	Id      int64
+	Name    string
 	Enabled int
 
 	M *models.SysMenu
@@ -41,7 +41,7 @@ func (m *Menu) GetAll() vo.ResultList {
 	}
 
 	list := models.GetAllMenus(maps)
-	return vo.ResultList{Content: list,TotalElements: 0}
+	return vo.ResultList{Content: list, TotalElements: 0}
 }
 
 func (m *Menu) Insert() error {
@@ -57,10 +57,9 @@ func (m *Menu) Del() error {
 }
 
 func (m *Menu) BuildMenus() []mVO.MenuVo {
-    menus := models.BuildMenus(m.Uid)
+	menus := models.BuildMenus(m.Uid)
 	return buildMenus(buildTree(menus))
 }
-
 
 func buildTree(menus []models.SysMenu) []models.SysMenu {
 	var trees []models.SysMenu

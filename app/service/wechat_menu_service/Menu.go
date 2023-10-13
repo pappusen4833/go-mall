@@ -8,16 +8,16 @@ package wechat_menu_service
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
+	menuDto "go-mall/app/service/wechat_menu_service/dto"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/global"
 	"gorm.io/datatypes"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
-	menuDto "yixiang.co/go-mall/app/service/wechat_menu_service/dto"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/global"
 )
 
 type Menu struct {
-	Id int64
+	Id  int64
 	Key string
 
 	Dto menuDto.WechatMenu
@@ -25,14 +25,12 @@ type Menu struct {
 	M *models.YshopWechatMenu
 }
 
-
-
 func (d *Menu) GetAll() vo.ResultList {
 	maps := make(map[string]interface{})
 	maps["key"] = constant.YSHOP_WEICHAT_MENU
 
 	data := models.GetWechatMenu(maps)
-	return vo.ResultList{Content: data,TotalElements: 0}
+	return vo.ResultList{Content: data, TotalElements: 0}
 }
 
 func (d *Menu) Insert() error {
@@ -49,11 +47,10 @@ func (d *Menu) Insert() error {
 		global.YSHOP_LOG.Error(err)
 	}
 
-	result,_ := json.Marshal(d.Dto.Buttons)
+	result, _ := json.Marshal(d.Dto.Buttons)
 	model := models.YshopWechatMenu{
-		Key: constant.YSHOP_WEICHAT_MENU,
+		Key:    constant.YSHOP_WEICHAT_MENU,
 		Result: datatypes.JSON(result),
 	}
 	return models.UpdateByWechatMenu(&model)
 }
-

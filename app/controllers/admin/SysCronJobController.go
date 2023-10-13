@@ -9,12 +9,12 @@ package admin
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
+	"go-mall/app/models"
+	"go-mall/app/service/cron_job_service"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/util"
 	"net/http"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/service/cron_job_service"
-	"yixiang.co/go-mall/pkg/app"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 type SysCronJobController struct {

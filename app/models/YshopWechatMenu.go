@@ -6,16 +6,15 @@
 package models
 
 import (
+	"go-mall/pkg/constant"
 	"gorm.io/datatypes"
 	"time"
-	"yixiang.co/go-mall/pkg/constant"
 )
 
-
 type YshopWechatMenu struct {
-	Key     string `json:"key"`
-	Result    datatypes.JSON `json:"result"`
-	AddTime time.Time `json:"addTIme" gorm:"autoCreateTime"`
+	Key     string         `json:"key"`
+	Result  datatypes.JSON `json:"result"`
+	AddTime time.Time      `json:"addTIme" gorm:"autoCreateTime"`
 }
 
 func (YshopWechatMenu) TableName() string {
@@ -23,9 +22,9 @@ func (YshopWechatMenu) TableName() string {
 }
 
 // get all
-func GetWechatMenu( maps interface{}) YshopWechatMenu {
+func GetWechatMenu(maps interface{}) YshopWechatMenu {
 	var (
-		data  YshopWechatMenu
+		data YshopWechatMenu
 	)
 
 	db.Where(maps).First(&data)
@@ -44,12 +43,10 @@ func AddWechatMenu(m *YshopWechatMenu) error {
 
 func UpdateByWechatMenu(m *YshopWechatMenu) error {
 	var err error
-	err = db.Model(&YshopWechatMenu{}).Where("key",constant.YSHOP_WEICHAT_MENU).Updates(m).Error
+	err = db.Model(&YshopWechatMenu{}).Where("key", constant.YSHOP_WEICHAT_MENU).Updates(m).Error
 	if err != nil {
 		return err
 	}
 
 	return err
 }
-
-

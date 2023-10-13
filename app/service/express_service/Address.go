@@ -6,17 +6,17 @@
 package express_service
 
 import (
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
 )
 
 type Express struct {
-	Id int64
+	Id   int64
 	Name string
 
 	Enabled int
 
-	PageNum int
+	PageNum  int
 	PageSize int
 
 	M *models.YshopExpress
@@ -24,10 +24,7 @@ type Express struct {
 	Ids []int64
 
 	Uid int64
-
 }
-
-
 
 func (d *Express) GetAll() vo.ResultList {
 	maps := make(map[string]interface{})
@@ -35,10 +32,9 @@ func (d *Express) GetAll() vo.ResultList {
 		maps["name"] = d.Name
 	}
 
-	total,list := models.GetAllExpress(d.PageNum,d.PageSize,maps)
-	return vo.ResultList{Content: list,TotalElements: total}
+	total, list := models.GetAllExpress(d.PageNum, d.PageSize, maps)
+	return vo.ResultList{Content: list, TotalElements: total}
 }
-
 
 func (d *Express) Insert() error {
 	return models.AddExpress(d.M)

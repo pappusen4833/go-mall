@@ -2,22 +2,22 @@
 * Copyright (C) 2020-2021
 * All rights reserved, Designed By www.yixiang.co
 * 注意：本软件为www.yixiang.co开发研制
-*/
+ */
 package front
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
+	"go-mall/app/params"
+	"go-mall/app/service/product_relation_service"
+	"go-mall/app/service/product_reply_service"
+	"go-mall/app/service/product_service"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	productEnum "go-mall/pkg/enums/product"
+	"go-mall/pkg/jwt"
+	"go-mall/pkg/util"
 	"net/http"
-	"yixiang.co/go-mall/app/params"
-	"yixiang.co/go-mall/app/service/product_relation_service"
-	"yixiang.co/go-mall/app/service/product_reply_service"
-	"yixiang.co/go-mall/app/service/product_service"
-	"yixiang.co/go-mall/pkg/app"
-	"yixiang.co/go-mall/pkg/constant"
-	productEnum "yixiang.co/go-mall/pkg/enums/product"
-	"yixiang.co/go-mall/pkg/jwt"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 // product api
@@ -33,21 +33,20 @@ func (e *ProductController) GoodsList(c *gin.Context) {
 		appG = app.Gin{C: c}
 	)
 
-	productService := product_service.Product {
-		Name: c.Query("keyword"),
-		Enabled: 1,
-		PageNum: util.GetFrontPage(c),
-		PageSize: util.GetFrontLimit(c),
-		Sid: c.Query("sid"),
-		News: c.Query("news"),
+	productService := product_service.Product{
+		Name:       c.Query("keyword"),
+		Enabled:    1,
+		PageNum:    util.GetFrontPage(c),
+		PageSize:   util.GetFrontLimit(c),
+		Sid:        c.Query("sid"),
+		News:       c.Query("news"),
 		PriceOrder: c.Query("priceOrder"),
 		SalesOrder: c.Query("salesOrder"),
 	}
 
-	vo,total,page := productService.GetList()
+	vo, total, page := productService.GetList()
 
-
-	appG.ResponsePage(http.StatusOK,constant.SUCCESS,vo,total,page)
+	appG.ResponsePage(http.StatusOK, constant.SUCCESS, vo, total, page)
 
 }
 
@@ -60,17 +59,16 @@ func (e *ProductController) GoodsRecommendList(c *gin.Context) {
 		appG = app.Gin{C: c}
 	)
 
-	productService := product_service.Product {
-		Enabled: 1,
-		PageNum: 0,
+	productService := product_service.Product{
+		Enabled:  1,
+		PageNum:  0,
 		PageSize: 6,
-		Order: productEnum.STATUS_1,
+		Order:    productEnum.STATUS_1,
 	}
 
-	vo,_,_ := productService.GetList()
+	vo, _, _ := productService.GetList()
 
-
-	appG.Response(http.StatusOK,constant.SUCCESS,vo)
+	appG.Response(http.StatusOK, constant.SUCCESS, vo)
 
 }
 
@@ -81,30 +79,29 @@ func (e *ProductController) GoodsRecommendList(c *gin.Context) {
 func (e *ProductController) GoodDetail(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
-		uid int64
+		uid  int64
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
-	user,err := jwt.GetAppDetailUser(c)
+	user, err := jwt.GetAppDetailUser(c)
 	if err != nil {
 		uid = 0
-	}else {
+	} else {
 		uid = user.Id
 	}
 
-	productService := product_service.Product {
-		Id: id,
+	productService := product_service.Product{
+		Id:  id,
 		Uid: uid,
 	}
 
-	vo,err := productService.GetDetail()
+	vo, err := productService.GetDetail()
 	if err != nil {
-		appG.Response(http.StatusBadRequest,err.Error(),nil)
+		appG.Response(http.StatusBadRequest, err.Error(), nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,vo)
+	appG.Response(http.StatusOK, constant.SUCCESS, vo)
 }
-
 
 // @Title 添加收藏
 // @Description 添加收藏
@@ -113,26 +110,25 @@ func (e *ProductController) GoodDetail(c *gin.Context) {
 func (e *ProductController) AddCollect(c *gin.Context) {
 	var (
 		param params.RelationParam
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	paramErr:= app.BindAndValidate(c,&param)
+	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest,paramErr.Error(),nil)
+		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
 		return
 	}
-	uid,_ := jwt.GetAppUserId(c)
-	relationService := product_relation_service.Relation {
+	uid, _ := jwt.GetAppUserId(c)
+	relationService := product_relation_service.Relation{
 		Param: &param,
-		Uid: uid,
+		Uid:   uid,
 	}
-	if err := relationService.AddRelation();err != nil {
-		appG.Response(http.StatusInternalServerError,err.Error(),nil)
+	if err := relationService.AddRelation(); err != nil {
+		appG.Response(http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
-	appG.Response(http.StatusOK,constant.SUCCESS,"success")
+	appG.Response(http.StatusOK, constant.SUCCESS, "success")
 
 }
-
 
 // @Title 取消收藏
 // @Description 取消收藏
@@ -141,23 +137,23 @@ func (e *ProductController) AddCollect(c *gin.Context) {
 func (e *ProductController) DelCollect(c *gin.Context) {
 	var (
 		param params.RelationParam
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	paramErr:= app.BindAndValidate(c,&param)
+	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest,paramErr.Error(),nil)
+		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
 		return
 	}
-	uid,_ := jwt.GetAppUserId(c)
-	relationService := product_relation_service.Relation {
+	uid, _ := jwt.GetAppUserId(c)
+	relationService := product_relation_service.Relation{
 		Param: &param,
-		Uid: uid,
+		Uid:   uid,
 	}
-	if err := relationService.DelRelation();err != nil {
-		appG.Response(http.StatusInternalServerError,err.Error(),nil)
+	if err := relationService.DelRelation(); err != nil {
+		appG.Response(http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
-	appG.Response(http.StatusOK,constant.SUCCESS,"success")
+	appG.Response(http.StatusOK, constant.SUCCESS, "success")
 
 }
 
@@ -170,18 +166,14 @@ func (e *ProductController) ReplyList(c *gin.Context) {
 		appG = app.Gin{C: c}
 	)
 
-	replyService := product_reply_service.Reply {
+	replyService := product_reply_service.Reply{
 		ProductId: com.StrTo(c.Param("id")).MustInt64(),
-		PageNum: util.GetFrontPage(c),
-		PageSize: util.GetFrontLimit(c),
-		Type: com.StrTo(c.Query("type")).MustInt(),
+		PageNum:   util.GetFrontPage(c),
+		PageSize:  util.GetFrontLimit(c),
+		Type:      com.StrTo(c.Query("type")).MustInt(),
 	}
 
-	vo,total,page := replyService.GetList()
+	vo, total, page := replyService.GetList()
 
-	appG.ResponsePage(http.StatusOK,constant.SUCCESS,vo,total,page)
+	appG.ResponsePage(http.StatusOK, constant.SUCCESS, vo, total, page)
 }
-
-
-
-

@@ -6,16 +6,16 @@
 package role_service
 
 import (
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
-	dto2 "yixiang.co/go-mall/app/service/menu_service/dto"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
+	dto2 "go-mall/app/service/menu_service/dto"
 )
 
 type Role struct {
-	Id int64
+	Id   int64
 	Name string
 
-	PageNum int
+	PageNum  int
 	PageSize int
 
 	M *models.SysRole
@@ -23,10 +23,9 @@ type Role struct {
 	Ids []int64
 
 	Dto dto2.RoleMenu
-
 }
 
-func (d *Role) GetOneRole() models.SysRole  {
+func (d *Role) GetOneRole() models.SysRole {
 	return models.GetOneRole(d.Id)
 }
 
@@ -40,8 +39,8 @@ func (d *Role) GetAll() vo.ResultList {
 		maps["name"] = d.Name
 	}
 
-	total,list := models.GetAllRole(d.PageNum,d.PageSize,maps)
-	return vo.ResultList{Content: list,TotalElements: total}
+	total, list := models.GetAllRole(d.PageNum, d.PageSize, maps)
+	return vo.ResultList{Content: list, TotalElements: total}
 }
 
 func (d *Role) Insert() error {

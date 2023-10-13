@@ -9,13 +9,13 @@ import (
 	"bytes"
 	"github.com/alecthomas/template"
 	"github.com/gin-gonic/gin"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
+	"go-mall/app/params/admin"
+	"go-mall/pkg/file"
+	"go-mall/pkg/global"
+	"go-mall/pkg/util"
 	"strings"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
-	"yixiang.co/go-mall/app/params/admin"
-	"yixiang.co/go-mall/pkg/file"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 type Gen struct {

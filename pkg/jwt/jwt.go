@@ -6,18 +6,19 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/global"
+	"go-mall/pkg/logging"
+	"go-mall/pkg/redis"
 	"strconv"
 	"strings"
 	"time"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/logging"
-	"yixiang.co/go-mall/pkg/redis"
 )
 
 var jwtSecret []byte
+
 const bearerLength = len("Bearer ")
 
 var (
@@ -47,8 +48,6 @@ func GenerateAppToken(m *models.YshopUser, d time.Time) (string, error) {
 		Issuer:    "YshopAppGo",
 	}
 
-
-
 	var jwtUser = vo.JwtUser{
 		Id:       m.Id,
 		Avatar:   m.Avatar,
@@ -73,7 +72,8 @@ func GenerateAppToken(m *models.YshopUser, d time.Time) (string, error) {
 
 	return tokenString, err
 }
-//返回id
+
+// 返回id
 func GetAppUserId(c *gin.Context) (int64, error) {
 	u, exist := c.Get(constant.APP_AUTH_USER)
 	if !exist {
@@ -87,7 +87,7 @@ func GetAppUserId(c *gin.Context) (int64, error) {
 	return 0, errors.New("can't convert to user struct")
 }
 
-//返回user
+// 返回user
 func GetAppUser(c *gin.Context) (*vo.JwtUser, error) {
 	u, exist := c.Get(constant.APP_AUTH_USER)
 	if !exist {
@@ -100,8 +100,8 @@ func GetAppUser(c *gin.Context) (*vo.JwtUser, error) {
 	return nil, errors.New("can't convert to user struct")
 }
 
-//返回 detail user
-func GetAppDetailUser(c *gin.Context) (*models.YshopUser,error) {
+// 返回 detail user
+func GetAppDetailUser(c *gin.Context) (*models.YshopUser, error) {
 	mytoken := c.Request.Header.Get("Authorization")
 	if mytoken == "" {
 		return nil, errors.New("user not login")
@@ -118,7 +118,7 @@ func GetAppDetailUser(c *gin.Context) (*models.YshopUser,error) {
 	if err != nil {
 		return nil, err
 	}
-	return user,nil
+	return user, nil
 }
 
 func RemoveAppUser(c *gin.Context) error {
@@ -129,8 +129,6 @@ func RemoveAppUser(c *gin.Context) error {
 
 	return err
 }
-
-
 
 func GenerateToken(m *models.SysUser, d time.Duration) (string, error) {
 	m.Password = ""
@@ -205,7 +203,7 @@ func ValidateToken(tokenString string) (*vo.JwtUser, error) {
 
 }
 
-//返回id
+// 返回id
 func GetAdminUserId(c *gin.Context) (int64, error) {
 	u, exist := c.Get(constant.ContextKeyUserObj)
 	if !exist {
@@ -219,7 +217,7 @@ func GetAdminUserId(c *gin.Context) (int64, error) {
 	return 0, errors.New("can't convert to user struct")
 }
 
-//返回user
+// 返回user
 func GetAdminUser(c *gin.Context) (*vo.JwtUser, error) {
 	u, exist := c.Get(constant.ContextKeyUserObj)
 	if !exist {
@@ -232,7 +230,7 @@ func GetAdminUser(c *gin.Context) (*vo.JwtUser, error) {
 	return nil, errors.New("can't convert to user struct")
 }
 
-//返回 detail user
+// 返回 detail user
 func GetAdminDetailUser(c *gin.Context) *models.SysUser {
 	mytoken := c.Request.Header.Get("Authorization")
 	token := strings.TrimSpace(mytoken[bearerLength:])
@@ -252,5 +250,3 @@ func RemoveUser(c *gin.Context) error {
 
 	return err
 }
-
-

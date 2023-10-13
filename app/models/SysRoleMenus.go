@@ -6,18 +6,16 @@
 package models
 
 import (
-	dto2 "yixiang.co/go-mall/app/service/menu_service/dto"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/runtime"
+	dto2 "go-mall/app/service/menu_service/dto"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/runtime"
 )
-
 
 type SysRolesMenus struct {
 	ID     int64 `gorm:"primaryKey;autoIncrement"`
 	MenuId int64 `gorm:"column:sys_menu_id;"`
 	RoleId int64 `gorm:"column:sys_role_id;"`
 }
-
 
 func BatchRoleMenuAdd(menu dto2.RoleMenu) error {
 
@@ -26,12 +24,12 @@ func BatchRoleMenuAdd(menu dto2.RoleMenu) error {
 	defer func() {
 		if err != nil {
 			tx.Rollback()
-		}else{
+		} else {
 			tx.Commit()
 		}
 	}()
 
-	err = tx.Where("sys_role_id = ?",menu.Id).Delete(SysRolesMenus{}).Error
+	err = tx.Where("sys_role_id = ?", menu.Id).Delete(SysRolesMenus{}).Error
 	if err != nil {
 		return err
 	}
@@ -39,15 +37,13 @@ func BatchRoleMenuAdd(menu dto2.RoleMenu) error {
 	var roleMenus []SysRolesMenus
 	var roles = GetOneRole(menu.Id)
 
-
-
 	cb := runtime.Runtime.GetCasbinKey(constant.YSHOP_CASBIN)
 	cb.RemoveFilteredPolicy(0, roles.Permission)
 	for _, val := range menu.Menus {
-		var roleMenu = SysRolesMenus{RoleId: menu.Id,MenuId: val.Id}
+		var roleMenu = SysRolesMenus{RoleId: menu.Id, MenuId: val.Id}
 
 		var menus = GetOneMenuById(val.Id)
-		roleMenus = append(roleMenus,  roleMenu)
+		roleMenus = append(roleMenus, roleMenu)
 		if roles.Permission != "" && menus.Router != "" && menus.RouterMethod != "" {
 			cb.AddNamedPolicy("p", roles.Permission, menus.Router, menus.RouterMethod)
 		}
@@ -60,7 +56,6 @@ func BatchRoleMenuAdd(menu dto2.RoleMenu) error {
 	}
 	//logging.Info(roleMenus)
 	cb.SavePolicy()
-
 
 	return err
 }

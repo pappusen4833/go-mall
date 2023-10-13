@@ -7,11 +7,11 @@ package models
 
 import (
 	"github.com/segmentio/ksuid"
+	dto2 "go-mall/app/service/product_service/dto"
+	"go-mall/pkg/util"
 	"sort"
 	"strconv"
 	"strings"
-	dto2 "yixiang.co/go-mall/app/service/product_service/dto"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 type YshopStoreProductAttrValue struct {
@@ -37,7 +37,7 @@ type YshopStoreProductAttrValue struct {
 	Integral     int     `json:"integral"`
 }
 
-func (YshopStoreProductAttrValue) TableName() string  {
+func (YshopStoreProductAttrValue) TableName() string {
 	return "yshop_store_product_attr_value"
 }
 
@@ -47,14 +47,14 @@ func GetAttrValueByProductIdAndSku(productId int64, sku string) *YshopStoreProdu
 
 	return &attrValue
 }
-//
+
 func AddProductttrValue(attrs []dto2.ProductFormat, productId int64) error {
 	var err error
 	tx := db.Begin()
 	defer func() {
 		if err != nil {
 			tx.Rollback()
-		}else{
+		} else {
 			tx.Commit()
 		}
 	}()
@@ -105,6 +105,6 @@ func AddProductttrValue(attrs []dto2.ProductFormat, productId int64) error {
 }
 
 func DelByProductttrValue(productId int64) (err error) {
-	err = db.Where("product_id = ?",productId).Delete(YshopStoreProductAttrValue{}).Error
+	err = db.Where("product_id = ?", productId).Delete(YshopStoreProductAttrValue{}).Error
 	return err
 }

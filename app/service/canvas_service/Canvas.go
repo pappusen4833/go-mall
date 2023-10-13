@@ -6,46 +6,41 @@
 package canvas_service
 
 import (
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
-	"yixiang.co/go-mall/pkg/global"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
+	"go-mall/pkg/global"
 )
 
 type Canvas struct {
-	Id int64
+	Id       int64
 	Terminal int
 
 	Enabled int
 
-
 	M *models.YshopStoreCanvas
 
 	Ids []int64
-
 }
 
 func (d *Canvas) Get() vo.ResultList {
 	var data models.YshopStoreCanvas
-	err := global.YSHOP_DB.Model(&models.YshopStoreCanvas{}).Where("terminal = ?",d.Terminal).First(&data).Error
+	err := global.YSHOP_DB.Model(&models.YshopStoreCanvas{}).Where("terminal = ?", d.Terminal).First(&data).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 	}
-	return vo.ResultList{Content: data,TotalElements: 0}
+	return vo.ResultList{Content: data, TotalElements: 0}
 }
-
-
-
 
 func (d *Canvas) Save() error {
 	if d.M.Id == 0 {
 		return models.AddCanvas(d.M)
-	}else{
+	} else {
 		data := &models.YshopStoreCanvas{
-			Name: d.M.Name,
+			Name:     d.M.Name,
 			Terminal: d.M.Terminal,
-			Json: d.M.Json,
+			Json:     d.M.Json,
 		}
-		return global.YSHOP_DB.Model(&models.YshopStoreCanvas{}).Where("id = ?",d.M.Id).Updates(data).Error
+		return global.YSHOP_DB.Model(&models.YshopStoreCanvas{}).Where("id = ?", d.M.Id).Updates(data).Error
 	}
 
 }

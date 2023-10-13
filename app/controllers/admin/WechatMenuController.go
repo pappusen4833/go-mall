@@ -7,18 +7,16 @@ package admin
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-mall/app/service/wechat_menu_service"
+	dto2 "go-mall/app/service/wechat_menu_service/dto"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
 	"net/http"
-	"yixiang.co/go-mall/app/service/wechat_menu_service"
-	dto2 "yixiang.co/go-mall/app/service/wechat_menu_service/dto"
-	"yixiang.co/go-mall/pkg/app"
-	"yixiang.co/go-mall/pkg/constant"
 )
-
 
 // 菜单api
 type WechatMenuController struct {
 }
-
 
 // @Title 获取菜单
 // @Description 获取菜单
@@ -30,21 +28,21 @@ func (e *WechatMenuController) GetAll(c *gin.Context) {
 	)
 	meuService := wechat_menu_service.Menu{}
 	vo := meuService.GetAll()
-	appG.Response(http.StatusOK,constant.SUCCESS,vo)
+	appG.Response(http.StatusOK, constant.SUCCESS, vo)
 }
 
 // @Title 菜单更新
 // @Description 菜单更新
 // @Success 200 {object} app.Response
 // @router / [post]
-func (e *WechatMenuController) Post(c *gin.Context)  {
+func (e *WechatMenuController) Post(c *gin.Context) {
 	var (
 		dto  dto2.WechatMenu
 		appG = app.Gin{C: c}
 	)
-	httpCode, errCode := app.BindAndValid(c,&dto)
+	httpCode, errCode := app.BindAndValid(c, &dto)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
 	meuService := wechat_menu_service.Menu{
@@ -52,11 +50,10 @@ func (e *WechatMenuController) Post(c *gin.Context)  {
 	}
 
 	if err := meuService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 
 }
-

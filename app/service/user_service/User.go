@@ -7,20 +7,20 @@ package user_service
 
 import (
 	"errors"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
-	userDto "yixiang.co/go-mall/app/service/user_service/dto"
-	"yixiang.co/go-mall/pkg/util"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
+	userDto "go-mall/app/service/user_service/dto"
+	"go-mall/pkg/util"
 )
 
 type User struct {
-	Id int64
+	Id       int64
 	Username string
 
-	DeptId int64
+	DeptId  int64
 	Enabled int
 
-	PageNum int
+	PageNum  int
 	PageSize int
 
 	M *models.SysUser
@@ -31,13 +31,12 @@ type User struct {
 	UserPass userDto.UserPass
 
 	ImageUrl string
-
 }
 
 func (u *User) UpdateImage() error {
-	user ,err := models.GetUserById(u.Id)
+	user, err := models.GetUserById(u.Id)
 	if err != nil {
-		return  errors.New("用户不存在")
+		return errors.New("用户不存在")
 	}
 
 	user.Avatar = u.ImageUrl
@@ -45,22 +44,21 @@ func (u *User) UpdateImage() error {
 }
 
 func (u *User) UpdatePass() error {
-	user ,err := models.GetUserById(u.Id)
+	user, err := models.GetUserById(u.Id)
 	if err != nil {
-		return  errors.New("用户不存在")
+		return errors.New("用户不存在")
 	}
-	if !util.ComparePwd(user.Password,[]byte(u.UserPass.OldPass)) {
-		return  errors.New("旧密码错误密码错误")
+	if !util.ComparePwd(user.Password, []byte(u.UserPass.OldPass)) {
+		return errors.New("旧密码错误密码错误")
 	}
 	user.Password = util.HashAndSalt([]byte(u.UserPass.NewPass))
 	return models.UpdateCurrentUser(&user)
 }
 
-
 func (u *User) UpdateProfile() error {
-	user ,err := models.GetUserById(u.Id)
+	user, err := models.GetUserById(u.Id)
 	if err != nil {
-		return  err
+		return err
 	}
 
 	user.Phone = u.UserPost.Phone
@@ -87,8 +85,8 @@ func (u *User) GetUserAll() vo.ResultList {
 		maps["username"] = u.Username
 	}
 
-	total,list := models.GetAllUser(u.PageNum,u.PageSize,maps)
-	return vo.ResultList{Content: list,TotalElements: total}
+	total, list := models.GetAllUser(u.PageNum, u.PageSize, maps)
+	return vo.ResultList{Content: list, TotalElements: total}
 }
 
 func (u *User) Insert() error {
@@ -102,4 +100,3 @@ func (u *User) Save() error {
 func (u *User) Del() error {
 	return models.DelByUser(u.Ids)
 }
-

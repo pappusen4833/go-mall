@@ -10,32 +10,31 @@ import (
 	"errors"
 	"github.com/jinzhu/copier"
 	"github.com/silenceper/wechat/v2/officialaccount/user"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
+	"go-mall/app/params"
+	userDto "go-mall/app/service/user_service/dto"
+	wechatUserDto "go-mall/app/service/wechat_user_service/dto"
+	wechatUserVo "go-mall/app/service/wechat_user_service/vo"
+	"go-mall/pkg/constant"
+	userEnum "go-mall/pkg/enums/user"
+	"go-mall/pkg/global"
+	"go-mall/pkg/redis"
+	"go-mall/pkg/util"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
 	"time"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
-	"yixiang.co/go-mall/app/params"
-	userDto "yixiang.co/go-mall/app/service/user_service/dto"
-	wechatUserDto "yixiang.co/go-mall/app/service/wechat_user_service/dto"
-	wechatUserVo "yixiang.co/go-mall/app/service/wechat_user_service/vo"
-	"yixiang.co/go-mall/pkg/constant"
-	userEnum "yixiang.co/go-mall/pkg/enums/user"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/redis"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 type User struct {
-	Id int64
+	Id       int64
 	Username string
 
-	Value string
-	MyType string
+	Value    string
+	MyType   string
 	UserType string
 
-
-	PageNum int
+	PageNum  int
 	PageSize int
 
 	UserInfo *user.Info
@@ -48,20 +47,19 @@ type User struct {
 
 	Ids []int64
 
-    HLoginParam *params.HLoginParam
-	RegParam *params.RegParam
+	HLoginParam *params.HLoginParam
+	RegParam    *params.RegParam
 	VerityParam *params.VerityParam
 
 	User *models.YshopUser
-
 }
 
 func (u *User) GetUserInfo() *wechatUserVo.User {
 	var (
 		userVO wechatUserVo.User
-		user models.YshopUser
+		user   models.YshopUser
 	)
-	global.YSHOP_DB.Model(&models.YshopUser{}).Where("id = ?",u.Id).First(&user)
+	global.YSHOP_DB.Model(&models.YshopUser{}).Where("id = ?", u.Id).First(&user)
 	copier.Copy(&userVO, user)
 
 	return &userVO
@@ -78,19 +76,19 @@ func (u *User) GetUserDetail() *wechatUserVo.User {
 	return &user
 }
 
-func (u *User) Reg() error  {
+func (u *User) Reg() error {
 	var (
 		user models.YshopUser
-		err error
+		err  error
 	)
 	err = global.YSHOP_DB.
 		Model(&models.YshopUser{}).
-		Where("username = ?",u.RegParam.Account).First(&user).Error
+		Where("username = ?", u.RegParam.Account).First(&user).Error
 	if err == nil {
 		return errors.New("用户已经存在")
 	}
 	codeKey := constant.SMS_CODE + u.RegParam.Account
-	code :=  redis.GetString(codeKey)
+	code := redis.GetString(codeKey)
 	if code != u.RegParam.Captcha {
 		return errors.New("验证码不对")
 	}
@@ -100,12 +98,11 @@ func (u *User) Reg() error  {
 		Nickname: u.RegParam.Account,
 		Password: util.HashAndSalt([]byte(u.RegParam.Password)),
 		RealName: u.RegParam.Account,
-		Avatar: "",
-		AddIp: u.Ip,
-		LastIp: u.Ip,
+		Avatar:   "",
+		AddIp:    u.Ip,
+		LastIp:   u.Ip,
 		UserType: userEnum.PC,
-		Phone:u.RegParam.Account,
-
+		Phone:    u.RegParam.Account,
 	}
 	err = models.AddWechatUser(&uu)
 	//注册成功删除验证码缓存
@@ -114,7 +111,7 @@ func (u *User) Reg() error  {
 
 }
 
-func (u *User) Verify() (string,error) {
+func (u *User) Verify() (string, error) {
 	var (
 		user models.YshopUser
 		err  error
@@ -123,33 +120,31 @@ func (u *User) Verify() (string,error) {
 		Model(&models.YshopUser{}).
 		Where("username = ?", u.VerityParam.Phone).First(&user).Error
 	if err == nil {
-		return "",errors.New("手机已经注册过")
+		return "", errors.New("手机已经注册过")
 	}
 
 	codeKey := constant.SMS_CODE + u.VerityParam.Phone
 	if redis.Exists(codeKey) {
-		return "",errors.New("10分钟有效:"+ redis.GetString(codeKey))
+		return "", errors.New("10分钟有效:" + redis.GetString(codeKey))
 	}
 
 	code := util.RandomNumber(constant.SMS_LENGTH)
-	expireTime := time.Now().Add(time.Minute*10)
-	redis.SetEx(codeKey,code,expireTime.Unix())
+	expireTime := time.Now().Add(time.Minute * 10)
+	redis.SetEx(codeKey, code, expireTime.Unix())
 
 	//此处发送阿里云短信
 	//测试阶段直接把验证码返回
-	return "测试阶段验证码为："+code,nil
-
+	return "测试阶段验证码为：" + code, nil
 
 }
-
 
 func (u *User) GetUserAll() vo.ResultList {
 	maps := make(map[string]interface{})
 
-	if u.Value != ""{
+	if u.Value != "" {
 		if u.MyType == "phone" {
 			maps["phone"] = u.Value
-		}else{
+		} else {
 			maps["nickname"] = u.Value
 		}
 	}
@@ -158,23 +153,22 @@ func (u *User) GetUserAll() vo.ResultList {
 		maps["user_type"] = u.UserType
 	}
 
-	total,list := models.GetAllWechatUser(u.PageNum,u.PageSize,maps)
-	return vo.ResultList{Content: list,TotalElements: total}
+	total, list := models.GetAllWechatUser(u.PageNum, u.PageSize, maps)
+	return vo.ResultList{Content: list, TotalElements: total}
 }
 
 func (u *User) Insert() error {
-	result,_ := json.Marshal(u.UserInfo)
+	result, _ := json.Marshal(u.UserInfo)
 	user := models.YshopUser{
-		Username: u.UserInfo.OpenID,
-		Nickname: u.UserInfo.Nickname,
-		Password: util.HashAndSalt([]byte("123456")),
-		RealName: u.UserInfo.Nickname,
-		Avatar: u.UserInfo.Headimgurl,
-		AddIp: u.Ip,
-		LastIp: u.Ip,
-		UserType: userEnum.WECHAT,
+		Username:  u.UserInfo.OpenID,
+		Nickname:  u.UserInfo.Nickname,
+		Password:  util.HashAndSalt([]byte("123456")),
+		RealName:  u.UserInfo.Nickname,
+		Avatar:    u.UserInfo.Headimgurl,
+		AddIp:     u.Ip,
+		LastIp:    u.Ip,
+		UserType:  userEnum.WECHAT,
 		WxProfile: datatypes.JSON(result),
-
 	}
 	return models.AddWechatUser(&user)
 }
@@ -182,12 +176,11 @@ func (u *User) Insert() error {
 func (u *User) Save() error {
 	user := models.YshopUser{
 		RealName: u.Dto.RealName,
-		Mark: u.Dto.Mark,
-		Phone: u.Dto.Phone,
+		Mark:     u.Dto.Mark,
+		Phone:    u.Dto.Phone,
 		Integral: u.Dto.Integral,
-
 	}
-	return models.UpdateByWechatUsere(u.Dto.Id,&user)
+	return models.UpdateByWechatUsere(u.Dto.Id, &user)
 }
 
 func (u *User) SaveMony() error {
@@ -195,34 +188,32 @@ func (u *User) SaveMony() error {
 	if u.Money.Ptype == 1 {
 		err = global.YSHOP_DB.
 			Model(&models.YshopUser{}).
-			Where("id = ?",u.Money.Id).
-			Update("now_money",gorm.Expr("now_money + ?",u.Money.Money)).Error
-	}else{
+			Where("id = ?", u.Money.Id).
+			Update("now_money", gorm.Expr("now_money + ?", u.Money.Money)).Error
+	} else {
 		err = global.YSHOP_DB.
 			Model(&models.YshopUser{}).
-			Where("id = ? and now_money >= ?",u.Money.Id,u.Money.Money).
-			Update("now_money",gorm.Expr("now_money - ?",u.Money.Money)).Error
+			Where("id = ? and now_money >= ?", u.Money.Id, u.Money.Money).
+			Update("now_money", gorm.Expr("now_money - ?", u.Money.Money)).Error
 	}
 	return err
 }
 
-func (u *User) HLogin() (*models.YshopUser,error)  {
+func (u *User) HLogin() (*models.YshopUser, error) {
 	var (
 		user models.YshopUser
-		err error
+		err  error
 	)
 	err = global.YSHOP_DB.
 		Model(&models.YshopUser{}).
-		Where("username = ?",u.HLoginParam.Username).First(&user).Error
+		Where("username = ?", u.HLoginParam.Username).First(&user).Error
 	if err != nil {
-		return nil,errors.New("用户不存在")
+		return nil, errors.New("用户不存在")
 	}
 	if !util.ComparePwd(user.Password, []byte(u.HLoginParam.Password)) {
-		return nil,errors.New("密码不对")
+		return nil, errors.New("密码不对")
 	}
 
-	return &user,err
+	return &user, err
 
 }
-
-

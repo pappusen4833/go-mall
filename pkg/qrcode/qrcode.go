@@ -3,10 +3,10 @@ package qrcode
 import (
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/qr"
+	"go-mall/pkg/file"
+	"go-mall/pkg/global"
+	"go-mall/pkg/util"
 	"image/jpeg"
-	"yixiang.co/go-mall/pkg/file"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 type QrCode struct {

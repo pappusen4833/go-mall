@@ -10,22 +10,20 @@ import (
 	"github.com/ttlv/kdniao"
 	"github.com/ttlv/kdniao/sdk"
 	"github.com/unknwon/com"
+	"go-mall/app/models"
+	"go-mall/app/service/article_service"
+	"go-mall/app/service/order_service"
+	"go-mall/app/service/order_service/dto"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/global"
+	"go-mall/pkg/util"
 	"net/http"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/service/article_service"
-	"yixiang.co/go-mall/app/service/order_service"
-	"yixiang.co/go-mall/app/service/order_service/dto"
-	"yixiang.co/go-mall/pkg/app"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/util"
 )
-
 
 // order api
 type OrderController struct {
 }
-
 
 // @Title 订单列表
 // @Description 订单列表
@@ -35,32 +33,32 @@ func (e *OrderController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
 	)
-	enabled := com.StrTo(c.DefaultQuery("enabled","-1")).MustInt()
-	name := c.DefaultQuery("blurry","")
+	enabled := com.StrTo(c.DefaultQuery("enabled", "-1")).MustInt()
+	name := c.DefaultQuery("blurry", "")
 	orderService := order_service.Order{
-		Enabled: enabled,
-		Name: name,
+		Enabled:  enabled,
+		Name:     name,
 		PageSize: util.GetSize(c),
-		PageNum: util.GetPage(c),
-		IntType: com.StrTo(c.Query("orderStatus")).MustInt(),
+		PageNum:  util.GetPage(c),
+		IntType:  com.StrTo(c.Query("orderStatus")).MustInt(),
 	}
 	vo := orderService.GetAll()
-	appG.Response(http.StatusOK,constant.SUCCESS,vo)
+	appG.Response(http.StatusOK, constant.SUCCESS, vo)
 }
 
 // @Title 文章添加
 // @Description 文章添加
 // @Success 200 {object} app.Response
 // @router / [post]
-func (e *OrderController) Post(c *gin.Context)  {
+func (e *OrderController) Post(c *gin.Context) {
 	var (
 		model models.YshopWechatArticle
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
 
-	paramErr := app.BindAndValidate(c,&model)
+	paramErr := app.BindAndValidate(c, &model)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest,paramErr.Error(),nil)
+		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
 		return
 	}
 
@@ -69,11 +67,11 @@ func (e *OrderController) Post(c *gin.Context)  {
 	}
 
 	if err := articleService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 
 }
 
@@ -81,14 +79,14 @@ func (e *OrderController) Post(c *gin.Context)  {
 // @Description 订单修改
 // @Success 200 {object} app.Response
 // @router / [put]
-func (e *OrderController) Put(c *gin.Context)  {
+func (e *OrderController) Put(c *gin.Context) {
 	var (
 		model models.YshopStoreOrder
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	httpCode, errCode := app.BindAndValid(c,&model)
+	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
 	orderService := order_service.Order{
@@ -96,26 +94,25 @@ func (e *OrderController) Put(c *gin.Context)  {
 	}
 
 	if err := orderService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
-
 
 // @Title 订单发货
 // @Description 订单发货
 // @Success 200 {object} app.Response
 // @router / [put]
-func (e *OrderController) Deliver(c *gin.Context)  {
+func (e *OrderController) Deliver(c *gin.Context) {
 	var (
 		model models.YshopStoreOrder
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	httpCode, errCode := app.BindAndValid(c,&model)
+	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
 	orderService := order_service.Order{
@@ -124,26 +121,25 @@ func (e *OrderController) Deliver(c *gin.Context)  {
 
 	if err := orderService.Deliver(); err != nil {
 		global.YSHOP_LOG.Error(err)
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
-
 
 // @Title 订单快递查询
 // @Description 订单快递查询
 // @Success 200 {object} app.Response
 // @router / [post]
-func (e *OrderController) DeliverQuery(c *gin.Context)  {
+func (e *OrderController) DeliverQuery(c *gin.Context) {
 	var (
 		model dto.Express
-		appG = app.Gin{C: c}
+		appG  = app.Gin{C: c}
 	)
-	httpCode, errCode := app.BindAndValid(c,&model)
+	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode,errCode,nil)
+		appG.Response(httpCode, errCode, nil)
 		return
 	}
 
@@ -158,16 +154,13 @@ func (e *OrderController) DeliverQuery(c *gin.Context)  {
 		global.YSHOP_LOG.Error(err)
 	}
 	//
-	if  resp.Success == false {
-		appG.Response(http.StatusInternalServerError,resp.Reason,nil)
+	if resp.Success == false {
+		appG.Response(http.StatusInternalServerError, resp.Reason, nil)
 		return
 	}
 
-
-	appG.Response(http.StatusOK,constant.SUCCESS,resp.Traces)
+	appG.Response(http.StatusOK, constant.SUCCESS, resp.Traces)
 }
-
-
 
 // @Title 订单删除
 // @Description 订单删除
@@ -175,7 +168,7 @@ func (e *OrderController) DeliverQuery(c *gin.Context)  {
 // @router /:id [delete]
 func (e *OrderController) Delete(c *gin.Context) {
 	var (
-		ids []int64
+		ids  []int64
 		appG = app.Gin{C: c}
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
@@ -183,10 +176,9 @@ func (e *OrderController) Delete(c *gin.Context) {
 	orderService := order_service.Order{Ids: ids}
 
 	if err := orderService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError,constant.FAIL_ADD_DATA,nil)
+		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK,constant.SUCCESS,nil)
+	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
-

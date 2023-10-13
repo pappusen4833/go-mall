@@ -3,10 +3,10 @@ package util
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
-	"yixiang.co/go-mall/pkg/global"
+	"go-mall/pkg/global"
 )
 
-func GetPage(c *gin.Context) int  {
+func GetPage(c *gin.Context) int {
 	result := 0
 	page, _ := com.StrTo(c.Query("page")).Int()
 
@@ -19,20 +19,20 @@ func GetPage(c *gin.Context) int  {
 	return result
 }
 
-func GetSize(c *gin.Context) int  {
+func GetSize(c *gin.Context) int {
 	result := 0
 	size, _ := com.StrTo(c.Query("size")).Int()
 
 	if size > 0 {
 		result = size
-	}else{
+	} else {
 		result = global.YSHOP_CONFIG.App.PageSize
 	}
 
 	return result
 }
 
-func GetFrontPage(c *gin.Context) int  {
+func GetFrontPage(c *gin.Context) int {
 	result := 0
 	page, _ := com.StrTo(c.Query("page")).Int()
 
@@ -45,13 +45,13 @@ func GetFrontPage(c *gin.Context) int  {
 	return result
 }
 
-func GetFrontLimit(c *gin.Context) int  {
+func GetFrontLimit(c *gin.Context) int {
 	result := 0
 	size, _ := com.StrTo(c.Query("limit")).Int()
 
 	if size > 0 {
 		result = size
-	}else{
+	} else {
 		result = global.YSHOP_CONFIG.App.PageSize
 	}
 

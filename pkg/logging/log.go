@@ -2,11 +2,11 @@ package logging
 
 import (
 	"fmt"
+	"go-mall/pkg/file"
 	"log"
 	"os"
 	"path/filepath"
 	"runtime"
-	"yixiang.co/go-mall/pkg/file"
 )
 
 type Level int

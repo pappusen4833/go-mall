@@ -3,10 +3,10 @@ package task
 import (
 	"encoding/json"
 	"fmt"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/pkg/constant"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/redis"
+	"go-mall/app/models"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/global"
+	"go-mall/pkg/redis"
 )
 
 // 这里添加自定义任务

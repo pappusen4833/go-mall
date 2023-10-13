@@ -8,14 +8,14 @@ package front
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/silenceper/wechat/v2/officialaccount/message"
-	"yixiang.co/go-mall/app/service/wechat_user_service"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/util"
+	"go-mall/app/service/wechat_user_service"
+	"go-mall/pkg/global"
+	"go-mall/pkg/util"
 )
+
 // 公众号服务api
 type WechatController struct {
 }
-
 
 // @Title 公众号服务
 // @Description 公众号服务
@@ -23,7 +23,7 @@ type WechatController struct {
 // @router / [any]
 func (e *WechatController) GetAll(c *gin.Context) {
 	official := global.YSHOP_OFFICIAL_ACCOUNT
-	server := official.GetServer(c.Request,c.Writer)
+	server := official.GetServer(c.Request, c.Writer)
 
 	server.SetMessageHandler(func(msg *message.MixMessage) *message.Reply {
 		if msg.MsgType == message.MsgTypeEvent {
@@ -31,20 +31,19 @@ func (e *WechatController) GetAll(c *gin.Context) {
 			if msg.Event == message.EventSubscribe {
 				//存储用户
 				user := official.GetUser()
-				userInfo,e := user.GetUserInfo(msg.CommonToken.GetOpenID())
+				userInfo, e := user.GetUserInfo(msg.CommonToken.GetOpenID())
 				if e != nil {
 					global.YSHOP_LOG.Error(e)
 				}
 				ip := util.GetClientIP(c)
-				userSerive := wechat_user_service.User{UserInfo: userInfo,Ip: ip}
+				userSerive := wechat_user_service.User{UserInfo: userInfo, Ip: ip}
 				userSerive.Insert()
 			}
 		}
 		global.YSHOP_LOG.Info(msg.MsgType)
 		text := message.NewText(msg.Content)
 
-
-		return &message.Reply{MsgType: message.MsgTypeText,MsgData: text}
+		return &message.Reply{MsgType: message.MsgTypeText, MsgData: text}
 	})
 
 	//处理消息接收以及回复
@@ -61,4 +60,3 @@ func (e *WechatController) GetAll(c *gin.Context) {
 	}
 
 }
-

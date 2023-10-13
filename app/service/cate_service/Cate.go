@@ -6,23 +6,21 @@
 package cate_service
 
 import (
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
 )
 
 type Cate struct {
-	Id int64
-	Name string
+	Id      int64
+	Name    string
 	Enabled int
 
 	M *models.YshopStoreCategory
 
 	Ids []int64
-
 }
 
-
-//返回一定格式的分类数据
+// 返回一定格式的分类数据
 func (d *Cate) GetProductCate() []map[string]interface{} {
 	var (
 		retList []map[string]interface{}
@@ -72,7 +70,7 @@ func (d *Cate) GetAll() vo.ResultList {
 	}
 
 	list := models.GetAllCates(maps)
-	return vo.ResultList{Content: list,TotalElements: 0}
+	return vo.ResultList{Content: list, TotalElements: 0}
 }
 
 func (d *Cate) Insert() error {

@@ -2,15 +2,15 @@ package upload
 
 import (
 	"fmt"
+	"go-mall/pkg/file"
+	"go-mall/pkg/global"
+	"go-mall/pkg/logging"
+	"go-mall/pkg/util"
 	"log"
 	"mime/multipart"
 	"os"
 	"path"
 	"strings"
-	"yixiang.co/go-mall/pkg/file"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/logging"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 // GetImageFullUrl get the full access path

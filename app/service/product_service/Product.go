@@ -11,29 +11,29 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/unknwon/com"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
+	"go-mall/app/service/cate_service"
+	"go-mall/app/service/product_relation_service"
+	"go-mall/app/service/product_rule_service"
+	productDto "go-mall/app/service/product_service/dto"
+	proVo "go-mall/app/service/product_service/vo"
+	productEnum "go-mall/pkg/enums/product"
+	"go-mall/pkg/global"
+	"go-mall/pkg/logging"
+	"go-mall/pkg/util"
 	"sort"
 	"strconv"
 	"strings"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
-	"yixiang.co/go-mall/app/service/cate_service"
-	"yixiang.co/go-mall/app/service/product_relation_service"
-	"yixiang.co/go-mall/app/service/product_rule_service"
-	productDto "yixiang.co/go-mall/app/service/product_service/dto"
-	proVo "yixiang.co/go-mall/app/service/product_service/vo"
-	productEnum "yixiang.co/go-mall/pkg/enums/product"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/logging"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 type Product struct {
-	Id int64
+	Id   int64
 	Name string
 
 	Enabled int
 
-	PageNum int
+	PageNum  int
 	PageSize int
 
 	//M *models.YshopStoreProductRule
@@ -48,25 +48,24 @@ type Product struct {
 
 	Order int
 
-	News string
+	News       string
 	PriceOrder string
 	SalesOrder string
-	Sid string
+	Sid        string
 
 	Uid int64
 
 	Unique string
 
 	Type string
-
 }
 
-//get stock
-func (d *Product) GetStock() int{
+// get stock
+func (d *Product) GetStock() int {
 	var productAttrValue models.YshopStoreProductAttrValue
 	err := global.YSHOP_DB.Model(&models.YshopStoreProductAttrValue{}).
-		Where("`unique` = ?",d.Unique).
-		Where("product_id = ?",d.Id).First(&productAttrValue).Error
+		Where("`unique` = ?", d.Unique).
+		Where("product_id = ?", d.Id).First(&productAttrValue).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 		return 0
@@ -74,7 +73,7 @@ func (d *Product) GetStock() int{
 	return productAttrValue.Stock
 }
 
-func (d *Product) GetList() ([]proVo.Product,int,int) {
+func (d *Product) GetList() ([]proVo.Product, int, int) {
 	maps := make(map[string]interface{})
 	if d.Name != "" {
 		maps["name"] = d.Name
@@ -83,10 +82,14 @@ func (d *Product) GetList() ([]proVo.Product,int,int) {
 		maps["is_show"] = d.Enabled
 	}
 	switch d.Order {
-	  case productEnum.STATUS_1: maps["is_best"] = 1
-	  case productEnum.STATUS_2: maps["is_new"] = 1
-	  case productEnum.STATUS_3: maps["is_benefit"] = 1
-	  case productEnum.STATUS_4: maps["is_hot"] = 1
+	case productEnum.STATUS_1:
+		maps["is_best"] = 1
+	case productEnum.STATUS_2:
+		maps["is_new"] = 1
+	case productEnum.STATUS_3:
+		maps["is_benefit"] = 1
+	case productEnum.STATUS_4:
+		maps["is_hot"] = 1
 	}
 
 	if d.Sid != "" {
@@ -102,61 +105,60 @@ func (d *Product) GetList() ([]proVo.Product,int,int) {
 	if d.SalesOrder != "" {
 		if productEnum.ASC == d.SalesOrder {
 			order = "sales asc"
-		}else if productEnum.DESC == d.SalesOrder {
+		} else if productEnum.DESC == d.SalesOrder {
 			order = "sales desc"
 		}
 	}
 	if d.PriceOrder != "" {
 		if productEnum.ASC == d.PriceOrder {
 			order = "price asc"
-		}else if productEnum.DESC == d.PriceOrder {
+		} else if productEnum.DESC == d.PriceOrder {
 			order = "price desc"
 		}
 	}
 
 	var PrductListVo []proVo.Product
 
-
-	total,list := models.GetFrontAllProduct(d.PageNum,d.PageSize,maps,order)
+	total, list := models.GetFrontAllProduct(d.PageNum, d.PageSize, maps, order)
 	e := copier.Copy(&PrductListVo, list)
 	if e != nil {
 		global.YSHOP_LOG.Error(e)
 	}
 	totalNum := util.Int64ToInt(total)
-	totalPage := util.GetTotalPage(totalNum,d.PageSize)
-	return  PrductListVo,totalNum,totalPage
+	totalPage := util.GetTotalPage(totalNum, d.PageSize)
+	return PrductListVo, totalNum, totalPage
 }
 
-func (d *Product) GetDetail() (*proVo.ProductDetail,error) {
+func (d *Product) GetDetail() (*proVo.ProductDetail, error) {
 	var (
 		storeProduct models.YshopStoreProduct
 		productVo    proVo.Product
 		err          error
 	)
 	err = global.YSHOP_DB.Model(&models.YshopStoreProduct{}).
-		Where("id = ?",d.Id).
-		Where("is_show",1).
+		Where("id = ?", d.Id).
+		Where("is_show", 1).
 		First(&storeProduct).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
-		return nil,errors.New("获取商品失败")
+		return nil, errors.New("获取商品失败")
 	}
 	//获取sku
-	returnMap,err := getProductAttrDetail(d.Id)
+	returnMap, err := getProductAttrDetail(d.Id)
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
-		return nil,errors.New("获取商品sku失败")
+		return nil, errors.New("获取商品sku失败")
 	}
 	err = copier.Copy(&productVo, storeProduct)
-	productVo.SliderImageArr = strings.Split(storeProduct.SliderImage,",")
+	productVo.SliderImageArr = strings.Split(storeProduct.SliderImage, ",")
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
-		return nil,errors.New("商品转化失败")
+		return nil, errors.New("商品转化失败")
 	}
 	//此处处理登录的用户
 	//todo
 	if d.Uid > 0 {
-		isCollect := product_relation_service.IsRelation(d.Id,d.Uid)
+		isCollect := product_relation_service.IsRelation(d.Id, d.Uid)
 		productVo.UserCollect = isCollect
 	}
 
@@ -165,44 +167,44 @@ func (d *Product) GetDetail() (*proVo.ProductDetail,error) {
 	//此处处理运费模板
 	//todo
 	detail := proVo.ProductDetail{
-		StoreInfo: productVo,
-		ProductAttr: returnMap["productAttr"].([]proVo.ProductAttr),
+		StoreInfo:    productVo,
+		ProductAttr:  returnMap["productAttr"].([]proVo.ProductAttr),
 		ProductValue: returnMap["productValue"].(map[string]models.YshopStoreProductAttrValue),
 	}
 
-	return &detail,nil
+	return &detail, nil
 }
 
-//获取商品sku
-func getProductAttrDetail(productId int64) (map[string]interface{},error) {
+// 获取商品sku
+func getProductAttrDetail(productId int64) (map[string]interface{}, error) {
 	var (
-		storeProductAttrs []models.YshopStoreProductAttr
-		productAttrValues []models.YshopStoreProductAttrValue
-		mapp map[string]models.YshopStoreProductAttrValue
+		storeProductAttrs    []models.YshopStoreProductAttr
+		productAttrValues    []models.YshopStoreProductAttrValue
+		mapp                 map[string]models.YshopStoreProductAttrValue
 		storeProductAttrList []proVo.ProductAttr
-		err error
+		err                  error
 	)
 	err = global.YSHOP_DB.Model(&models.YshopStoreProductAttr{}).
-		Where("product_id = ?",productId).
-	 	Order("attr_values asc").Find(&storeProductAttrs).Error
+		Where("product_id = ?", productId).
+		Order("attr_values asc").Find(&storeProductAttrs).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
-		return nil,err
+		return nil, err
 	}
 	err = global.YSHOP_DB.Model(&models.YshopStoreProductAttrValue{}).
-		Where("product_id = ?",productId).
+		Where("product_id = ?", productId).
 		Find(&productAttrValues).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
-		return nil,err
+		return nil, err
 	}
-	util.StructColumn(&mapp,productAttrValues,"","Sku")
+	util.StructColumn(&mapp, productAttrValues, "", "Sku")
 	//global.YSHOP_LOG.Info(mapp)
 
-	for _,attr := range storeProductAttrs {
+	for _, attr := range storeProductAttrs {
 		stringList := strings.Split(attr.AttrValues, ",")
 		var attrValues []productDto.AttrValue
-		for _,str := range stringList {
+		for _, str := range stringList {
 			attrValue := productDto.AttrValue{
 				Attr: str,
 			}
@@ -212,7 +214,7 @@ func getProductAttrDetail(productId int64) (map[string]interface{},error) {
 		err = copier.Copy(&attrVo, attr)
 		if err != nil {
 			global.YSHOP_LOG.Error(err)
-			return nil,err
+			return nil, err
 		}
 		attrVo.AttrValue = attrValues
 		attrVo.AttrValueArr = stringList
@@ -220,19 +222,18 @@ func getProductAttrDetail(productId int64) (map[string]interface{},error) {
 	}
 
 	returnMap := gin.H{
-		"productAttr":storeProductAttrList,
+		"productAttr":  storeProductAttrList,
 		"productValue": mapp,
 	}
-	return returnMap,nil
+	return returnMap, nil
 }
-
 
 func (d *Product) OnSaleByProduct() error {
-	return models.OnSaleByProduct(d.Id,d.SaleDto.Status)
+	return models.OnSaleByProduct(d.Id, d.SaleDto.Status)
 }
 
-func (d *Product) PublicFormatAttr() map[string]interface{}  {
-	return getFormatAttr(d.Id,d.JsonObj)
+func (d *Product) PublicFormatAttr() map[string]interface{} {
+	return getFormatAttr(d.Id, d.JsonObj)
 }
 
 func (d *Product) AddOrSaveProduct() (err error) {
@@ -251,15 +252,13 @@ func (d *Product) AddOrSaveProduct() (err error) {
 	images := strings.Join(m.SliderImage, ",")
 	model.SliderImage = images
 
-
 	if m.Id > 0 {
-		err = models.UpdateByProduct(m.Id,&model)
+		err = models.UpdateByProduct(m.Id, &model)
 		productId = m.Id
 	} else {
 		models.AddProduct(&model)
 		productId = model.Id
 	}
-
 
 	//sku处理
 	if m.SpecType == productEnum.SEPC_TYPE_0 {
@@ -277,9 +276,8 @@ func (d *Product) AddOrSaveProduct() (err error) {
 	} else {
 		err = insertProductSku(m.Items, m.Attrs, productId)
 	}
-	return  err
+	return err
 }
-
 
 func (d *Product) GetProductInfo() map[string]interface{} {
 	var (
@@ -291,7 +289,7 @@ func (d *Product) GetProductInfo() map[string]interface{} {
 	catList := cateService.GetProductCate()
 	ruleService := product_rule_service.Rule{
 		PageSize: 9999,
-		PageNum: 1,
+		PageNum:  1,
 	}
 	ruleList := ruleService.GetAll()
 	mapData["cateList"] = catList
@@ -312,10 +310,8 @@ func (d *Product) GetProductInfo() map[string]interface{} {
 
 	mapData["productInfo"] = productDto
 
-
 	return mapData
 }
-
 
 func (d *Product) GetAll() vo.ResultList {
 	maps := make(map[string]interface{})
@@ -326,12 +322,11 @@ func (d *Product) GetAll() vo.ResultList {
 		maps["is_show"] = d.Enabled
 	}
 
-	total,list := models.GetAllProduct(d.PageNum,d.PageSize,maps)
+	total, list := models.GetAllProduct(d.PageNum, d.PageSize, maps)
 	cateService := cate_service.Cate{}
 	mapList := cateService.GetProductCate()
-	return vo.ResultList{Content: list,TotalElements: total,ExtendData: mapList}
+	return vo.ResultList{Content: list, TotalElements: total, ExtendData: mapList}
 }
-
 
 func (d *Product) Del() error {
 	return models.DelByProduct(d.Ids)
@@ -355,7 +350,7 @@ func insertProductSku(items []productDto.FormatDetail, attrs []productDto.Produc
 	if err != nil {
 		return err
 	}
-	err =models.AddProductAttrResult(items, attrs, productId)
+	err = models.AddProductAttrResult(items, attrs, productId)
 	if err != nil {
 		return err
 	}
@@ -364,7 +359,7 @@ func insertProductSku(items []productDto.FormatDetail, attrs []productDto.Produc
 
 }
 
-//计算获取属性结果最小值
+// 计算获取属性结果最小值
 func computeProduct(attrs []productDto.ProductFormat) map[string]interface{} {
 	returnMap := make(map[string]interface{})
 
@@ -394,7 +389,7 @@ func computeProduct(attrs []productDto.ProductFormat) map[string]interface{} {
 	return returnMap
 }
 
-//获取生成的商品sku
+// 获取生成的商品sku
 func getFormatAttr(id int64, jsonObj map[string]interface{}) map[string]interface{} {
 	var (
 		mapData          = make(map[string]interface{})
@@ -499,7 +494,7 @@ func getFormatAttr(id int64, jsonObj map[string]interface{}) map[string]interfac
 	return mapData
 }
 
-//组合map
+// 组合map
 func addMap(headerMapList []map[string]interface{}, align string) []map[string]interface{} {
 
 	headMap := map[string]interface{}{
@@ -578,7 +573,7 @@ func addMap(headerMapList []map[string]interface{}, align string) []map[string]i
 
 }
 
-//组合sku规则算法
+// 组合sku规则算法
 func attrFormat(formatDetailList []productDto.FormatDetail) productDto.Detail {
 	var (
 		data []string

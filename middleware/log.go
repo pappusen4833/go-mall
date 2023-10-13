@@ -2,14 +2,13 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-mall/app/models"
+	"go-mall/pkg/jwt"
+	"go-mall/pkg/logging"
 	"regexp"
 	"strings"
 	"time"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/pkg/jwt"
-	"yixiang.co/go-mall/pkg/logging"
 )
-
 
 func Log() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -24,17 +23,17 @@ func Log() gin.HandlerFunc {
 		}
 
 		reg := regexp.MustCompile(`[0-9]+`)
-		newUrl := reg.ReplaceAllString(url,"*")
-		menu := models.FindMenuByRouterAndMethod(newUrl,method)
+		newUrl := reg.ReplaceAllString(url, "*")
+		menu := models.FindMenuByRouterAndMethod(newUrl, method)
 		log := models.SysLog{
-			Description:     menu.Name,
-			Method:          method,
-			RequestIp:       c.ClientIP(),
-			Username:        user.Username,
-			Address:         newUrl,
-			Browser:         "",
-			Type:            0,
-			Uid:             user.Id,
+			Description: menu.Name,
+			Method:      method,
+			RequestIp:   c.ClientIP(),
+			Username:    user.Username,
+			Address:     newUrl,
+			Browser:     "",
+			Type:        0,
+			Uid:         user.Id,
 		}
 		now := time.Now()
 		c.Next()
@@ -43,6 +42,3 @@ func Log() gin.HandlerFunc {
 		models.AddLog(&log)
 	}
 }
-
-
-

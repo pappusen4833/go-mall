@@ -2,7 +2,7 @@ package cron
 
 import (
 	"github.com/robfig/cron/v3"
-	"yixiang.co/go-mall/pkg/global"
+	"go-mall/pkg/global"
 )
 
 var cronMap = make(map[int64]*cron.Cron)

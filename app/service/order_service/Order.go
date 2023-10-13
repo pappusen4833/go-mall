@@ -13,22 +13,22 @@ import (
 	"github.com/segmentio/ksuid"
 	"github.com/shopspring/decimal"
 	"github.com/unknwon/com"
+	"go-mall/app/models"
+	"go-mall/app/models/vo"
+	"go-mall/app/params"
+	"go-mall/app/service/cart_service"
+	cartVo "go-mall/app/service/cart_service/vo"
+	orderDto "go-mall/app/service/order_service/dto"
+	ordervo "go-mall/app/service/order_service/vo"
+	userVO "go-mall/app/service/wechat_user_service/vo"
+	"go-mall/pkg/constant"
+	orderEnum "go-mall/pkg/enums/order"
+	"go-mall/pkg/global"
+	"go-mall/pkg/redis"
+	"go-mall/pkg/util"
 	"gorm.io/gorm"
 	"strconv"
 	"strings"
-	"yixiang.co/go-mall/app/models"
-	"yixiang.co/go-mall/app/models/vo"
-	"yixiang.co/go-mall/app/params"
-	"yixiang.co/go-mall/app/service/cart_service"
-	cartVo "yixiang.co/go-mall/app/service/cart_service/vo"
-	orderDto "yixiang.co/go-mall/app/service/order_service/dto"
-	ordervo "yixiang.co/go-mall/app/service/order_service/vo"
-	userVO "yixiang.co/go-mall/app/service/wechat_user_service/vo"
-	"yixiang.co/go-mall/pkg/constant"
-	orderEnum "yixiang.co/go-mall/pkg/enums/order"
-	"yixiang.co/go-mall/pkg/global"
-	"yixiang.co/go-mall/pkg/redis"
-	"yixiang.co/go-mall/pkg/util"
 )
 
 type Order struct {
@@ -59,11 +59,9 @@ type Order struct {
 	IntType      int
 
 	ReplyParam []params.ProductReplyParam
-
 }
 
-
-//订单列表 -1全部 默认为0未支付 1待发货 2待收货 3待评价 4已完成
+// 订单列表 -1全部 默认为0未支付 1待发货 2待收货 3待评价 4已完成
 func (d *Order) GetList() ([]ordervo.StoreOrder, int, int) {
 	maps := make(map[string]interface{})
 	maps["uid"] = d.Uid
@@ -80,7 +78,7 @@ func (d *Order) GetList() ([]ordervo.StoreOrder, int, int) {
 		maps["refund_status"] = 0
 		maps["status"] = 0
 	case 2:
-		maps["paid"] =1
+		maps["paid"] = 1
 		maps["refund_status"] = 0
 		maps["status"] = 1
 	case 3:
@@ -116,7 +114,7 @@ func (d *Order) GetList() ([]ordervo.StoreOrder, int, int) {
 	return ReturnListVo, totalNum, totalPage
 }
 
-//取消订单
+// 取消订单
 func (d *Order) CancelOrder() error {
 	var err error
 	tx := global.YSHOP_DB.Begin()
@@ -127,21 +125,21 @@ func (d *Order) CancelOrder() error {
 			tx.Commit()
 		}
 	}()
-	order,err := d.GetOrderInfo()
+	order, err := d.GetOrderInfo()
 	if err != nil {
 		return errors.New("订单不存在")
 	}
 	if order.Paid == 1 {
 		return errors.New("支付订单不可以取消")
 	}
-	err = RegressionStock(tx,order)
+	err = RegressionStock(tx, order)
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 		return errors.New("取消失败-001")
 	}
 
 	//删除订单
-	err = tx.Where("id = ?",order.Id).Delete(&models.YshopStoreOrder{}).Error
+	err = tx.Where("id = ?", order.Id).Delete(&models.YshopStoreOrder{}).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 		return errors.New("取消失败-002")
@@ -151,12 +149,12 @@ func (d *Order) CancelOrder() error {
 
 }
 
-//回退库存
-func RegressionStock(tx *gorm.DB,order *ordervo.StoreOrder) error  {
+// 回退库存
+func RegressionStock(tx *gorm.DB, order *ordervo.StoreOrder) error {
 	var err error
 	orderInfo := HandleOrder(order)
 	cartInfoList := orderInfo.CartInfo
-	for _,vo := range cartInfoList {
+	for _, vo := range cartInfoList {
 		err = tx.Exec("update yshop_store_product_attr_value set stock=stock + ?, sales=sales - ?"+
 			" where product_id = ? and `unique` = ? and stock >= ?",
 			vo.CartNum, vo.CartNum, vo.ProductId, vo.ProductAttrUnique, vo.CartNum).Error
@@ -177,7 +175,7 @@ func RegressionStock(tx *gorm.DB,order *ordervo.StoreOrder) error  {
 //todo 回退积分
 //todo 回退优惠券
 
-//订单评价
+// 订单评价
 func (d *Order) OrderComment() error {
 	var err error
 	tx := global.YSHOP_DB.Begin()
@@ -188,21 +186,21 @@ func (d *Order) OrderComment() error {
 			tx.Commit()
 		}
 	}()
-	order,err := d.GetOrderInfo()
+	order, err := d.GetOrderInfo()
 	if err != nil {
 		return errors.New("订单不存在")
 	}
 	var replys []models.YshopStoreProductReply
-	for _,data := range d.ReplyParam {
+	for _, data := range d.ReplyParam {
 		reply := models.YshopStoreProductReply{
-			Uid: d.Uid,
-			Oid: order.Id,
-			ProductId: data.ProductId,
+			Uid:          d.Uid,
+			Oid:          order.Id,
+			ProductId:    data.ProductId,
 			ProductScore: data.ProductScore,
 			ServiceScore: data.ServiceScore,
-			Comment: data.Comment,
-			Pics: data.Pics,
-			Unique: data.Unique,
+			Comment:      data.Comment,
+			Pics:         data.Pics,
+			Unique:       data.Unique,
 		}
 		replys = append(replys, reply)
 	}
@@ -212,7 +210,7 @@ func (d *Order) OrderComment() error {
 		global.YSHOP_LOG.Error(err)
 		return errors.New("评价失败-0001")
 	}
-	err = tx.Model(&models.YshopStoreOrder{}).Where("id = ?",order.Id).Update("status",3).Error
+	err = tx.Model(&models.YshopStoreOrder{}).Where("id = ?", order.Id).Update("status", 3).Error
 	if err != nil {
 		global.YSHOP_LOG.Error(err)
 		return errors.New("评价失败-0002")
@@ -220,7 +218,7 @@ func (d *Order) OrderComment() error {
 	return nil
 }
 
-//收货
+// 收货
 func (d *Order) TakeOrder() error {
 	var err error
 	tx := global.YSHOP_DB.Begin()
@@ -231,7 +229,7 @@ func (d *Order) TakeOrder() error {
 			tx.Commit()
 		}
 	}()
-	order,err := d.GetOrderInfo()
+	order, err := d.GetOrderInfo()
 	if err != nil {
 		return errors.New("订单不存在")
 	}
@@ -240,23 +238,23 @@ func (d *Order) TakeOrder() error {
 	}
 
 	//修改订单状态
-	err = tx.Model(&models.YshopStoreOrder{}).Where("id = ?",order.Id).Update("status",2).Error
+	err = tx.Model(&models.YshopStoreOrder{}).Where("id = ?", order.Id).Update("status", 2).Error
 	//增加状态
 	err = models.AddStoreOrderStatus(tx, order.Id, "user_take_delivery", "用户已收货")
 
 	//奖励积分
 	if order.GainIntegral > 0 {
-		err = tx.Exec("update yshop_user set integral = integral + ?" +
-			" where id = ?",order.Uid,order.GainIntegral).Error
+		err = tx.Exec("update yshop_user set integral = integral + ?"+
+			" where id = ?", order.Uid, order.GainIntegral).Error
 		if err != nil {
 			global.YSHOP_LOG.Error(err)
 			return err
 		}
 		//增加流水
-		number,_ := com.StrTo(order.GainIntegral).Float64()
+		number, _ := com.StrTo(order.GainIntegral).Float64()
 		mark := "购买商品赠送积分" + com.ToStr(order.GainIntegral) + "积分"
-		err = models.Income(tx,order.Uid,"购买商品赠送积分","integral","gain",
-			mark,com.ToStr(order.Id),number,number)
+		err = models.Income(tx, order.Uid, "购买商品赠送积分", "integral", "gain",
+			mark, com.ToStr(order.Id), number, number)
 		if err != nil {
 			global.YSHOP_LOG.Error(err)
 			return err
@@ -268,7 +266,7 @@ func (d *Order) TakeOrder() error {
 	return nil
 }
 
-//创建订单
+// 创建订单
 func (d *Order) CreateOrder() (*models.YshopStoreOrder, error) {
 	var err error
 	tx := global.YSHOP_DB.Begin()
@@ -409,7 +407,7 @@ func (d *Order) CreateOrder() (*models.YshopStoreOrder, error) {
 	return storeOrder, nil
 }
 
-func (d *Order) GetOrderInfo() (*ordervo.StoreOrder,error) {
+func (d *Order) GetOrderInfo() (*ordervo.StoreOrder, error) {
 	var (
 		order *models.YshopStoreOrder
 		vo    ordervo.StoreOrder
@@ -428,10 +426,10 @@ func (d *Order) GetOrderInfo() (*ordervo.StoreOrder,error) {
 	}
 	copier.Copy(&vo, order)
 
-	return &vo,nil
+	return &vo, nil
 }
 
-//处理订单状态
+// 处理订单状态
 func HandleOrder(order *ordervo.StoreOrder) *ordervo.StoreOrder {
 	var (
 		orderInfoList []models.YshopStoreOrderCartInfo
@@ -516,7 +514,7 @@ func (d *Order) Check() (map[string]interface{}, error) {
 	return nil, nil
 }
 
-//计算订单
+// 计算订单
 func (d *Order) ComputeOrder() (*ordervo.Compute, error) {
 	global.YSHOP_LOG.Info(d.ComputeParam)
 	var (
@@ -556,7 +554,7 @@ func (d *Order) ComputeOrder() (*ordervo.Compute, error) {
 
 }
 
-//确认订单
+// 确认订单
 func (d *Order) ConfirmOrder() (*ordervo.ConfirmOrder, error) {
 	cartService := cart_service.Cart{
 		Uid:     d.Uid,
@@ -665,10 +663,6 @@ func getOrderPriceGroup(cartInfo []cartVo.Cart, userAddress *models.YshopUserAdd
 	}
 }
 
-
-
-
-
 func (d *Order) GetAll() vo.ResultList {
 	maps := make(map[string]interface{})
 	if d.Name != "" {
@@ -689,7 +683,7 @@ func (d *Order) GetAll() vo.ResultList {
 		maps["refund_status"] = 0
 		maps["status"] = 0
 	case 2:
-		maps["paid"] =1
+		maps["paid"] = 1
 		maps["refund_status"] = 0
 		maps["status"] = 1
 	case 3:
@@ -713,9 +707,9 @@ func (d *Order) GetAll() vo.ResultList {
 	var (
 		orderInfoList []models.YshopStoreOrderCartInfo
 		cart          cartVo.Cart
-		newList []models.YshopStoreOrder
+		newList       []models.YshopStoreOrder
 	)
-	for _ ,order := range list {
+	for _, order := range list {
 		global.YSHOP_DB.Model(&models.YshopStoreOrderCartInfo{}).Where("oid = ?", order.Id).Find(&orderInfoList)
 		cartInfo := make([]cartVo.Cart, 0)
 		for _, orderInfo := range orderInfoList {
@@ -724,17 +718,14 @@ func (d *Order) GetAll() vo.ResultList {
 		}
 		order.CartInfo = cartInfo
 
-		_status := orderStatus(order.Paid,order.Status,order.RefundStatus)
+		_status := orderStatus(order.Paid, order.Status, order.RefundStatus)
 		order.OrderStatus = _status
-		order.OrderStatusName = orderStatusStr(order.Paid,order.Status,order.ShippingType,order.RefundStatus)
-		order.PayTypeName = payTypeName(order.PayType,order.Paid)
+		order.OrderStatusName = orderStatusStr(order.Paid, order.Status, order.ShippingType, order.RefundStatus)
+		order.PayTypeName = payTypeName(order.PayType, order.Paid)
 		//global.YSHOP_LOG.Info(order.CartInfo)
 
 		newList = append(newList, order)
 	}
-
-
-
 
 	return vo.ResultList{Content: newList, TotalElements: total}
 }
@@ -808,18 +799,16 @@ func (d *Order) Del() error {
 	return models.DelByStoreOrder(d.Ids)
 }
 
-
 func (d *Order) Save() error {
 	return models.UpdateByStoreOrder(d.M)
 }
-
 
 func (d *Order) Deliver() error {
 	if d.M.Status != 0 {
 		return errors.New("订单状态错误")
 	}
 	var express models.YshopExpress
-    err := global.YSHOP_DB.Model(&models.YshopExpress{}).Where("name = ?",d.M.DeliveryName).First(&express).Error
+	err := global.YSHOP_DB.Model(&models.YshopExpress{}).Where("name = ?", d.M.DeliveryName).First(&express).Error
 	if err != nil {
 		return errors.New("请先添加快递公司")
 	}

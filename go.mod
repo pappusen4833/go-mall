@@ -1,4 +1,4 @@
-module yixiang.co/go-mall
+module go-mall
 
 go 1.15
 

@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"yixiang.co/go-mall/app/service/cart_service/vo"
+	"go-mall/app/service/cart_service/vo"
 )
 
 type Cache struct {

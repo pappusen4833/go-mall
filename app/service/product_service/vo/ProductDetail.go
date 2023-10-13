@@ -6,7 +6,7 @@
 package vo
 
 import (
-	"yixiang.co/go-mall/app/models"
+	"go-mall/app/models"
 )
 
 type ProductDetail struct {
@@ -19,6 +19,3 @@ type ProductDetail struct {
 	Uid          int64                                        `json:"uid"`
 	TempName     string                                       `json:"tempName"`
 }
-
-
-
