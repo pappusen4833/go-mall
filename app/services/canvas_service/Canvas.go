@@ -8,7 +8,7 @@ package canvas_service
 import (
 	"go-mall/app/models"
 	"go-mall/app/models/vo"
-	"go-mall/pkg/global"
+	"go-mall/packages/global"
 )
 
 type Canvas struct {

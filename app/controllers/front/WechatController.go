@@ -9,8 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/silenceper/wechat/v2/officialaccount/message"
 	"go-mall/app/services/wechat_user_service"
-	"go-mall/pkg/global"
-	"go-mall/pkg/util"
+	"go-mall/packages/global"
+	"go-mall/packages/util"
 )
 
 // 公众号服务api

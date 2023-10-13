@@ -6,8 +6,8 @@
 package models
 
 import (
-	"go-mall/pkg/logging"
-	"go-mall/pkg/util"
+	"go-mall/packages/logging"
+	"go-mall/packages/util"
 )
 
 type SysUser struct {

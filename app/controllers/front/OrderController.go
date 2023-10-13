@@ -13,11 +13,11 @@ import (
 	"go-mall/app/services/order_service"
 	orderDto "go-mall/app/services/order_service/dto"
 	"go-mall/app/services/pay_service"
-	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
-	"go-mall/pkg/global"
-	"go-mall/pkg/jwt"
-	"go-mall/pkg/util"
+	"go-mall/packages/app"
+	"go-mall/packages/constant"
+	"go-mall/packages/global"
+	"go-mall/packages/jwt"
+	"go-mall/packages/util"
 	"net/http"
 )
 

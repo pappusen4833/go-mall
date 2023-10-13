@@ -9,7 +9,7 @@ import (
 	"go-mall/app/models"
 	"go-mall/app/models/vo"
 	mVO "go-mall/app/services/menu_service/vo"
-	"go-mall/pkg/util"
+	"go-mall/packages/util"
 )
 
 type Menu struct {

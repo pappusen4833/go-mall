@@ -10,10 +10,10 @@ import (
 	"github.com/unknwon/com"
 	"go-mall/app/models"
 	"go-mall/app/services/article_service"
-	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
-	"go-mall/pkg/global"
-	"go-mall/pkg/util"
+	"go-mall/packages/app"
+	"go-mall/packages/constant"
+	"go-mall/packages/global"
+	"go-mall/packages/util"
 	"net/http"
 )
 

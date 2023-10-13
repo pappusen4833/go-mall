@@ -10,9 +10,9 @@ import (
 	dto2 "go-mall/app/services/user_service/dto"
 	"go-mall/app/services/wechat_user_service"
 	dto3 "go-mall/app/services/wechat_user_service/dto"
-	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
-	"go-mall/pkg/util"
+	"go-mall/packages/app"
+	"go-mall/packages/constant"
+	"go-mall/packages/util"
 	"net/http"
 )
 

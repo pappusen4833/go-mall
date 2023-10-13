@@ -10,7 +10,7 @@ import (
 	"go-mall/app/models"
 	"go-mall/app/models/vo"
 	userDto "go-mall/app/services/user_service/dto"
-	"go-mall/pkg/util"
+	"go-mall/packages/util"
 )
 
 type User struct {

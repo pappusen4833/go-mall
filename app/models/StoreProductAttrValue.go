@@ -8,7 +8,7 @@ package models
 import (
 	"github.com/segmentio/ksuid"
 	dto2 "go-mall/app/services/product_service/dto"
-	"go-mall/pkg/util"
+	"go-mall/packages/util"
 	"sort"
 	"strconv"
 	"strings"

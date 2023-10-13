@@ -7,7 +7,7 @@ package params
 
 import (
 	"github.com/astaxie/beego/validation"
-	"go-mall/pkg/global"
+	"go-mall/packages/global"
 )
 
 type CartParam struct {

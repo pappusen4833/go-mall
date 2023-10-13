@@ -11,10 +11,10 @@ import (
 	"go-mall/app/models"
 	dto2 "go-mall/app/services/menu_service/dto"
 	"go-mall/app/services/role_service"
-	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
-	"go-mall/pkg/logging"
-	"go-mall/pkg/util"
+	"go-mall/packages/app"
+	"go-mall/packages/constant"
+	"go-mall/packages/logging"
+	"go-mall/packages/util"
 	"net/http"
 )
 

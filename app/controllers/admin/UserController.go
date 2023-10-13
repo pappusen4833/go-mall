@@ -11,12 +11,12 @@ import (
 	"go-mall/app/models"
 	"go-mall/app/services/user_service"
 	dto2 "go-mall/app/services/user_service/dto"
-	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
-	"go-mall/pkg/jwt"
-	"go-mall/pkg/logging"
-	"go-mall/pkg/upload"
-	"go-mall/pkg/util"
+	"go-mall/packages/app"
+	"go-mall/packages/constant"
+	"go-mall/packages/jwt"
+	"go-mall/packages/logging"
+	"go-mall/packages/upload"
+	"go-mall/packages/util"
 	"net/http"
 )
 

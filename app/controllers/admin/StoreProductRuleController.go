@@ -5,9 +5,9 @@ import (
 	"github.com/unknwon/com"
 	"go-mall/app/services/product_rule_service"
 	dto2 "go-mall/app/services/product_service/dto"
-	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
-	"go-mall/pkg/util"
+	"go-mall/packages/app"
+	"go-mall/packages/constant"
+	"go-mall/packages/util"
 	"net/http"
 )
 

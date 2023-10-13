@@ -8,8 +8,8 @@ package front
 import (
 	"github.com/gin-gonic/gin"
 	"go-mall/app/services/cate_service"
-	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
+	"go-mall/packages/app"
+	"go-mall/packages/constant"
 	"net/http"
 )
 

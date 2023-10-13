@@ -6,7 +6,7 @@
 package models
 
 import (
-	"go-mall/pkg/global"
+	"go-mall/packages/global"
 	"gorm.io/gorm"
 )
 

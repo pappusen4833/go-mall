@@ -10,11 +10,11 @@ import (
 	"github.com/unknwon/com"
 	"go-mall/app/services/canvas_service"
 	"go-mall/app/services/product_service"
-	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
-	productEnum "go-mall/pkg/enums/product"
-	"go-mall/pkg/logging"
-	"go-mall/pkg/upload"
+	"go-mall/packages/app"
+	"go-mall/packages/constant"
+	productEnum "go-mall/packages/enums/product"
+	"go-mall/packages/logging"
+	"go-mall/packages/upload"
 	"net/http"
 )
 

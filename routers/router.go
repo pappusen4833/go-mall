@@ -7,8 +7,8 @@ import (
 	"go-mall/app/controllers/admin"
 	"go-mall/app/controllers/front"
 	_ "go-mall/docs"
-	"go-mall/middleware"
-	"go-mall/pkg/upload"
+	"go-mall/middlewares"
+	"go-mall/packages/upload"
 	"net/http"
 )
 
@@ -16,7 +16,7 @@ func InitRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
-	r.Use(middleware.Cors())
+	r.Use(middlewares.Cors())
 
 	r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
 
@@ -36,7 +36,7 @@ func InitRouter() *gin.Engine {
 	materialGroupController := admin.MaterialGroupController{}
 	canvasController := admin.CanvasController{}
 	adminRouter := r.Group("/admin")
-	adminRouter.Use(middleware.Jwt()).Use(middleware.Log())
+	adminRouter.Use(middlewares.Jwt()).Use(middlewares.Log())
 
 	{
 		adminRouter.GET("/auth/info", loginController.Info)
@@ -108,7 +108,7 @@ func InitRouter() *gin.Engine {
 	orderController := admin.OrderController{}
 	expressController := admin.ExpressController{}
 	shopRouter := r.Group("/shop")
-	shopRouter.Use(middleware.Jwt()).Use(middleware.Log())
+	shopRouter.Use(middlewares.Jwt()).Use(middlewares.Log())
 	{
 		shopRouter.GET("/cate", cateController.GetAll)
 		shopRouter.POST("/cate", cateController.Post)
@@ -143,7 +143,7 @@ func InitRouter() *gin.Engine {
 	wechatUserController := admin.WechatUserController{}
 	articleController := admin.ArticleController{}
 	wechatRouter := r.Group("/weixin")
-	wechatRouter.Use(middleware.Jwt()).Use(middleware.Log())
+	wechatRouter.Use(middlewares.Jwt()).Use(middlewares.Log())
 	{
 		wechatRouter.GET("/menu", wechatMenuController.GetAll)
 		wechatRouter.POST("/menu", wechatMenuController.Post)
@@ -163,7 +163,7 @@ func InitRouter() *gin.Engine {
 	genController := admin.GenController{}
 	cronCrontroller := admin.SysCronJobController{}
 	toolsRouter := r.Group("/tools")
-	toolsRouter.Use(middleware.Jwt()).Use(middleware.Log())
+	toolsRouter.Use(middlewares.Jwt()).Use(middlewares.Log())
 	{
 		toolsRouter.GET("/gen/tables", genController.GetAllDBTables)
 		toolsRouter.POST("/gen/import", genController.ImportTable)
@@ -211,7 +211,7 @@ func InitRouter() *gin.Engine {
 	ApiUserController := new(front.UserController)
 	ApiCartController := new(front.CartController)
 	//ApiOrderController := new(front.OrderController)
-	authApiv1 := r.Group("/api/v1").Use(middleware.AppJwt())
+	authApiv1 := r.Group("/api/v1").Use(middlewares.AppJwt())
 	{
 		authApiv1.GET("/userinfo", ApiUserController.GetUserInfo)
 		authApiv1.POST("/collect/add", ApiProductControler.AddCollect)

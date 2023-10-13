@@ -5,8 +5,8 @@ import (
 	"github.com/unknwon/com"
 	"go-mall/app/models"
 	"go-mall/app/services/cate_service"
-	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
+	"go-mall/packages/app"
+	"go-mall/packages/constant"
 	"net/http"
 )
 

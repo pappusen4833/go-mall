@@ -9,10 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-mall/app/params"
 	"go-mall/app/services/cart_service"
-	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
-	"go-mall/pkg/global"
-	"go-mall/pkg/jwt"
+	"go-mall/packages/app"
+	"go-mall/packages/constant"
+	"go-mall/packages/global"
+	"go-mall/packages/jwt"
 	"net/http"
 )
 

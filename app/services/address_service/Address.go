@@ -11,10 +11,10 @@ import (
 	"go-mall/app/models"
 	"go-mall/app/models/vo"
 	"go-mall/app/params"
-	"go-mall/pkg/constant"
-	"go-mall/pkg/global"
-	"go-mall/pkg/redis"
-	"go-mall/pkg/util"
+	"go-mall/packages/constant"
+	"go-mall/packages/global"
+	"go-mall/packages/redis"
+	"go-mall/packages/util"
 )
 
 type Address struct {
