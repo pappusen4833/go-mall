@@ -91,7 +91,7 @@ func (e *GenController) GetAllTables(c *gin.Context) {
 // @Title 获取表的信息
 // @Description 获取表的信息
 // @Success 200 {object} app.Response
-// @router /tools/gen/config/:name[get]
+// @router /tools/gen/config/:name [get]
 func (e *GenController) GetTableInfo(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -107,7 +107,7 @@ func (e *GenController) GetTableInfo(c *gin.Context) {
 // @Title 获取表的列信息
 // @Description 获取表的列信息
 // @Success 200 {object} app.Response
-// @router /tools/gen/columns[get]
+// @router /tools/gen/columns [get]
 func (e *GenController) GetTableColumns(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}

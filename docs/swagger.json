@@ -3,7 +3,7 @@
     "info": {
         "description": "gin-shop商城后台管理系统",
         "title": "gin-shop  API",
-        "termsOfService": "https://github.com/guchengwuyue/gin-shop",
+        "termsOfService": "https://gitee.com/guchengwuyue/gin-shop",
         "contact": {},
         "license": {
             "name": "apache2"
@@ -13,7 +13,7 @@
     "paths": {
         "/": {
             "get": {
-                "description": "素材分组列表",
+                "description": "用户列表",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -24,7 +24,7 @@
                 }
             },
             "put": {
-                "description": "素材分组修改",
+                "description": "用户编辑",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -35,6 +35,7 @@
                 }
             },
             "post": {
+                "description": "用户余额修改",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -78,7 +79,7 @@
                 }
             },
             "delete": {
-                "description": "素材分组删除",
+                "description": "删除定时任务调度表",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -104,7 +105,372 @@
         },
         "/admin/login": {
             "post": {
-                "description": "登录",
+                "description": "注册",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/address": {
+            "get": {
+                "description": "获取列表数据",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/address/default/set": {
+            "post": {
+                "description": "设置默认地址",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/address/del": {
+            "post": {
+                "description": "设置默认地址",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/address/edit": {
+            "post": {
+                "description": "添加or更新地址",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/cart/add": {
+            "post": {
+                "description": "添加购物车",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/cart/count": {
+            "get": {
+                "description": "获取数量",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/cart/num": {
+            "post": {
+                "description": "修改购物车数量",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/carts": {
+            "get": {
+                "description": "购物车列表数据",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/category": {
+            "get": {
+                "description": "获取树形数据",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/city_list": {
+            "get": {
+                "description": "获取树形数据",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/collect/add": {
+            "post": {
+                "description": "添加收藏",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/collect/del": {
+            "post": {
+                "description": "取消收藏",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/collect/user": {
+            "get": {
+                "description": "获取用户收藏",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/getCanvas": {
+            "get": {
+                "description": "获取画布数据",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order": {
+            "get": {
+                "description": "获取列表数据",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order/cancel": {
+            "post": {
+                "description": "未支付订单取消",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order/comments/:key": {
+            "post": {
+                "description": "订单评价",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order/computed/:key": {
+            "post": {
+                "description": "订单计算",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order/confirm": {
+            "post": {
+                "description": "订单确认",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order/create/:key": {
+            "post": {
+                "description": "订单创建",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order/detail/:key": {
+            "get": {
+                "description": "订单详情",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order/notify": {},
+        "/api/v1/order/pay": {
+            "post": {
+                "description": "订单支付",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order/take": {
+            "post": {
+                "description": "订单收货",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/product/detail/:id": {
+            "get": {
+                "description": "获取商品详情",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/product/hot": {
+            "get": {
+                "description": "获取推荐商品",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/products": {
+            "get": {
+                "description": "获取商品列表数据",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reply/list/:id": {
+            "get": {
+                "description": "获取商品评论列表数据",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/userinfo": {
+            "get": {
+                "description": "获取用户信息",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -136,6 +502,45 @@
         "/center": {
             "put": {
                 "description": "用户修改个人信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/exec/:id": {
+            "put": {
+                "description": "执行定时任务调度表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/gen/columns": {
+            "put": {
+                "description": "保存列配置",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/gen/config": {
+            "put": {
+                "description": "保存配置",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -224,9 +629,126 @@
                 }
             }
         },
+        "/register/verity": {
+            "post": {
+                "description": "短信验证码",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/save/:id": {
             "post": {
                 "description": "商品规格sku添加",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/stop/:id": {
+            "put": {
+                "description": "停止定时任务调度表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/tools/gen/code": {
+            "get": {
+                "description": "代码生产",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/tools/gen/columns": {
+            "get": {
+                "description": "获取表的列信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/tools/gen/config/:name": {
+            "get": {
+                "description": "获取表的信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/tools/gen/import": {
+            "post": {
+                "description": "导入数据库表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/tools/gen/preview": {
+            "get": {
+                "description": "代码预览",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/tools/gen/systables": {
+            "get": {
+                "description": "获取已经导入的表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/tools/gen/tables": {
+            "get": {
+                "description": "获取所有表",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -278,28 +800,10 @@
         },
         "/upload": {
             "post": {
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Import Image",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "Image File",
-                        "name": "image",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
+                "description": "上传图像",
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
@@ -312,9 +816,7 @@
         "app.Response": {
             "type": "object",
             "properties": {
-                "data": {
-                    "type": "object"
-                },
+                "data": {},
                 "msg": {
                     "type": "string"
                 },

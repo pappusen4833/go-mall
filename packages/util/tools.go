@@ -152,10 +152,6 @@ func GetTotalPage(total, size int) int {
 }
 
 // 实现 php 中的array_column 方法
-// @param desk [slice|map] 指针类型，方法最终的存储位置
-// @param input []struct，待转换的结构体切片
-// @param columnKey string
-// @param indexKey string
 func StructColumn(desk, input interface{}, columnKey, indexKey string) (err error) {
 	deskValue := reflect.ValueOf(desk)
 	if deskValue.Kind() != reflect.Ptr {
