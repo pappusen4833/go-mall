@@ -53,7 +53,7 @@ func (e *LoginController) Login(c *gin.Context) {
 // @Title 短信验证码
 // @Description 短信验证码
 // @Success 200 {object} app.Response
-// @router /register/verity [post]
+// @router /register/verify [post]
 func (e *LoginController) Verify(c *gin.Context) {
 	var (
 		param params.VerityParam
