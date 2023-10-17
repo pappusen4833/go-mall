@@ -17,7 +17,7 @@ type CanvasController struct {
 // @Title 画布
 // @Description 画布
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /admin/canvas/getCanvas [get]
 // @Tags Admin
 func (e *CanvasController) Get(c *gin.Context) {
 	var (
@@ -34,7 +34,7 @@ func (e *CanvasController) Get(c *gin.Context) {
 // @Title 画布添加/修改
 // @Description 画布添加/修改
 // @Success 200 {object} app.Response
-// @router / [post]
+// @router /admin/canvas/saveCanvas [post]
 // @Tags Admin
 func (e *CanvasController) Post(c *gin.Context) {
 	var (

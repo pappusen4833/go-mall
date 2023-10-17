@@ -18,7 +18,7 @@ type StoreProductController struct {
 // @Title 商品列表
 // @Description 商品列表
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /shop/product [get]
 // @Tags Admin
 func (e *StoreProductController) GetAll(c *gin.Context) {
 	var (
@@ -39,7 +39,7 @@ func (e *StoreProductController) GetAll(c *gin.Context) {
 // @Title 获取商品信息
 // @Description 获取商品信息
 // @Success 200 {object} app.Response
-// @router /info/:id [get]
+// @router /shop/product/info/:id [get]
 // @Tags Admin
 func (e *StoreProductController) GetInfo(c *gin.Context) {
 	var (
@@ -56,7 +56,7 @@ func (e *StoreProductController) GetInfo(c *gin.Context) {
 // @Title 商品添加
 // @Description 商品添加
 // @Success 200 {object} app.Response
-// @router /addOrSave [post]
+// @router /shop/product/addOrSave [post]
 // @Tags Admin
 func (e *StoreProductController) Post(c *gin.Context) {
 	var (
@@ -84,7 +84,7 @@ func (e *StoreProductController) Post(c *gin.Context) {
 // @Title 商品上下架
 // @Description 商品上下架
 // @Success 200 {object} app.Response
-// @router /onsale/:id [post]
+// @router /shop/product/onsale/:id [post]
 // @Tags Admin
 func (e *StoreProductController) OnSale(c *gin.Context) {
 	var (
@@ -109,7 +109,7 @@ func (e *StoreProductController) OnSale(c *gin.Context) {
 // @Title 商品删除
 // @Description 商品删除
 // @Success 200 {object} app.Response
-// @router /:id [delete]
+// @router /shop/product/:id [delete]
 // @Tags Admin
 func (e *StoreProductController) Delete(c *gin.Context) {
 	var (
@@ -131,7 +131,7 @@ func (e *StoreProductController) Delete(c *gin.Context) {
 // @Title 商品sku生成
 // @Description 商品sku生成
 // @Success 200 {object} app.Response
-// @router /isFormatAttr/:id [post]
+// @router /shop/product/isFormatAttr/:id [post]
 // @Tags Admin
 func (e *StoreProductController) FormatAttr(c *gin.Context) {
 	var (

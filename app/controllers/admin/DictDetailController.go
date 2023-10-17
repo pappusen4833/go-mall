@@ -18,7 +18,7 @@ type DictDetailController struct {
 // @Title 获取字典详情列表
 // @Description 获取字典详情列表
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /admin/dictDetail [get]
 // @Tags Admin
 func (e *DictDetailController) GetAll(c *gin.Context) {
 	var (
@@ -39,7 +39,7 @@ func (e *DictDetailController) GetAll(c *gin.Context) {
 // @Title 添加字典详情
 // @Description 添加字典详情
 // @Success 200 {object} app.Response
-// @router / [post]
+// @router /admin/dictDetail [post]
 // @Tags Admin
 func (e *DictDetailController) Post(c *gin.Context) {
 	var (
@@ -66,7 +66,7 @@ func (e *DictDetailController) Post(c *gin.Context) {
 // @Title 修改字典详情
 // @Description 修改字典详情
 // @Success 200 {object} app.Response
-// @router / [put]
+// @router /admin/dictDetail [put]
 // @Tags Admin
 func (e *DictDetailController) Put(c *gin.Context) {
 	var (
@@ -93,7 +93,7 @@ func (e *DictDetailController) Put(c *gin.Context) {
 // @Title 删除字典详情
 // @Description 删除字典详情
 // @Success 200 {object} app.Response
-// @router /:id [delete]
+// @router /admin/dictDetail/:id [delete]
 // @Tags Admin
 func (e *DictDetailController) Delete(c *gin.Context) {
 	var (

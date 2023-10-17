@@ -18,7 +18,7 @@ type MaterialGroupController struct {
 // @Title 素材分组列表
 // @Description 素材分组列表
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /admin/materialgroup [get]
 // @Tags Admin
 func (e *MaterialGroupController) GetAll(c *gin.Context) {
 	var (
@@ -35,7 +35,7 @@ func (e *MaterialGroupController) GetAll(c *gin.Context) {
 // @Title素材分组添加
 // @Description素材分组添加
 // @Success 200 {object} app.Response
-// @router / [post]
+// @router /admin/materialgroup [post]
 // @Tags Admin
 func (e *MaterialGroupController) Post(c *gin.Context) {
 	var (
@@ -65,7 +65,7 @@ func (e *MaterialGroupController) Post(c *gin.Context) {
 // @Title 素材分组修改
 // @Description 素材分组修改
 // @Success 200 {object} app.Response
-// @router / [put]
+// @router /admin/materialgroup [put]
 // @Tags Admin
 func (e *MaterialGroupController) Put(c *gin.Context) {
 	var (
@@ -94,7 +94,7 @@ func (e *MaterialGroupController) Put(c *gin.Context) {
 // @Title 素材分组删除
 // @Description 素材分组删除
 // @Success 200 {object} app.Response
-// @router /:id [delete]
+// @router /admin/materialgroup/:id [delete]
 // @Tags Admin
 func (e *MaterialGroupController) Delete(c *gin.Context) {
 	var (

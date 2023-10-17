@@ -19,7 +19,7 @@ type MenuController struct {
 // @Title 菜单列表
 // @Description 菜单列表
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /admin/menu [get]
 // @Tags Admin
 func (e *MenuController) GetAll(c *gin.Context) {
 	var (
@@ -35,7 +35,7 @@ func (e *MenuController) GetAll(c *gin.Context) {
 // @Title 菜单添加
 // @Description 菜单添加
 // @Success 200 {object} app.Response
-// @router / [post]
+// @router /admin/menu [post]
 // @Tags Admin
 func (e *MenuController) Post(c *gin.Context) {
 	var (
@@ -62,7 +62,7 @@ func (e *MenuController) Post(c *gin.Context) {
 // @Title 菜单修改
 // @Description 菜单修改
 // @Success 200 {object} app.Response
-// @router / [put]
+// @router /admin/menu [put]
 // @Tags Admin
 func (e *MenuController) Put(c *gin.Context) {
 	var (
@@ -89,7 +89,7 @@ func (e *MenuController) Put(c *gin.Context) {
 // @Title 菜单删除
 // @Description 菜单删除
 // @Success 200 {object} app.Response
-// @router / [delete]
+// @router /admin/menu [delete]
 // @Tags Admin
 func (e *MenuController) Delete(c *gin.Context) {
 	var (
@@ -110,7 +110,7 @@ func (e *MenuController) Delete(c *gin.Context) {
 // @Title 菜单构建
 // @Description 菜单构建
 // @Success 200 {object} app.Response
-// @router /build [get]
+// @router /admin/menu/build [get]
 // @Tags Admin
 func (e *MenuController) Build(c *gin.Context) {
 	var (
@@ -126,7 +126,7 @@ func (e *MenuController) Build(c *gin.Context) {
 // @Title 菜单树形
 // @Description 菜单树形
 // @Success 200 {object} app.Response
-// @router /tree [get]
+// @router /admin/menu/tree [get]
 // @Tags Admin
 func (e *MenuController) GetTree(c *gin.Context) {
 	var (

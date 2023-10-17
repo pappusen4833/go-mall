@@ -16,7 +16,7 @@ type LogController struct {
 // @Title 日志列表
 // @Description 日志列表
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /admin/logs [get]
 // @Tags Admin
 func (e *LogController) GetAll(c *gin.Context) {
 	var (
@@ -35,7 +35,7 @@ func (e *LogController) GetAll(c *gin.Context) {
 // @Title 日志删除
 // @Description 日志删除
 // @Success 200 {object} app.Response
-// @router / [delete]
+// @router /admin/logs [delete]
 // @Tags Admin
 func (e *LogController) Delete(c *gin.Context) {
 	var (

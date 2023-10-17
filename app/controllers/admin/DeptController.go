@@ -17,7 +17,7 @@ type DeptController struct {
 // @Title 获取部门列表
 // @Description 获取部门列表
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /admin/dept [get]
 // @Tags Admin
 func (e *DeptController) GetAll(c *gin.Context) {
 	var (
@@ -33,7 +33,7 @@ func (e *DeptController) GetAll(c *gin.Context) {
 // @Title 添加部门
 // @Description 添加部门
 // @Success 200 {object} app.Response
-// @router / [post]
+// @router /admin/dept [post]
 // @Tags Admin
 func (e *DeptController) Post(c *gin.Context) {
 	var (
@@ -60,7 +60,7 @@ func (e *DeptController) Post(c *gin.Context) {
 // @Title 修改部门
 // @Description 修改部门
 // @Success 200 {object} app.Response
-// @router / [put]
+// @router /admin/dept [put]
 // @Tags Admin
 func (e *DeptController) Put(c *gin.Context) {
 	var (
@@ -86,7 +86,7 @@ func (e *DeptController) Put(c *gin.Context) {
 // @Title 删除部门
 // @Description 删除部门
 // @Success 200 {object} app.Response
-// @router / [delete]
+// @router /admin/dept [delete]
 // @Tags Admin
 func (e *DeptController) Delete(c *gin.Context) {
 	var (

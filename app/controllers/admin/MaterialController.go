@@ -22,7 +22,7 @@ type MaterialController struct {
 // @Title 素材列表
 // @Description 岗位列表
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /admin/material [get]
 // @Tags Admin
 func (e *MaterialController) GetAll(c *gin.Context) {
 	var (
@@ -43,7 +43,7 @@ func (e *MaterialController) GetAll(c *gin.Context) {
 // @Title 素材添加
 // @Description 素材添加
 // @Success 200 {object} app.Response
-// @router / [post]
+// @router /admin/material [post]
 // @Tags Admin
 func (e *MaterialController) Post(c *gin.Context) {
 	var (
@@ -72,7 +72,7 @@ func (e *MaterialController) Post(c *gin.Context) {
 // @Title 素材修改
 // @Description 素材修改
 // @Success 200 {object} app.Response
-// @router / [put]
+// @router /admin/material [put]
 // @Tags Admin
 func (e *MaterialController) Put(c *gin.Context) {
 	var (
@@ -101,7 +101,7 @@ func (e *MaterialController) Put(c *gin.Context) {
 // @Title 素材删除
 // @Description 素材删除
 // @Success 200 {object} app.Response
-// @router /:id [delete]
+// @router /admin/material/:id [delete]
 // @Tags Admin
 func (e *MaterialController) Delete(c *gin.Context) {
 	var (
@@ -125,7 +125,7 @@ func (e *MaterialController) Delete(c *gin.Context) {
 // @Title 上传图像
 // @Description 上传图像
 // @Success 200 {object} app.Response
-// @router /upload [post]
+// @router /admin/material/upload [post]
 // @Tags Admin
 func (e *MaterialController) Upload(c *gin.Context) {
 	appG := app.Gin{C: c}

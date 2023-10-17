@@ -130,7 +130,7 @@ func InitRouter() *gin.Engine {
 		shopRouter.POST("/order/save/:id", orderController.Post)
 		shopRouter.DELETE("/order/:id", orderController.Delete)
 		shopRouter.POST("/order/remark", orderController.Put)
-		shopRouter.PUT("/order", orderController.Deliver)
+		shopRouter.PUT("/order/deliver", orderController.Deliver)
 		shopRouter.POST("/order/express", orderController.DeliverQuery)
 
 		shopRouter.GET("/express", expressController.GetAll)

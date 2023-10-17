@@ -18,7 +18,7 @@ type WechatUserController struct {
 // @Title 用户列表
 // @Description 用户列表
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /weixin/user [get]
 // @Tags Admin
 func (e *WechatUserController) GetAll(c *gin.Context) {
 	var (
@@ -43,7 +43,7 @@ func (e *WechatUserController) GetAll(c *gin.Context) {
 // @Title 用户编辑
 // @Description 用户编辑
 // @Success 200 {object} app.Response
-// @router / [put]
+// @router //weixin/user [put]
 // @Tags Admin
 func (e *WechatUserController) Put(c *gin.Context) {
 	var (
@@ -70,7 +70,7 @@ func (e *WechatUserController) Put(c *gin.Context) {
 // @Title 用户余额修改
 // @Description 用户余额修改
 // @Success 200 {object} app.Response
-// @router / [post]
+// @router /weixin/user/money [post]
 // @Tags Admin
 func (e *WechatUserController) Money(c *gin.Context) {
 	var (

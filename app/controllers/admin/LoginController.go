@@ -77,7 +77,7 @@ func (e *LoginController) Login(c *gin.Context) {
 // @Title 获取用户信息
 // @Description 获取用户信息
 // @Success 200 {object} app.Response
-// @router /info [get]
+// @router /admin/info [get]
 // @Tags Admin
 func (e *LoginController) Info(c *gin.Context) {
 	var (
@@ -89,7 +89,7 @@ func (e *LoginController) Info(c *gin.Context) {
 // @Title 退出登录
 // @Description 退出登录
 // @Success 200 {object} app.Response
-// @router /logout [delete]
+// @router /admin/logout [delete]
 // @Tags Admin
 func (e *LoginController) Logout(c *gin.Context) {
 	var (
@@ -106,7 +106,7 @@ func (e *LoginController) Logout(c *gin.Context) {
 
 // @Title 获取验证码
 // @Description 获取验证码
-// @router /captcha [get]
+// @router /admin/captcha [get]
 // @Tags Admin
 func (e *LoginController) Captcha(c *gin.Context) {
 	GenerateCaptcha(c)

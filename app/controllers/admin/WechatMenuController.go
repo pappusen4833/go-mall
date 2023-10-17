@@ -16,7 +16,7 @@ type WechatMenuController struct {
 // @Title 获取菜单
 // @Description 获取菜单
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /weixin/menu [get]
 // @Tags Admin
 func (e *WechatMenuController) GetAll(c *gin.Context) {
 	var (
@@ -30,7 +30,7 @@ func (e *WechatMenuController) GetAll(c *gin.Context) {
 // @Title 菜单更新
 // @Description 菜单更新
 // @Success 200 {object} app.Response
-// @router / [post]
+// @router /weixin/menu [post]
 // @Tags Admin
 func (e *WechatMenuController) Post(c *gin.Context) {
 	var (

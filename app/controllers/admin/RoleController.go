@@ -21,7 +21,7 @@ type RoleController struct {
 // @Description 获取单个角色
 // @Param    id        path     int    true        "角色ID"
 // @Success 200 {object} app.Response
-// @router /:id [get]
+// @router /admin/roles/:id [get]
 // @Tags Admin
 func (e *RoleController) GetOne(c *gin.Context) {
 	var (
@@ -38,7 +38,7 @@ func (e *RoleController) GetOne(c *gin.Context) {
 // @Title 角色列表
 // @Description 角色列表
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /admin/roles [get]
 // @Tags Admin
 func (e *RoleController) GetAll(c *gin.Context) {
 	var (
@@ -57,7 +57,7 @@ func (e *RoleController) GetAll(c *gin.Context) {
 // @Title 角色添加
 // @Description 角色添加
 // @Success 200 {object} app.Response
-// @router / [post]
+// @router /admin/roles [post]
 // @Tags Admin
 func (e *RoleController) Post(c *gin.Context) {
 	var (
@@ -81,7 +81,7 @@ func (e *RoleController) Post(c *gin.Context) {
 	appG.Response(http.StatusOK, constant.SUCCESS, nil)
 }
 
-// @router / [put]
+// @router /admin/roles [put]
 // @Tags Admin
 func (e *RoleController) Put(c *gin.Context) {
 	var (
@@ -108,7 +108,7 @@ func (e *RoleController) Put(c *gin.Context) {
 // @Title 角色删除
 // @Description 角色删除
 // @Success 200 {object} app.Response
-// @router / [delete]
+// @router /admin/roles [delete]
 // @Tags Admin
 func (e *RoleController) Delete(c *gin.Context) {
 	var (
@@ -129,7 +129,7 @@ func (e *RoleController) Delete(c *gin.Context) {
 // @Title 角色菜单更新
 // @Description 角色菜单更新
 // @Success 200 {object} app.Response
-// @router /menu [put]
+// @router /admin/roles/menu [put]
 // @Tags Admin
 func (e *RoleController) Menu(c *gin.Context) {
 	var (

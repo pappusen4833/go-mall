@@ -17,7 +17,7 @@ type StoreCategoryController struct {
 // @Title 商品分类列表
 // @Description 商品分类列表
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /shop/cate [get]
 // @Tags Admin
 func (e *StoreCategoryController) GetAll(c *gin.Context) {
 	var (
@@ -33,7 +33,7 @@ func (e *StoreCategoryController) GetAll(c *gin.Context) {
 // @Title 添加商品分类
 // @Description 添加商品分类
 // @Success 200 {object} app.Response
-// @router / [post]
+// @router /shop/cate [post]
 // @Tags Admin
 func (e *StoreCategoryController) Post(c *gin.Context) {
 	var (
@@ -60,7 +60,7 @@ func (e *StoreCategoryController) Post(c *gin.Context) {
 // @Title 修改商品分类
 // @Description 修改商品分类
 // @Success 200 {object} app.Response
-// @router / [put]
+// @router /shop/cate [put]
 // @Tags Admin
 func (e *StoreCategoryController) Put(c *gin.Context) {
 	var (
@@ -87,7 +87,7 @@ func (e *StoreCategoryController) Put(c *gin.Context) {
 // @Title 删除商品分类
 // @Description 删除商品分类
 // @Success 200 {object} app.Response
-// @router / [delete]
+// @router /shop/cate [delete]
 // @Tags Admin
 func (e *StoreCategoryController) Delete(c *gin.Context) {
 	var (

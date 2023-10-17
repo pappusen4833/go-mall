@@ -18,7 +18,7 @@ type StoreProductRuleController struct {
 // @Title 商品规格sku列表
 // @Description 商品规格sku列表
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /shop/rule [get]
 // @Tags Admin
 func (e *StoreProductRuleController) GetAll(c *gin.Context) {
 	var (
@@ -39,7 +39,7 @@ func (e *StoreProductRuleController) GetAll(c *gin.Context) {
 // @Title 商品规格sku添加
 // @Description 商品规格sku添加
 // @Success 200 {object} app.Response
-// @router /save/:id [post]
+// @router /shop/rule/save/:id [post]
 // @Tags Admin
 func (e *StoreProductRuleController) Post(c *gin.Context) {
 	var (
@@ -69,7 +69,7 @@ func (e *StoreProductRuleController) Post(c *gin.Context) {
 // @Title 商品规格sku删除
 // @Description 商品规格sku删除
 // @Success 200 {object} app.Response
-// @router / [delete]
+// @router /shop/rule [delete]
 // @Tags Admin
 func (e *StoreProductRuleController) Delete(c *gin.Context) {
 	var (

@@ -22,7 +22,7 @@ type UserController struct {
 // @Title 用户列表
 // @Description 用户列表
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /admin/user [get]
 // @Tags Admin
 func (e *UserController) GetAll(c *gin.Context) {
 	var (
@@ -47,7 +47,7 @@ func (e *UserController) GetAll(c *gin.Context) {
 // @Title 用户添加
 // @Description 用户添加
 // @Success 200 {object} app.Response
-// @router / [post]
+// @router /admin/user [post]
 // @Tags Admin
 func (e *UserController) Post(c *gin.Context) {
 	var (
@@ -75,7 +75,7 @@ func (e *UserController) Post(c *gin.Context) {
 // @Title 用户编辑
 // @Description 用户编辑
 // @Success 200 {object} app.Response
-// @router / [put]
+// @router /admin/user [put]
 // @Tags Admin
 func (e *UserController) Put(c *gin.Context) {
 	var (
@@ -102,7 +102,7 @@ func (e *UserController) Put(c *gin.Context) {
 // @Title 用户删除
 // @Description 用户删除
 // @Success 200 {object} app.Response
-// @router / [delete]
+// @router /admin/user [delete]
 // @Tags Admin
 func (e *UserController) Delete(c *gin.Context) {
 	var (
@@ -124,7 +124,7 @@ func (e *UserController) Delete(c *gin.Context) {
 // @Title 用户上传图像
 // @Description 用户上传图像
 // @Success 200 {object} app.Response
-// @router /updateAvatar [post]
+// @router /admin/updateAvatar [post]
 // @Tags Admin
 func (e *UserController) Avatar(c *gin.Context) {
 	appG := app.Gin{C: c}
@@ -175,7 +175,7 @@ func (e *UserController) Avatar(c *gin.Context) {
 // @Title 用户修改密码
 // @Description 用户修改密码
 // @Success 200 {object} app.Response
-// @router /updatePass [post]
+// @router /admin/updatePass [post]
 // @Tags Admin
 func (e *UserController) Pass(c *gin.Context) {
 	var (
@@ -200,7 +200,7 @@ func (e *UserController) Pass(c *gin.Context) {
 // @Title 用户修改个人信息
 // @Description 用户修改个人信息
 // @Success 200 {object} app.Response
-// @router /center [put]
+// @router /admin/center [put]
 // @Tags Admin
 func (e *UserController) Center(c *gin.Context) {
 	var (
@@ -227,7 +227,7 @@ func (e *UserController) Center(c *gin.Context) {
 // @Param image formData file true "Image File"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Router /upload [post]
+// @router /admin/upload [post]
 // @Tags Admin
 func UploadImage(c *gin.Context) {
 	appG := app.Gin{C: c}

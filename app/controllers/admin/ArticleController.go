@@ -19,7 +19,7 @@ type ArticleController struct {
 // @Title 文章
 // @Description 文章
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /admin/article/info/:id [get]
 // @Tags Admin
 func (e *ArticleController) Get(c *gin.Context) {
 	var (
@@ -37,7 +37,7 @@ func (e *ArticleController) Get(c *gin.Context) {
 // @Title 文章列表
 // @Description 文章列表
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /admin/article [get]
 // @Tags Admin
 func (e *ArticleController) GetAll(c *gin.Context) {
 	var (
@@ -58,7 +58,7 @@ func (e *ArticleController) GetAll(c *gin.Context) {
 // @Title 文章添加
 // @Description 文章添加
 // @Success 200 {object} app.Response
-// @router / [post]
+// @router /admin/article [post]
 // @Tags Admin
 func (e *ArticleController) Post(c *gin.Context) {
 	var (
@@ -88,7 +88,7 @@ func (e *ArticleController) Post(c *gin.Context) {
 // @Title 文章修改
 // @Description 文章修改
 // @Success 200 {object} app.Response
-// @router / [put]
+// @router /admin/article [put]
 // @Tags Admin
 func (e *ArticleController) Put(c *gin.Context) {
 	var (
@@ -115,7 +115,7 @@ func (e *ArticleController) Put(c *gin.Context) {
 // @Title 文章删除
 // @Description 文章删除
 // @Success 200 {object} app.Response
-// @router /:id [delete]
+// @router /admin/article/:id [delete]
 // @Tags Admin
 func (e *ArticleController) Delete(c *gin.Context) {
 	var (
@@ -137,7 +137,7 @@ func (e *ArticleController) Delete(c *gin.Context) {
 // @Title 发布文章
 // @Description 发布文章
 // @Success 200 {object} app.Response
-// @router / [get]
+// @router /admin/article/publish/:id [get]
 // @Tags Admin
 func (e *ArticleController) Pub(c *gin.Context) {
 	var (
