@@ -1,8 +1,3 @@
-/**
-* Copyright (C) 2020-2021
-* All rights reserved, Designed By www.yixiang.co
-* 注意：本软件为www.yixiang.co开发研制
- */
 package models
 
 type SysMaterial struct {
@@ -14,14 +9,14 @@ type SysMaterial struct {
 	BaseModel
 }
 
-func (SysMaterial) TableName() string  {
+func (SysMaterial) TableName() string {
 	return "sys_material"
 }
 
-func GetAllMaterial(pageNUm int,pageSize int,maps interface{}) (int64, []SysMaterial) {
+func GetAllMaterial(pageNUm int, pageSize int, maps interface{}) (int64, []SysMaterial) {
 	var (
 		total int64
-		data      []SysMaterial
+		data  []SysMaterial
 	)
 	db.Model(&SysMaterial{}).Where(maps).Count(&total)
 	db.Where(maps).Offset(pageNUm).Limit(pageSize).Order("id DESC").Find(&data)
@@ -34,7 +29,6 @@ func AddMaterial(m *SysMaterial) error {
 	if err = db.Create(m).Error; err != nil {
 		return err
 	}
-
 
 	return err
 }
@@ -51,12 +45,10 @@ func UpdateByMaterial(m *SysMaterial) error {
 
 func DelByMaterial(ids []int64) error {
 	var err error
-	err = db.Where("id in (?)",ids).Delete(&SysMaterial{}).Error
+	err = db.Where("id in (?)", ids).Delete(&SysMaterial{}).Error
 	if err != nil {
 		return err
 	}
 
-
 	return err
 }
-
