@@ -49,10 +49,16 @@ func main() {
 
 	global.YSHOP_LOG.Info("[info] start http server listening %s", server.Addr)
 	log.Printf("[info] start http server listening %s", endPoint)
+	fmt.Println(`
+ _____ _____     _____ _____ __    __    
+|   __|     |___|     |  _  |  |  |  |   
+|  |  |  |  |___| | | |     |  |__|  |__ 
+|_____|_____|   |_|_|_|__|__|_____|_____|
+`)
 	fmt.Printf(`
-	欢迎使用 go-mall
-	默认自动化文档地址:http://127.0.0.1%s/swagger/index.html
-	默认前端文件运行地址:http://127.0.0.1:8080
+欢迎使用 go-mall
+默认自动化文档地址:http://127.0.0.1%s/swagger/index.html
+默认前端文件运行地址:http://127.0.0.1:8080
 `, endPoint)
 
 	server.ListenAndServe()
