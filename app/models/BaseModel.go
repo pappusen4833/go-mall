@@ -7,14 +7,14 @@ package models
 
 import (
 	"fmt"
-	"go-mall/packages/global"
+	"go-mall/pkg/global"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/plugin/soft_delete"
 
 	//"gorm.io/plugin/soft_delete"
-	"go-mall/packages/casbin"
+	"go-mall/pkg/casbin"
 	"log"
 	"os"
 	"time"

@@ -11,8 +11,8 @@ import (
 	"go-mall/app/models"
 	"go-mall/app/models/vo"
 	menuDto "go-mall/app/services/wechat_menu_service/dto"
-	"go-mall/packages/constant"
-	"go-mall/packages/global"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/global"
 	"gorm.io/datatypes"
 )
 

@@ -10,8 +10,8 @@ import (
 	"go-mall/app/models"
 	"go-mall/app/models/vo"
 	"go-mall/app/services/cron_job_service/task"
-	"go-mall/packages/global"
-	"go-mall/packages/util/cron"
+	"go-mall/pkg/global"
+	"go-mall/pkg/util/cron"
 )
 
 type SysCronJob struct {

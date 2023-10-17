@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"go-mall/app/models"
-	"go-mall/packages/constant"
-	"go-mall/packages/global"
-	"go-mall/packages/redis"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/global"
+	"go-mall/pkg/redis"
 )
 
 // 这里添加自定义任务

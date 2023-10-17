@@ -11,9 +11,9 @@ import (
 	"go-mall/app/models"
 	"go-mall/app/params/admin"
 	"go-mall/app/services/gen_service"
-	"go-mall/packages/app"
-	"go-mall/packages/constant"
-	"go-mall/packages/util"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/util"
 	"net/http"
 )
 

@@ -6,7 +6,7 @@
 package models
 
 import (
-	"go-mall/packages/constant"
+	"go-mall/pkg/constant"
 	"gorm.io/datatypes"
 	"time"
 )

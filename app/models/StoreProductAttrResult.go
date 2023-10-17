@@ -8,7 +8,7 @@ package models
 import (
 	"encoding/json"
 	dto2 "go-mall/app/services/product_service/dto"
-	"go-mall/packages/logging"
+	"go-mall/pkg/logging"
 	"time"
 )
 

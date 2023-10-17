@@ -2,7 +2,7 @@ package logging
 
 import (
 	"fmt"
-	"go-mall/packages/file"
+	"go-mall/pkg/file"
 	"log"
 	"os"
 	"path/filepath"

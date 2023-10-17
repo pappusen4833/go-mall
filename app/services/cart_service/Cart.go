@@ -15,9 +15,9 @@ import (
 	cartVo "go-mall/app/services/cart_service/vo"
 	"go-mall/app/services/product_service"
 	productVo "go-mall/app/services/product_service/vo"
-	cartEnum "go-mall/packages/enums/cart"
-	orderEnum "go-mall/packages/enums/order"
-	"go-mall/packages/global"
+	cartEnum "go-mall/pkg/enums/cart"
+	orderEnum "go-mall/pkg/enums/order"
+	"go-mall/pkg/global"
 	"strconv"
 	"strings"
 )

@@ -4,7 +4,7 @@ import (
 	"github.com/silenceper/wechat/v2"
 	"github.com/silenceper/wechat/v2/cache"
 	offConfig "github.com/silenceper/wechat/v2/officialaccount/config"
-	"go-mall/packages/global"
+	"go-mall/pkg/global"
 )
 
 func InitWechat() {

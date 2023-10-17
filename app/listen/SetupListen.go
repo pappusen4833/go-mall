@@ -2,7 +2,7 @@ package listen
 
 import (
 	"fmt"
-	"go-mall/packages/global"
+	"go-mall/pkg/global"
 )
 
 func Setup() {

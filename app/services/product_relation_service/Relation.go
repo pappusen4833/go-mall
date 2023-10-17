@@ -10,9 +10,9 @@ import (
 	"go-mall/app/models"
 	"go-mall/app/models/vo"
 	"go-mall/app/params"
-	relationEnum "go-mall/packages/enums/relation"
-	"go-mall/packages/global"
-	"go-mall/packages/util"
+	relationEnum "go-mall/pkg/enums/relation"
+	"go-mall/pkg/global"
+	"go-mall/pkg/util"
 )
 
 type Relation struct {

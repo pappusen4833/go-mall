@@ -10,8 +10,8 @@ import (
 	"github.com/silenceper/wechat/v2/officialaccount/material"
 	"go-mall/app/models"
 	"go-mall/app/models/vo"
-	articleEnum "go-mall/packages/enums/article"
-	"go-mall/packages/global"
+	articleEnum "go-mall/pkg/enums/article"
+	"go-mall/pkg/global"
 	"strings"
 )
 

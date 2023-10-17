@@ -8,7 +8,7 @@ import (
 	"go-mall/app/controllers/front"
 	_ "go-mall/docs"
 	"go-mall/middlewares"
-	"go-mall/packages/upload"
+	"go-mall/pkg/upload"
 	"net/http"
 )
 

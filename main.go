@@ -5,12 +5,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-mall/app/listen"
 	"go-mall/app/models"
-	"go-mall/packages/base"
-	"go-mall/packages/global"
-	"go-mall/packages/jwt"
-	"go-mall/packages/logging"
-	"go-mall/packages/redis"
-	"go-mall/packages/wechat"
+	"go-mall/pkg/base"
+	"go-mall/pkg/global"
+	"go-mall/pkg/jwt"
+	"go-mall/pkg/logging"
+	"go-mall/pkg/redis"
+	"go-mall/pkg/wechat"
 	"go-mall/routers"
 	"log"
 	"net/http"
@@ -48,7 +48,7 @@ func main() {
 		MaxHeaderBytes: maxHeaderBytes,
 	}
 
-	global.YSHOP_LOG.Info("[info] start http server listening %s", endPoint)
+	global.YSHOP_LOG.Info("[info] start http server listening %s", server.Addr)
 	log.Printf("[info] start http server listening %s", endPoint)
 	fmt.Printf(`
 	欢迎使用 go-mall

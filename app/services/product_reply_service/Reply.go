@@ -10,8 +10,8 @@ import (
 	"go-mall/app/models"
 	"go-mall/app/models/vo"
 	vo2 "go-mall/app/services/product_service/vo"
-	"go-mall/packages/global"
-	"go-mall/packages/util"
+	"go-mall/pkg/global"
+	"go-mall/pkg/util"
 )
 
 type Reply struct {

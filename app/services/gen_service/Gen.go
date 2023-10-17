@@ -12,9 +12,9 @@ import (
 	"go-mall/app/models"
 	"go-mall/app/models/vo"
 	"go-mall/app/params/admin"
-	"go-mall/packages/file"
-	"go-mall/packages/global"
-	"go-mall/packages/util"
+	"go-mall/pkg/file"
+	"go-mall/pkg/global"
+	"go-mall/pkg/util"
 	"strings"
 )
 

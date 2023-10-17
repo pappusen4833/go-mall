@@ -2,7 +2,7 @@ package base
 
 import (
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
-	"go-mall/packages/global"
+	"go-mall/pkg/global"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"io"

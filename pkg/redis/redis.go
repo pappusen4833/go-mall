@@ -3,7 +3,7 @@ package redis
 import (
 	"encoding/json"
 	"github.com/gomodule/redigo/redis"
-	"go-mall/packages/global"
+	"go-mall/pkg/global"
 	"time"
 )
 

@@ -4,8 +4,8 @@ import (
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
-	"go-mall/packages/constant"
-	"go-mall/packages/runtime"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/runtime"
 	"gorm.io/gorm"
 	"log"
 )

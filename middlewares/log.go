@@ -3,8 +3,8 @@ package middlewares
 import (
 	"github.com/gin-gonic/gin"
 	"go-mall/app/models"
-	"go-mall/packages/jwt"
-	"go-mall/packages/logging"
+	"go-mall/pkg/jwt"
+	"go-mall/pkg/logging"
 	"regexp"
 	"strings"
 	"time"

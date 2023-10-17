@@ -2,7 +2,7 @@ package logging
 
 import (
 	"fmt"
-	"go-mall/packages/global"
+	"go-mall/pkg/global"
 	"time"
 )
 

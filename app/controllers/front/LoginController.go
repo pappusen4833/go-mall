@@ -9,9 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-mall/app/params"
 	"go-mall/app/services/wechat_user_service"
-	"go-mall/packages/app"
-	"go-mall/packages/constant"
-	"go-mall/packages/jwt"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/jwt"
 	"net/http"
 	"time"
 )
@@ -20,10 +20,10 @@ import (
 type LoginController struct {
 }
 
-// @Title 登录
-// @Description 登录
+// @Title 会员登录
+// @Description 会员登录
 // @Success 200 {object} app.Response
-// @router /admin/login [post]
+// @router /login [post]
 func (e *LoginController) Login(c *gin.Context) {
 	var (
 		param params.HLoginParam

@@ -7,8 +7,8 @@ package models
 
 import (
 	dto2 "go-mall/app/services/menu_service/dto"
-	"go-mall/packages/constant"
-	"go-mall/packages/runtime"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/runtime"
 )
 
 type SysRolesMenus struct {

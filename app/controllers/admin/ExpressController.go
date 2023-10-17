@@ -10,9 +10,9 @@ import (
 	"github.com/unknwon/com"
 	"go-mall/app/models"
 	"go-mall/app/services/express_service"
-	"go-mall/packages/app"
-	"go-mall/packages/constant"
-	"go-mall/packages/util"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/util"
 	"net/http"
 )
 

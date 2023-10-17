@@ -17,8 +17,8 @@ import (
 	"go-mall/app/services/order_service"
 	orderDto "go-mall/app/services/order_service/dto"
 	"go-mall/app/services/wechat_user_service"
-	orderEnum "go-mall/packages/enums/order"
-	"go-mall/packages/global"
+	orderEnum "go-mall/pkg/enums/order"
+	"go-mall/pkg/global"
 	"gorm.io/gorm"
 	"time"
 )

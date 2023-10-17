@@ -2,11 +2,11 @@ package middlewares
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-mall/packages/app"
-	"go-mall/packages/constant"
-	"go-mall/packages/jwt"
-	"go-mall/packages/logging"
-	"go-mall/packages/runtime"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/jwt"
+	"go-mall/pkg/logging"
+	"go-mall/pkg/runtime"
 	"net/http"
 	"regexp"
 	"strings"

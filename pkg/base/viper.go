@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
-	"go-mall/packages/global"
+	"go-mall/pkg/global"
 	"log"
 )
 

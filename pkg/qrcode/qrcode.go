@@ -3,9 +3,9 @@ package qrcode
 import (
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/qr"
-	"go-mall/packages/file"
-	"go-mall/packages/global"
-	"go-mall/packages/util"
+	"go-mall/pkg/file"
+	"go-mall/pkg/global"
+	"go-mall/pkg/util"
 	"image/jpeg"
 )
 

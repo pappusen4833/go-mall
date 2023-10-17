@@ -2,10 +2,10 @@ package upload
 
 import (
 	"fmt"
-	"go-mall/packages/file"
-	"go-mall/packages/global"
-	"go-mall/packages/logging"
-	"go-mall/packages/util"
+	"go-mall/pkg/file"
+	"go-mall/pkg/global"
+	"go-mall/pkg/logging"
+	"go-mall/pkg/util"
 	"log"
 	"mime/multipart"
 	"os"

@@ -12,11 +12,11 @@ import (
 	"go-mall/app/services/product_relation_service"
 	"go-mall/app/services/product_reply_service"
 	"go-mall/app/services/product_service"
-	"go-mall/packages/app"
-	"go-mall/packages/constant"
-	productEnum "go-mall/packages/enums/product"
-	"go-mall/packages/jwt"
-	"go-mall/packages/util"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	productEnum "go-mall/pkg/enums/product"
+	"go-mall/pkg/jwt"
+	"go-mall/pkg/util"
 	"net/http"
 )
 

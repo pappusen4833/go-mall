@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-mall/packages/constant"
+	"go-mall/pkg/constant"
 )
 
 type Gin struct {

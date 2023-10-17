@@ -5,9 +5,9 @@ import (
 	"errors"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
-	"go-mall/packages/constant"
-	"go-mall/packages/global"
-	"go-mall/packages/logging"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/global"
+	"go-mall/pkg/logging"
 	"net/http"
 	"strings"
 )

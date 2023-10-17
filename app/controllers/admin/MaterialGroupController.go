@@ -10,9 +10,9 @@ import (
 	"github.com/unknwon/com"
 	"go-mall/app/models"
 	"go-mall/app/services/material_group_service"
-	"go-mall/packages/app"
-	"go-mall/packages/constant"
-	"go-mall/packages/jwt"
+	"go-mall/pkg/app"
+	"go-mall/pkg/constant"
+	"go-mall/pkg/jwt"
 	"net/http"
 )
 

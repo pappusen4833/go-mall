@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/astaxie/beego/validation"
-	"go-mall/packages/global"
+	"go-mall/pkg/global"
 )
 
 // MarkErrors logs error logs
