@@ -18,22 +18,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "//weixin/user": {
-            "put": {
-                "description": "用户编辑",
-                "tags": [
-                    "Admin"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/admin/article": {
             "get": {
                 "description": "文章列表",
@@ -2166,6 +2150,20 @@ const docTemplate = `{
         "/weixin/user": {
             "get": {
                 "description": "用户列表",
+                "tags": [
+                    "Admin"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "用户编辑",
                 "tags": [
                     "Admin"
                 ],

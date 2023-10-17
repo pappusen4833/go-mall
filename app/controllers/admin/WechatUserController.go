@@ -43,7 +43,7 @@ func (e *WechatUserController) GetAll(c *gin.Context) {
 // @Title 用户编辑
 // @Description 用户编辑
 // @Success 200 {object} app.Response
-// @router //weixin/user [put]
+// @router /weixin/user [put]
 // @Tags Admin
 func (e *WechatUserController) Put(c *gin.Context) {
 	var (
