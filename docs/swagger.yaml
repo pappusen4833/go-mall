@@ -96,7 +96,6 @@ paths:
   /admin/captcha:
     get:
       description: 获取验证码
-      responses: {}
       tags:
       - Admin
   /admin/center:
@@ -595,7 +594,6 @@ paths:
       tags:
       - Admin
     put:
-      responses: {}
       tags:
       - Admin
   /admin/roles/:id:
@@ -991,9 +989,36 @@ paths:
             $ref: '#/definitions/app.Response'
       tags:
       - Front API
+  /api/v1/info:
+    get:
+      description: 获取用户信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Front API
   /api/v1/login:
     post:
-      description: 注册
+      description: 会员登录
+      parameters:
+      - description: body data
+        in: body
+        name: data
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Front API
+  /api/v1/logout:
+    delete:
+      description: 退出登录
       responses:
         "200":
           description: OK
@@ -1131,6 +1156,26 @@ paths:
             $ref: '#/definitions/app.Response'
       tags:
       - Front API
+  /api/v1/register:
+    post:
+      description: 注册
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Front API
+  /api/v1/register/verify:
+    post:
+      description: 短信验证码
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Front API
   /api/v1/reply/list/:id:
     get:
       description: 获取商品评论列表数据
@@ -1154,46 +1199,6 @@ paths:
   /api/v1/userinfo:
     get:
       description: 获取用户信息
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Front API
-  /info:
-    get:
-      description: 获取用户信息
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Front API
-  /login:
-    post:
-      description: 会员登录
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Front API
-  /logout:
-    delete:
-      description: 退出登录
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Front API
-  /register/verify:
-    post:
-      description: 短信验证码
       responses:
         "200":
           description: OK

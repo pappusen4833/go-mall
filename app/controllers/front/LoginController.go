@@ -18,7 +18,8 @@ type LoginController struct {
 // @Title 会员登录
 // @Description 会员登录
 // @Success 200 {object} app.Response
-// @router /login [post]
+// @router /api/v1/login [post]
+// @Param data body string true "body data"
 // @Tags Front API
 func (e *LoginController) Login(c *gin.Context) {
 	var (
@@ -49,7 +50,7 @@ func (e *LoginController) Login(c *gin.Context) {
 // @Title 短信验证码
 // @Description 短信验证码
 // @Success 200 {object} app.Response
-// @router /register/verify [post]
+// @router /api/v1/register/verify [post]
 // @Tags Front API
 func (e *LoginController) Verify(c *gin.Context) {
 	var (
@@ -75,7 +76,7 @@ func (e *LoginController) Verify(c *gin.Context) {
 // @Title 注册
 // @Description 注册
 // @Success 200 {object} app.Response
-// @router /api/v1/login [post]
+// @router /api/v1/register [post]
 // @Tags Front API
 func (e *LoginController) Reg(c *gin.Context) {
 	var (
@@ -100,7 +101,7 @@ func (e *LoginController) Reg(c *gin.Context) {
 // @Title 获取用户信息
 // @Description 获取用户信息
 // @Success 200 {object} app.Response
-// @router /info [get]
+// @router /api/v1/info [get]
 // @Tags Front API
 func (e *LoginController) Info(c *gin.Context) {
 	var (
@@ -112,7 +113,7 @@ func (e *LoginController) Info(c *gin.Context) {
 // @Title 退出登录
 // @Description 退出登录
 // @Success 200 {object} app.Response
-// @router /logout [delete]
+// @router /api/v1/logout [delete]
 // @Tags Front API
 func (e *LoginController) Logout(c *gin.Context) {
 	var (

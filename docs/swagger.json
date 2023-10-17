@@ -139,8 +139,7 @@
                 "description": "获取验证码",
                 "tags": [
                     "Admin"
-                ],
-                "responses": {}
+                ]
             }
         },
         "/admin/center": {
@@ -900,8 +899,7 @@
             "put": {
                 "tags": [
                     "Admin"
-                ],
-                "responses": {}
+                ]
             },
             "post": {
                 "description": "角色添加",
@@ -1557,9 +1555,52 @@
                 }
             }
         },
+        "/api/v1/info": {
+            "get": {
+                "description": "获取用户信息",
+                "tags": [
+                    "Front API"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/login": {
             "post": {
-                "description": "注册",
+                "description": "会员登录",
+                "tags": [
+                    "Front API"
+                ],
+                "parameters": [
+                    {
+                        "description": "body data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/logout": {
+            "delete": {
+                "description": "退出登录",
                 "tags": [
                     "Front API"
                 ],
@@ -1781,6 +1822,38 @@
                 }
             }
         },
+        "/api/v1/register": {
+            "post": {
+                "description": "注册",
+                "tags": [
+                    "Front API"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/register/verify": {
+            "post": {
+                "description": "短信验证码",
+                "tags": [
+                    "Front API"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/reply/list/:id": {
             "get": {
                 "description": "获取商品评论列表数据",
@@ -1816,70 +1889,6 @@
         "/api/v1/userinfo": {
             "get": {
                 "description": "获取用户信息",
-                "tags": [
-                    "Front API"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/info": {
-            "get": {
-                "description": "获取用户信息",
-                "tags": [
-                    "Front API"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/login": {
-            "post": {
-                "description": "会员登录",
-                "tags": [
-                    "Front API"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/logout": {
-            "delete": {
-                "description": "退出登录",
-                "tags": [
-                    "Front API"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/register/verify": {
-            "post": {
-                "description": "短信验证码",
                 "tags": [
                     "Front API"
                 ],
