@@ -28,7 +28,7 @@ func init() {
 	wechat.InitWechat()
 }
 
-// @title go-mall API
+// @title GO-MALL API
 // @version 1.0
 // @description go-mall 商城后台系统
 // @license.name apache2

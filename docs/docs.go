@@ -1059,7 +1059,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "go-mall API",
+	Title:            "GO-MALL API",
 	Description:      "go-mall 商城后台系统",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
