@@ -75,7 +75,7 @@ func (e *LoginController) Verify(c *gin.Context) {
 // @Title 注册
 // @Description 注册
 // @Success 200 {object} app.Response
-// @router /admin/login [post]
+// @router /api/v1/login [post]
 // @Tags Front API
 func (e *LoginController) Reg(c *gin.Context) {
 	var (

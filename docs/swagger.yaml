@@ -15,25 +15,7 @@ info:
   title: GO-MALL API
   version: "1.0"
 paths:
-  /admin/:
-    get:
-      description: 用户列表
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-    post:
-      description: 菜单更新
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
+  //weixin/user:
     put:
       description: 用户编辑
       responses:
@@ -271,7 +253,7 @@ paths:
       tags:
       - Admin
     post:
-      description: 订单快递查询
+      description: 快递添加
       responses:
         "200":
           description: OK
@@ -367,14 +349,14 @@ paths:
       - Admin
   /admin/login:
     post:
-      description: 注册
+      description: 登录
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
       tags:
-      - Front API
+      - Admin
   /admin/logout:
     delete:
       description: 退出登录
@@ -577,6 +559,16 @@ paths:
   /admin/order/:id:
     delete:
       description: 订单删除
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /admin/order/express:
+    post:
+      description: 订单快递查询
       responses:
         "200":
           description: OK
@@ -849,16 +841,6 @@ paths:
             $ref: '#/definitions/app.Response'
       tags:
       - Admin
-  /admin/user/money:
-    post:
-      description: 用户余额修改
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
   /api/v1/address:
     get:
       description: 获取列表数据
@@ -912,6 +894,16 @@ paths:
   /api/v1/cart/count:
     get:
       description: 获取数量
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Front API
+  /api/v1/cart/del:
+    post:
+      description: 取消收藏
       responses:
         "200":
           description: OK
@@ -992,6 +984,26 @@ paths:
   /api/v1/getCanvas:
     get:
       description: 获取画布数据
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Front API
+  /api/v1/index:
+    get:
+      description: 获取首页数据
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Front API
+  /api/v1/login:
+    post:
+      description: 注册
       responses:
         "200":
           description: OK
@@ -1335,4 +1347,43 @@ paths:
             $ref: '#/definitions/app.Response'
       tags:
       - Front API
+  /weixin/menu:
+    get:
+      description: 获取菜单
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+    post:
+      description: 菜单更新
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /weixin/user:
+    get:
+      description: 用户列表
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /weixin/user/money:
+    post:
+      description: 用户余额修改
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
 swagger: "2.0"

@@ -130,7 +130,7 @@ func (e *OrderController) Deliver(c *gin.Context) {
 // @Title 订单快递查询
 // @Description 订单快递查询
 // @Success 200 {object} app.Response
-// @router /admin/express [post]
+// @router /admin/order/express [post]
 // @Tags Admin
 func (e *OrderController) DeliverQuery(c *gin.Context) {
 	var (

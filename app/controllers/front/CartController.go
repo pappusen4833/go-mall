@@ -113,7 +113,7 @@ func (e *CartController) CartNum(c *gin.Context) {
 // @Title 取消收藏
 // @Description 取消收藏
 // @Success 200 {object} app.Response
-// @router /api/v1/collect/del [post]
+// @router /api/v1/cart/del [post]
 // @Tags Front API
 func (e *CartController) DelCart(c *gin.Context) {
 	var (

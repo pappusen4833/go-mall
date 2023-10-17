@@ -20,7 +20,7 @@ type IndexController struct {
 // @Title 获取首页数据
 // @Description 获取首页数据
 // @Success 200 {object} app.Response
-// @router /api/v1/getCanvas [get]
+// @router /api/v1/index [get]
 // @Tags Front API
 func (e *IndexController) GetIndex(c *gin.Context) {
 	var (

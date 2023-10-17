@@ -18,37 +18,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/": {
-            "get": {
-                "description": "用户列表",
-                "tags": [
-                    "Admin"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            },
+        "//weixin/user": {
             "put": {
                 "description": "用户编辑",
-                "tags": [
-                    "Admin"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "菜单更新",
                 "tags": [
                     "Admin"
                 ],
@@ -435,7 +407,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "订单快递查询",
+                "description": "快递添加",
                 "tags": [
                     "Admin"
                 ],
@@ -573,9 +545,9 @@ const docTemplate = `{
         },
         "/admin/login": {
             "post": {
-                "description": "注册",
+                "description": "登录",
                 "tags": [
-                    "Front API"
+                    "Admin"
                 ],
                 "responses": {
                     "200": {
@@ -905,6 +877,22 @@ const docTemplate = `{
         "/admin/order/:id": {
             "delete": {
                 "description": "订单删除",
+                "tags": [
+                    "Admin"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/order/express": {
+            "post": {
+                "description": "订单快递查询",
                 "tags": [
                     "Admin"
                 ],
@@ -1337,22 +1325,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/user/money": {
-            "post": {
-                "description": "用户余额修改",
-                "tags": [
-                    "Admin"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/address": {
             "get": {
                 "description": "获取列表数据",
@@ -1436,6 +1408,22 @@ const docTemplate = `{
         "/api/v1/cart/count": {
             "get": {
                 "description": "获取数量",
+                "tags": [
+                    "Front API"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/cart/del": {
+            "post": {
+                "description": "取消收藏",
                 "tags": [
                     "Front API"
                 ],
@@ -1564,6 +1552,38 @@ const docTemplate = `{
         "/api/v1/getCanvas": {
             "get": {
                 "description": "获取画布数据",
+                "tags": [
+                    "Front API"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/index": {
+            "get": {
+                "description": "获取首页数据",
+                "tags": [
+                    "Front API"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/login": {
+            "post": {
+                "description": "注册",
                 "tags": [
                     "Front API"
                 ],
@@ -2102,6 +2122,68 @@ const docTemplate = `{
                 "description": "上传图像",
                 "tags": [
                     "Front API"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/weixin/menu": {
+            "get": {
+                "description": "获取菜单",
+                "tags": [
+                    "Admin"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "菜单更新",
+                "tags": [
+                    "Admin"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/weixin/user": {
+            "get": {
+                "description": "用户列表",
+                "tags": [
+                    "Admin"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/weixin/user/money": {
+            "post": {
+                "description": "用户余额修改",
+                "tags": [
+                    "Admin"
                 ],
                 "responses": {
                     "200": {
