@@ -28,6 +28,7 @@ type MaterialController struct {
 // @Description 岗位列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *MaterialController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -48,6 +49,7 @@ func (e *MaterialController) GetAll(c *gin.Context) {
 // @Description 素材添加
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *MaterialController) Post(c *gin.Context) {
 	var (
 		model models.SysMaterial
@@ -76,6 +78,7 @@ func (e *MaterialController) Post(c *gin.Context) {
 // @Description 素材修改
 // @Success 200 {object} app.Response
 // @router / [put]
+// @Tags Admin
 func (e *MaterialController) Put(c *gin.Context) {
 	var (
 		model models.SysMaterial
@@ -104,6 +107,7 @@ func (e *MaterialController) Put(c *gin.Context) {
 // @Description 素材删除
 // @Success 200 {object} app.Response
 // @router /:id [delete]
+// @Tags Admin
 func (e *MaterialController) Delete(c *gin.Context) {
 	var (
 		ids  []int64
@@ -127,6 +131,7 @@ func (e *MaterialController) Delete(c *gin.Context) {
 // @Description 上传图像
 // @Success 200 {object} app.Response
 // @router /upload [post]
+// @Tags Admin
 func (e *MaterialController) Upload(c *gin.Context) {
 	appG := app.Gin{C: c}
 	file, image, err := c.Request.FormFile("file")

@@ -24,6 +24,7 @@ type ExpressController struct {
 // @Description 快递列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *ExpressController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -44,6 +45,7 @@ func (e *ExpressController) GetAll(c *gin.Context) {
 // @Description 快递添加
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *ExpressController) Post(c *gin.Context) {
 	var (
 		model models.Express
@@ -73,6 +75,7 @@ func (e *ExpressController) Post(c *gin.Context) {
 // @Description 快递修改
 // @Success 200 {object} app.Response
 // @router / [put]
+// @Tags Admin
 func (e *ExpressController) Put(c *gin.Context) {
 	var (
 		model models.Express
@@ -99,6 +102,7 @@ func (e *ExpressController) Put(c *gin.Context) {
 // @Description 快递删除
 // @Success 200 {object} app.Response
 // @router /:id [delete]
+// @Tags Admin
 func (e *ExpressController) Delete(c *gin.Context) {
 	var (
 		ids  []int64

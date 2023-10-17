@@ -27,6 +27,7 @@ type RoleController struct {
 // @Param    id        path     int    true        "角色ID"
 // @Success 200 {object} app.Response
 // @router /:id [get]
+// @Tags Admin
 func (e *RoleController) GetOne(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -43,6 +44,7 @@ func (e *RoleController) GetOne(c *gin.Context) {
 // @Description 角色列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *RoleController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -61,6 +63,7 @@ func (e *RoleController) GetAll(c *gin.Context) {
 // @Description 角色添加
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *RoleController) Post(c *gin.Context) {
 	var (
 		model models.SysRole
@@ -84,6 +87,7 @@ func (e *RoleController) Post(c *gin.Context) {
 }
 
 // @router / [put]
+// @Tags Admin
 func (e *RoleController) Put(c *gin.Context) {
 	var (
 		model models.SysRole
@@ -110,6 +114,7 @@ func (e *RoleController) Put(c *gin.Context) {
 // @Description 角色删除
 // @Success 200 {object} app.Response
 // @router / [delete]
+// @Tags Admin
 func (e *RoleController) Delete(c *gin.Context) {
 	var (
 		ids  []int64
@@ -130,6 +135,7 @@ func (e *RoleController) Delete(c *gin.Context) {
 // @Description 角色菜单更新
 // @Success 200 {object} app.Response
 // @router /menu [put]
+// @Tags Admin
 func (e *RoleController) Menu(c *gin.Context) {
 	var (
 		model dto2.RoleMenu

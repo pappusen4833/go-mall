@@ -24,6 +24,7 @@ type LoginController struct {
 // @Description 会员登录
 // @Success 200 {object} app.Response
 // @router /login [post]
+// @Tags Front API
 func (e *LoginController) Login(c *gin.Context) {
 	var (
 		param params.HLoginParam
@@ -54,6 +55,7 @@ func (e *LoginController) Login(c *gin.Context) {
 // @Description 短信验证码
 // @Success 200 {object} app.Response
 // @router /register/verify [post]
+// @Tags Front API
 func (e *LoginController) Verify(c *gin.Context) {
 	var (
 		param params.VerityParam
@@ -79,6 +81,7 @@ func (e *LoginController) Verify(c *gin.Context) {
 // @Description 注册
 // @Success 200 {object} app.Response
 // @router /admin/login [post]
+// @Tags Front API
 func (e *LoginController) Reg(c *gin.Context) {
 	var (
 		param params.RegParam
@@ -103,6 +106,7 @@ func (e *LoginController) Reg(c *gin.Context) {
 // @Description 获取用户信息
 // @Success 200 {object} app.Response
 // @router /info [get]
+// @Tags Front API
 func (e *LoginController) Info(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -114,6 +118,7 @@ func (e *LoginController) Info(c *gin.Context) {
 // @Description 退出登录
 // @Success 200 {object} app.Response
 // @router /logout [delete]
+// @Tags Front API
 func (e *LoginController) Logout(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}

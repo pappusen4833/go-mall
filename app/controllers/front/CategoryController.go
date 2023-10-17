@@ -21,6 +21,7 @@ type CategoryController struct {
 // @Description 获取树形数据
 // @Success 200 {object} app.Response
 // @router /api/v1/category [get]
+// @Tags Front API
 func (e *CategoryController) GetCateList(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}

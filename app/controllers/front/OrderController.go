@@ -29,6 +29,7 @@ type OrderController struct {
 // @Description 订单确认
 // @Success 200 {object} app.Response
 // @router /api/v1/order/confirm [post]
+// @Tags Front API
 func (e *OrderController) Confirm(c *gin.Context) {
 	var (
 		param params.ConfirmOrderParam
@@ -60,6 +61,7 @@ func (e *OrderController) Confirm(c *gin.Context) {
 // @Description 订单计算
 // @Success 200 {object} app.Response
 // @router /api/v1/order/computed/:key [post]
+// @Tags Front API
 func (e *OrderController) Compute(c *gin.Context) {
 	var (
 		param params.ComputeOrderParam
@@ -103,6 +105,7 @@ func (e *OrderController) Compute(c *gin.Context) {
 // @Description 订单创建
 // @Success 200 {object} app.Response
 // @router /api/v1/order/create/:key [post]
+// @Tags Front API
 func (e *OrderController) Create(c *gin.Context) {
 	var (
 		param params.OrderParam
@@ -147,6 +150,7 @@ func (e *OrderController) Create(c *gin.Context) {
 // @Description 订单支付
 // @Success 200 {object} app.Response
 // @router /api/v1/order/pay [post]
+// @Tags Front API
 func (e *OrderController) Pay(c *gin.Context) {
 	var (
 		param params.PayParam
@@ -180,7 +184,8 @@ func (e *OrderController) Pay(c *gin.Context) {
 // @Title 订单移步支付
 // @Description 订单移步支付
 // @Success 200 {object} app.Response
-// @router /api/v1/order/notify [any]
+// @router /api/v1/order/notify [get]
+// @Tags Front API
 func (e *OrderController) NotifyPay(c *gin.Context) {
 
 	notifyReq, err := wechat.ParseNotifyToBodyMap(c.Request)
@@ -197,6 +202,7 @@ func (e *OrderController) NotifyPay(c *gin.Context) {
 // @Description 订单详情
 // @Success 200 {object} app.Response
 // @router /api/v1/order/detail/:key [get]
+// @Tags Front API
 func (e *OrderController) OrderDetail(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -222,6 +228,7 @@ func (e *OrderController) OrderDetail(c *gin.Context) {
 // @Description 获取列表数据
 // @Success 200 {object} app.Response
 // @router /api/v1/order [get]
+// @Tags Front API
 func (e *OrderController) GetList(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -242,6 +249,7 @@ func (e *OrderController) GetList(c *gin.Context) {
 // @Description 订单收货
 // @Success 200 {object} app.Response
 // @router /api/v1/order/take [post]
+// @Tags Front API
 func (e *OrderController) TakeOrder(c *gin.Context) {
 	var (
 		param params.DoOrderParam
@@ -271,6 +279,7 @@ func (e *OrderController) TakeOrder(c *gin.Context) {
 // @Description 订单评价
 // @Success 200 {object} app.Response
 // @router /api/v1/order/comments/:key [post]
+// @Tags Front API
 func (e *OrderController) OrderComment(c *gin.Context) {
 	var (
 		param []params.ProductReplyParam
@@ -297,6 +306,7 @@ func (e *OrderController) OrderComment(c *gin.Context) {
 // @Description 未支付订单取消
 // @Success 200 {object} app.Response
 // @router /api/v1/order/cancel [post]
+// @Tags Front API
 func (e *OrderController) CancelOrder(c *gin.Context) {
 	var (
 		param params.HandleOrderParam

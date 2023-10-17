@@ -24,6 +24,7 @@ type CartController struct {
 // @Description 购物车列表数据
 // @Success 200 {object} app.Response
 // @router /api/v1/carts [get]
+// @Tags Front API
 func (e *CartController) CartList(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -41,6 +42,7 @@ func (e *CartController) CartList(c *gin.Context) {
 // @Description 获取数量
 // @Success 200 {object} app.Response
 // @router /api/v1/cart/count [get]
+// @Tags Front API
 func (e *CartController) Count(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -59,6 +61,7 @@ func (e *CartController) Count(c *gin.Context) {
 // @Description 添加购物车
 // @Success 200 {object} app.Response
 // @router /api/v1/cart/add [post]
+// @Tags Front API
 func (e *CartController) AddCart(c *gin.Context) {
 	var (
 		param params.CartParam
@@ -88,6 +91,7 @@ func (e *CartController) AddCart(c *gin.Context) {
 // @Description 修改购物车数量
 // @Success 200 {object} app.Response
 // @router /api/v1/cart/num [post]
+// @Tags Front API
 func (e *CartController) CartNum(c *gin.Context) {
 	var (
 		param params.CartNumParam
@@ -115,6 +119,7 @@ func (e *CartController) CartNum(c *gin.Context) {
 // @Description 取消收藏
 // @Success 200 {object} app.Response
 // @router /api/v1/collect/del [post]
+// @Tags Front API
 func (e *CartController) DelCart(c *gin.Context) {
 	var (
 		param params.CartIdsParam

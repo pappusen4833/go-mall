@@ -19,6 +19,7 @@ type StoreProductRuleController struct {
 // @Description 商品规格sku列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *StoreProductRuleController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -39,6 +40,7 @@ func (e *StoreProductRuleController) GetAll(c *gin.Context) {
 // @Description 商品规格sku添加
 // @Success 200 {object} app.Response
 // @router /save/:id [post]
+// @Tags Admin
 func (e *StoreProductRuleController) Post(c *gin.Context) {
 	var (
 		dto  dto2.ProductRule
@@ -68,6 +70,7 @@ func (e *StoreProductRuleController) Post(c *gin.Context) {
 // @Description 商品规格sku删除
 // @Success 200 {object} app.Response
 // @router / [delete]
+// @Tags Admin
 func (e *StoreProductRuleController) Delete(c *gin.Context) {
 	var (
 		ids  []int64

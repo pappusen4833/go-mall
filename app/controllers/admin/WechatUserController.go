@@ -24,6 +24,7 @@ type WechatUserController struct {
 // @Description 用户列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *WechatUserController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -48,6 +49,7 @@ func (e *WechatUserController) GetAll(c *gin.Context) {
 // @Description 用户编辑
 // @Success 200 {object} app.Response
 // @router / [put]
+// @Tags Admin
 func (e *WechatUserController) Put(c *gin.Context) {
 	var (
 		model dto3.YshopUser
@@ -74,6 +76,7 @@ func (e *WechatUserController) Put(c *gin.Context) {
 // @Description 用户余额修改
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *WechatUserController) Money(c *gin.Context) {
 	var (
 		model dto2.UserMoney

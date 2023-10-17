@@ -20,7 +20,8 @@ type WechatController struct {
 // @Title 公众号服务
 // @Description 公众号服务
 // @Success 200 {object} app.Response
-// @router / [any]
+// @router / [get]
+// @Tags Front API
 func (e *WechatController) GetAll(c *gin.Context) {
 	official := global.YSHOP_OFFICIAL_ACCOUNT
 	server := official.GetServer(c.Request, c.Writer)

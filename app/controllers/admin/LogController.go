@@ -22,6 +22,7 @@ type LogController struct {
 // @Description 日志列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *LogController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -40,6 +41,7 @@ func (e *LogController) GetAll(c *gin.Context) {
 // @Description 日志删除
 // @Success 200 {object} app.Response
 // @router / [delete]
+// @Tags Admin
 func (e *LogController) Delete(c *gin.Context) {
 	var (
 		ids  []int64

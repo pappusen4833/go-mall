@@ -28,6 +28,7 @@ type UserController struct {
 // @Description 用户列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *UserController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -52,6 +53,7 @@ func (e *UserController) GetAll(c *gin.Context) {
 // @Description 用户添加
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *UserController) Post(c *gin.Context) {
 	var (
 		model models.SysUser
@@ -79,6 +81,7 @@ func (e *UserController) Post(c *gin.Context) {
 // @Description 用户编辑
 // @Success 200 {object} app.Response
 // @router / [put]
+// @Tags Admin
 func (e *UserController) Put(c *gin.Context) {
 	var (
 		model models.SysUser
@@ -105,6 +108,7 @@ func (e *UserController) Put(c *gin.Context) {
 // @Description 用户删除
 // @Success 200 {object} app.Response
 // @router / [delete]
+// @Tags Admin
 func (e *UserController) Delete(c *gin.Context) {
 	var (
 		ids  []int64
@@ -126,6 +130,7 @@ func (e *UserController) Delete(c *gin.Context) {
 // @Description 用户上传图像
 // @Success 200 {object} app.Response
 // @router /updateAvatar [post]
+// @Tags Admin
 func (e *UserController) Avatar(c *gin.Context) {
 	appG := app.Gin{C: c}
 	file, image, err := c.Request.FormFile("file")
@@ -176,6 +181,7 @@ func (e *UserController) Avatar(c *gin.Context) {
 // @Description 用户修改密码
 // @Success 200 {object} app.Response
 // @router /updatePass [post]
+// @Tags Admin
 func (e *UserController) Pass(c *gin.Context) {
 	var (
 		model dto2.UserPass
@@ -200,6 +206,7 @@ func (e *UserController) Pass(c *gin.Context) {
 // @Description 用户修改个人信息
 // @Success 200 {object} app.Response
 // @router /center [put]
+// @Tags Admin
 func (e *UserController) Center(c *gin.Context) {
 	var (
 		model dto2.UserPost
@@ -226,6 +233,7 @@ func (e *UserController) Center(c *gin.Context) {
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @Router /upload [post]
+// @Tags Admin
 func UploadImage(c *gin.Context) {
 	appG := app.Gin{C: c}
 	file, image, err := c.Request.FormFile("image")

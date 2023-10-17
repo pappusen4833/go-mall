@@ -24,6 +24,7 @@ type UserController struct {
 // @Description 获取用户信息
 // @Success 200 {object} app.Response
 // @router /api/v1/userinfo [get]
+// @Tags Front API
 func (e *UserController) GetUserInfo(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -39,6 +40,7 @@ func (e *UserController) GetUserInfo(c *gin.Context) {
 // @Description 获取用户收藏
 // @Success 200 {object} app.Response
 // @router /api/v1/collect/user [get]
+// @Tags Front API
 func (e *UserController) CollectUser(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}

@@ -24,6 +24,7 @@ type MaterialGroupController struct {
 // @Description 素材分组列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *MaterialGroupController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -40,6 +41,7 @@ func (e *MaterialGroupController) GetAll(c *gin.Context) {
 // @Description素材分组添加
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *MaterialGroupController) Post(c *gin.Context) {
 	var (
 		model models.SysMaterialGroup
@@ -69,6 +71,7 @@ func (e *MaterialGroupController) Post(c *gin.Context) {
 // @Description 素材分组修改
 // @Success 200 {object} app.Response
 // @router / [put]
+// @Tags Admin
 func (e *MaterialGroupController) Put(c *gin.Context) {
 	var (
 		model models.SysMaterialGroup
@@ -97,6 +100,7 @@ func (e *MaterialGroupController) Put(c *gin.Context) {
 // @Description 素材分组删除
 // @Success 200 {object} app.Response
 // @router /:id [delete]
+// @Tags Admin
 func (e *MaterialGroupController) Delete(c *gin.Context) {
 	var (
 		ids  []int64

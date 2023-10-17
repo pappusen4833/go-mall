@@ -23,6 +23,7 @@ type CanvasController struct {
 // @Description 画布
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *CanvasController) Get(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -39,6 +40,7 @@ func (e *CanvasController) Get(c *gin.Context) {
 // @Description 画布添加/修改
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *CanvasController) Post(c *gin.Context) {
 	var (
 		model models.StoreCanvas

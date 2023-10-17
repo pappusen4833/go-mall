@@ -28,6 +28,7 @@ type ProductController struct {
 // @Description 获取商品列表数据
 // @Success 200 {object} app.Response
 // @router /api/v1/products [get]
+// @Tags Front API
 func (e *ProductController) GoodsList(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -54,6 +55,7 @@ func (e *ProductController) GoodsList(c *gin.Context) {
 // @Description 获取推荐商品
 // @Success 200 {object} app.Response
 // @router /api/v1/product/hot [get]
+// @Tags Front API
 func (e *ProductController) GoodsRecommendList(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -76,6 +78,7 @@ func (e *ProductController) GoodsRecommendList(c *gin.Context) {
 // @Description 获取商品详情
 // @Success 200 {object} app.Response
 // @router /api/v1/product/detail/:id [get]
+// @Tags Front API
 func (e *ProductController) GoodDetail(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -107,6 +110,7 @@ func (e *ProductController) GoodDetail(c *gin.Context) {
 // @Description 添加收藏
 // @Success 200 {object} app.Response
 // @router /api/v1/collect/add [post]
+// @Tags Front API
 func (e *ProductController) AddCollect(c *gin.Context) {
 	var (
 		param params.RelationParam
@@ -134,6 +138,7 @@ func (e *ProductController) AddCollect(c *gin.Context) {
 // @Description 取消收藏
 // @Success 200 {object} app.Response
 // @router /api/v1/collect/del [post]
+// @Tags Front API
 func (e *ProductController) DelCollect(c *gin.Context) {
 	var (
 		param params.RelationParam
@@ -161,6 +166,7 @@ func (e *ProductController) DelCollect(c *gin.Context) {
 // @Description 获取商品评论列表数据
 // @Success 200 {object} app.Response
 // @router /api/v1/reply/list/:id [get]
+// @Tags Front API
 func (e *ProductController) ReplyList(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}

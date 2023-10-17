@@ -29,6 +29,7 @@ type OrderController struct {
 // @Description 订单列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *OrderController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -50,6 +51,7 @@ func (e *OrderController) GetAll(c *gin.Context) {
 // @Description 文章添加
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *OrderController) Post(c *gin.Context) {
 	var (
 		model models.WechatArticle
@@ -79,6 +81,7 @@ func (e *OrderController) Post(c *gin.Context) {
 // @Description 订单修改
 // @Success 200 {object} app.Response
 // @router / [put]
+// @Tags Admin
 func (e *OrderController) Put(c *gin.Context) {
 	var (
 		model models.StoreOrder
@@ -105,6 +108,7 @@ func (e *OrderController) Put(c *gin.Context) {
 // @Description 订单发货
 // @Success 200 {object} app.Response
 // @router / [put]
+// @Tags Admin
 func (e *OrderController) Deliver(c *gin.Context) {
 	var (
 		model models.StoreOrder
@@ -132,6 +136,7 @@ func (e *OrderController) Deliver(c *gin.Context) {
 // @Description 订单快递查询
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *OrderController) DeliverQuery(c *gin.Context) {
 	var (
 		model dto.Express
@@ -166,6 +171,7 @@ func (e *OrderController) DeliverQuery(c *gin.Context) {
 // @Description 订单删除
 // @Success 200 {object} app.Response
 // @router /:id [delete]
+// @Tags Admin
 func (e *OrderController) Delete(c *gin.Context) {
 	var (
 		ids  []int64

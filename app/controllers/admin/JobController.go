@@ -24,6 +24,7 @@ type JobController struct {
 // @Description 岗位列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *JobController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -44,6 +45,7 @@ func (e *JobController) GetAll(c *gin.Context) {
 // @Description 岗位添加
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *JobController) Post(c *gin.Context) {
 	var (
 		model models.SysJob
@@ -71,6 +73,7 @@ func (e *JobController) Post(c *gin.Context) {
 // @Description 岗位修改
 // @Success 200 {object} app.Response
 // @router / [put]
+// @Tags Admin
 func (e *JobController) Put(c *gin.Context) {
 	var (
 		model models.SysJob
@@ -97,6 +100,7 @@ func (e *JobController) Put(c *gin.Context) {
 // @Description 岗位删除
 // @Success 200 {object} app.Response
 // @router / [delete]
+// @Tags Admin
 func (e *JobController) Delete(c *gin.Context) {
 	var (
 		ids  []int64

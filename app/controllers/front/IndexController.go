@@ -26,6 +26,7 @@ type IndexController struct {
 // @Description 获取首页数据
 // @Success 200 {object} app.Response
 // @router /api/v1/getCanvas [get]
+// @Tags Front API
 func (e *IndexController) GetIndex(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -65,6 +66,7 @@ func (e *IndexController) GetIndex(c *gin.Context) {
 // @Description 获取画布数据
 // @Success 200 {object} app.Response
 // @router /api/v1/getCanvas [get]
+// @Tags Front API
 func (e *IndexController) GetCanvas(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -82,6 +84,7 @@ func (e *IndexController) GetCanvas(c *gin.Context) {
 // @Description 上传图像
 // @Success 200 {object} app.Response
 // @router /upload [post]
+// @Tags Front API
 func (e *IndexController) Upload(c *gin.Context) {
 	appG := app.Gin{C: c}
 	file, image, err := c.Request.FormFile("file")

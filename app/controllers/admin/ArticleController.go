@@ -25,6 +25,7 @@ type ArticleController struct {
 // @Description 文章
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *ArticleController) Get(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -42,6 +43,7 @@ func (e *ArticleController) Get(c *gin.Context) {
 // @Description 文章列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *ArticleController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -62,6 +64,7 @@ func (e *ArticleController) GetAll(c *gin.Context) {
 // @Description 文章添加
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *ArticleController) Post(c *gin.Context) {
 	var (
 		model models.WechatArticle
@@ -91,6 +94,7 @@ func (e *ArticleController) Post(c *gin.Context) {
 // @Description 文章修改
 // @Success 200 {object} app.Response
 // @router / [put]
+// @Tags Admin
 func (e *ArticleController) Put(c *gin.Context) {
 	var (
 		model models.WechatArticle
@@ -117,6 +121,7 @@ func (e *ArticleController) Put(c *gin.Context) {
 // @Description 文章删除
 // @Success 200 {object} app.Response
 // @router /:id [delete]
+// @Tags Admin
 func (e *ArticleController) Delete(c *gin.Context) {
 	var (
 		ids  []int64
@@ -138,6 +143,7 @@ func (e *ArticleController) Delete(c *gin.Context) {
 // @Description 发布文章
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *ArticleController) Pub(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}

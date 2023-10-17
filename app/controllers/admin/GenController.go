@@ -25,6 +25,7 @@ type GenController struct {
 // @Description 获取所有表
 // @Success 200 {object} app.Response
 // @router /tools/gen/tables [get]
+// @Tags Admin
 func (e *GenController) GetAllDBTables(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -45,6 +46,7 @@ func (e *GenController) GetAllDBTables(c *gin.Context) {
 // @Description 导入数据库表
 // @Success 200 {object} app.Response
 // @router /tools/gen/import [post]
+// @Tags Admin
 func (e *GenController) ImportTable(c *gin.Context) {
 	var (
 		param admin.GenTableParan
@@ -72,6 +74,7 @@ func (e *GenController) ImportTable(c *gin.Context) {
 // @Description 获取已经导入的表
 // @Success 200 {object} app.Response
 // @router /tools/gen/systables [get]
+// @Tags Admin
 func (e *GenController) GetAllTables(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -92,6 +95,7 @@ func (e *GenController) GetAllTables(c *gin.Context) {
 // @Description 获取表的信息
 // @Success 200 {object} app.Response
 // @router /tools/gen/config/:name [get]
+// @Tags Admin
 func (e *GenController) GetTableInfo(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -108,6 +112,7 @@ func (e *GenController) GetTableInfo(c *gin.Context) {
 // @Description 获取表的列信息
 // @Success 200 {object} app.Response
 // @router /tools/gen/columns [get]
+// @Tags Admin
 func (e *GenController) GetTableColumns(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -124,6 +129,7 @@ func (e *GenController) GetTableColumns(c *gin.Context) {
 // @Description 保存配置
 // @Success 200 {object} app.Response
 // @router /gen/config [put]
+// @Tags Admin
 func (e *GenController) ConfigPut(c *gin.Context) {
 	var (
 		model models.SysTables
@@ -150,6 +156,7 @@ func (e *GenController) ConfigPut(c *gin.Context) {
 // @Description 保存列配置
 // @Success 200 {object} app.Response
 // @router /gen/columns [put]
+// @Tags Admin
 func (e *GenController) ColumnsPut(c *gin.Context) {
 	var (
 		model []models.SysColumns
@@ -176,6 +183,7 @@ func (e *GenController) ColumnsPut(c *gin.Context) {
 // @Description 代码预览
 // @Success 200 {object} app.Response
 // @router /tools/gen/preview [get]
+// @Tags Admin
 func (e *GenController) Preview(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -192,6 +200,7 @@ func (e *GenController) Preview(c *gin.Context) {
 // @Description 代码生产
 // @Success 200 {object} app.Response
 // @router /tools/gen/code [get]
+// @Tags Admin
 func (e *GenController) GenCode(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}

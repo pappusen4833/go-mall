@@ -22,6 +22,7 @@ type WechatMenuController struct {
 // @Description 获取菜单
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *WechatMenuController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -35,6 +36,7 @@ func (e *WechatMenuController) GetAll(c *gin.Context) {
 // @Description 菜单更新
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *WechatMenuController) Post(c *gin.Context) {
 	var (
 		dto  dto2.WechatMenu

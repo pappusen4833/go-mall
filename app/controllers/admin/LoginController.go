@@ -38,6 +38,7 @@ var store = base64Captcha.DefaultMemStore
 // @Description 登录
 // @Success 200 {object} app.Response
 // @router /admin/login [post]
+// @Tags Admin
 func (e *LoginController) Login(c *gin.Context) {
 	var (
 		authUser dto.AuthUser
@@ -82,6 +83,7 @@ func (e *LoginController) Login(c *gin.Context) {
 // @Description 获取用户信息
 // @Success 200 {object} app.Response
 // @router /info [get]
+// @Tags Admin
 func (e *LoginController) Info(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -93,6 +95,7 @@ func (e *LoginController) Info(c *gin.Context) {
 // @Description 退出登录
 // @Success 200 {object} app.Response
 // @router /logout [delete]
+// @Tags Admin
 func (e *LoginController) Logout(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -109,6 +112,7 @@ func (e *LoginController) Logout(c *gin.Context) {
 // @Title 获取验证码
 // @Description 获取验证码
 // @router /captcha [get]
+// @Tags Admin
 func (e *LoginController) Captcha(c *gin.Context) {
 	GenerateCaptcha(c)
 }

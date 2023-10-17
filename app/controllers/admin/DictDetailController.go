@@ -24,6 +24,7 @@ type DictDetailController struct {
 // @Description 获取字典详情列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *DictDetailController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -44,6 +45,7 @@ func (e *DictDetailController) GetAll(c *gin.Context) {
 // @Description 添加字典详情
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *DictDetailController) Post(c *gin.Context) {
 	var (
 		model models.SysDictDetail
@@ -70,6 +72,7 @@ func (e *DictDetailController) Post(c *gin.Context) {
 // @Description 修改字典详情
 // @Success 200 {object} app.Response
 // @router / [put]
+// @Tags Admin
 func (e *DictDetailController) Put(c *gin.Context) {
 	var (
 		model models.SysDictDetail
@@ -96,6 +99,7 @@ func (e *DictDetailController) Put(c *gin.Context) {
 // @Description 删除字典详情
 // @Success 200 {object} app.Response
 // @router /:id [delete]
+// @Tags Admin
 func (e *DictDetailController) Delete(c *gin.Context) {
 	var (
 		ids  []int64

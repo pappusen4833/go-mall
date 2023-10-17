@@ -25,6 +25,7 @@ type MenuController struct {
 // @Description 菜单列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *MenuController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -40,6 +41,7 @@ func (e *MenuController) GetAll(c *gin.Context) {
 // @Description 菜单添加
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *MenuController) Post(c *gin.Context) {
 	var (
 		model models.SysMenu
@@ -66,6 +68,7 @@ func (e *MenuController) Post(c *gin.Context) {
 // @Description 菜单修改
 // @Success 200 {object} app.Response
 // @router / [put]
+// @Tags Admin
 func (e *MenuController) Put(c *gin.Context) {
 	var (
 		model models.SysMenu
@@ -92,6 +95,7 @@ func (e *MenuController) Put(c *gin.Context) {
 // @Description 菜单删除
 // @Success 200 {object} app.Response
 // @router / [delete]
+// @Tags Admin
 func (e *MenuController) Delete(c *gin.Context) {
 	var (
 		ids  []int64
@@ -112,6 +116,7 @@ func (e *MenuController) Delete(c *gin.Context) {
 // @Description 菜单构建
 // @Success 200 {object} app.Response
 // @router /build [get]
+// @Tags Admin
 func (e *MenuController) Build(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -127,6 +132,7 @@ func (e *MenuController) Build(c *gin.Context) {
 // @Description 菜单树形
 // @Success 200 {object} app.Response
 // @router /tree [get]
+// @Tags Admin
 func (e *MenuController) GetTree(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}

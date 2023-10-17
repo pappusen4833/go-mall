@@ -24,6 +24,7 @@ type UserAddressController struct {
 // @Description 设置默认地址
 // @Success 200 {object} app.Response
 // @router /api/v1/address/del [post]
+// @Tags Front API
 func (e *UserAddressController) Del(c *gin.Context) {
 	var (
 		param params.IdParam
@@ -53,6 +54,7 @@ func (e *UserAddressController) Del(c *gin.Context) {
 // @Description 设置默认地址
 // @Success 200 {object} app.Response
 // @router /api/v1/address/default/set [post]
+// @Tags Front API
 func (e *UserAddressController) SetDefault(c *gin.Context) {
 	var (
 		param params.IdParam
@@ -82,6 +84,7 @@ func (e *UserAddressController) SetDefault(c *gin.Context) {
 // @Description 获取列表数据
 // @Success 200 {object} app.Response
 // @router /api/v1/address [get]
+// @Tags Front API
 func (e *UserAddressController) GetList(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -104,6 +107,7 @@ func (e *UserAddressController) GetList(c *gin.Context) {
 // @Description 添加or更新地址
 // @Success 200 {object} app.Response
 // @router /api/v1/address/edit [post]
+// @Tags Front API
 func (e *UserAddressController) SaveAddress(c *gin.Context) {
 	var (
 		param params.AddressParan
@@ -133,6 +137,7 @@ func (e *UserAddressController) SaveAddress(c *gin.Context) {
 // @Description 获取树形数据
 // @Success 200 {object} app.Response
 // @router /api/v1/city_list [get]
+// @Tags Front API
 func (e *UserAddressController) GetCityList(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}

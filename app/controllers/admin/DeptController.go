@@ -23,6 +23,7 @@ type DeptController struct {
 // @Description 获取部门列表
 // @Success 200 {object} app.Response
 // @router / [get]
+// @Tags Admin
 func (e *DeptController) GetAll(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -38,6 +39,7 @@ func (e *DeptController) GetAll(c *gin.Context) {
 // @Description 添加部门
 // @Success 200 {object} app.Response
 // @router / [post]
+// @Tags Admin
 func (e *DeptController) Post(c *gin.Context) {
 	var (
 		model models.SysDept
@@ -64,6 +66,7 @@ func (e *DeptController) Post(c *gin.Context) {
 // @Description 修改部门
 // @Success 200 {object} app.Response
 // @router / [put]
+// @Tags Admin
 func (e *DeptController) Put(c *gin.Context) {
 	var (
 		model models.SysDept
@@ -89,6 +92,7 @@ func (e *DeptController) Put(c *gin.Context) {
 // @Description 删除部门
 // @Success 200 {object} app.Response
 // @router / [delete]
+// @Tags Admin
 func (e *DeptController) Delete(c *gin.Context) {
 	var (
 		ids  []int64

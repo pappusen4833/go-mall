@@ -28,10 +28,9 @@ func init() {
 	wechat.InitWechat()
 }
 
-// @title gin-shop  API
+// @title go-mall API
 // @version 1.0
-// @description gin-shop商城后台管理系统
-// @termsOfService https://gitee.com/guchengwuyue/gin-shop
+// @description go-mall 商城后台系统
 // @license.name apache2
 func main() {
 	gin.SetMode(global.YSHOP_CONFIG.Server.RunMode)
