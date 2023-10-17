@@ -1385,4 +1385,9 @@ paths:
             $ref: '#/definitions/app.Response'
       tags:
       - Admin
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

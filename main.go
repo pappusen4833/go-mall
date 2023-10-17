@@ -32,6 +32,9 @@ func init() {
 // @version 1.0
 // @description go-mall 商城后台系统
 // @license.name apache2
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	gin.SetMode(global.YSHOP_CONFIG.Server.RunMode)
 
