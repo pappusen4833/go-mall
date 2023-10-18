@@ -18,7 +18,7 @@ type ExpressController struct {
 // @Title 快递列表
 // @Description 快递列表
 // @Success 200 {object} app.Response
-// @router /admin/express [get]
+// @router /shop/express [get]
 // @Tags Admin
 func (e *ExpressController) GetAll(c *gin.Context) {
 	var (
@@ -39,7 +39,7 @@ func (e *ExpressController) GetAll(c *gin.Context) {
 // @Title 快递添加
 // @Description 快递添加
 // @Success 200 {object} app.Response
-// @router /admin/express [post]
+// @router /shop/express [post]
 // @Tags Admin
 func (e *ExpressController) Post(c *gin.Context) {
 	var (
@@ -69,7 +69,7 @@ func (e *ExpressController) Post(c *gin.Context) {
 // @Title 快递修改
 // @Description 快递修改
 // @Success 200 {object} app.Response
-// @router /admin/express [put]
+// @router /shop/express [put]
 // @Tags Admin
 func (e *ExpressController) Put(c *gin.Context) {
 	var (
@@ -96,7 +96,7 @@ func (e *ExpressController) Put(c *gin.Context) {
 // @Title 快递删除
 // @Description 快递删除
 // @Success 200 {object} app.Response
-// @router /admin/express/:id [delete]
+// @router /shop/express/:id [delete]
 // @Tags Admin
 func (e *ExpressController) Delete(c *gin.Context) {
 	var (

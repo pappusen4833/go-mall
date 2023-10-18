@@ -23,7 +23,7 @@ type OrderController struct {
 // @Title 订单列表
 // @Description 订单列表
 // @Success 200 {object} app.Response
-// @router /admin/order [get]
+// @router /shop/order [get]
 // @Tags Admin
 func (e *OrderController) GetAll(c *gin.Context) {
 	var (
@@ -45,7 +45,7 @@ func (e *OrderController) GetAll(c *gin.Context) {
 // @Title 创建订单
 // @Description 创建订单
 // @Success 200 {object} app.Response
-// @router /admin/order [post]
+// @router /shop/order [post]
 // @Tags Admin
 func (e *OrderController) Post(c *gin.Context) {
 	var (
@@ -75,7 +75,7 @@ func (e *OrderController) Post(c *gin.Context) {
 // @Title 订单修改
 // @Description 订单修改
 // @Success 200 {object} app.Response
-// @router /admin/order [put]
+// @router /shop/order [put]
 // @Tags Admin
 func (e *OrderController) Put(c *gin.Context) {
 	var (
@@ -102,7 +102,7 @@ func (e *OrderController) Put(c *gin.Context) {
 // @Title 订单发货
 // @Description 订单发货
 // @Success 200 {object} app.Response
-// @router /admin/deliver [put]
+// @router /shop/deliver [put]
 // @Tags Admin
 func (e *OrderController) Deliver(c *gin.Context) {
 	var (
@@ -130,7 +130,7 @@ func (e *OrderController) Deliver(c *gin.Context) {
 // @Title 订单快递查询
 // @Description 订单快递查询
 // @Success 200 {object} app.Response
-// @router /admin/order/express [post]
+// @router /shop/order/express [post]
 // @Tags Admin
 func (e *OrderController) DeliverQuery(c *gin.Context) {
 	var (
@@ -165,7 +165,7 @@ func (e *OrderController) DeliverQuery(c *gin.Context) {
 // @Title 订单删除
 // @Description 订单删除
 // @Success 200 {object} app.Response
-// @router /admin/order/:id [delete]
+// @router /shop/order/:id [delete]
 // @Tags Admin
 func (e *OrderController) Delete(c *gin.Context) {
 	var (

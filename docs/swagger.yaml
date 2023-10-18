@@ -15,64 +15,6 @@ info:
   title: GO-MALL API
   version: "1.0"
 paths:
-  /admin/article:
-    get:
-      description: 文章列表
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-    post:
-      description: 文章添加
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-    put:
-      description: 文章修改
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/article/:id:
-    delete:
-      description: 文章删除
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/article/info/:id:
-    get:
-      description: 文章
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/article/publish/:id:
-    get:
-      description: 发布文章
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
   /admin/canvas/getCanvas:
     get:
       description: 画布
@@ -96,21 +38,12 @@ paths:
   /admin/captcha:
     get:
       description: 获取验证码
+      responses: {}
       tags:
       - Admin
   /admin/center:
     put:
       description: 用户修改个人信息
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/deliver:
-    put:
-      description: 订单发货
       responses:
         "200":
           description: OK
@@ -224,64 +157,6 @@ paths:
   /admin/dictDetail/:id:
     delete:
       description: 删除字典详情
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/express:
-    get:
-      description: 快递列表
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-    post:
-      description: 快递添加
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-    put:
-      description: 快递修改
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/express/:id:
-    delete:
-      description: 快递删除
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/gen/columns:
-    put:
-      description: 保存列配置
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/gen/config:
-    put:
-      description: 保存配置
       responses:
         "200":
           description: OK
@@ -517,54 +392,6 @@ paths:
             $ref: '#/definitions/app.Response'
       tags:
       - Admin
-  /admin/order:
-    get:
-      description: 订单列表
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-    post:
-      description: 创建订单
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-    put:
-      description: 订单修改
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/order/:id:
-    delete:
-      description: 订单删除
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/order/express:
-    post:
-      description: 订单快递查询
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
   /admin/roles:
     delete:
       description: 角色删除
@@ -594,6 +421,7 @@ paths:
       tags:
       - Admin
     put:
+      responses: {}
       tags:
       - Admin
   /admin/roles/:id:
@@ -615,134 +443,6 @@ paths:
   /admin/roles/menu:
     put:
       description: 角色菜单更新
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/timing:
-    get:
-      description: 获取定时任务调度表列表
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-    post:
-      description: 添加定时任务调度表
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-    put:
-      description: 修改定时任务调度表
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/timing/:id:
-    delete:
-      description: 删除定时任务调度表
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/timing/exec/:id:
-    put:
-      description: 执行定时任务调度表
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/timing/stop/:id:
-    put:
-      description: 停止定时任务调度表
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/tools/gen/code:
-    get:
-      description: 代码生产
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/tools/gen/columns:
-    get:
-      description: 获取表的列信息
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/tools/gen/config/:name:
-    get:
-      description: 获取表的信息
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/tools/gen/import:
-    post:
-      description: 导入数据库表
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/tools/gen/preview:
-    get:
-      description: 代码预览
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/tools/gen/systables:
-    get:
-      description: 获取已经导入的表
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-      tags:
-      - Admin
-  /admin/tools/gen/tables:
-    get:
-      description: 获取所有表
       responses:
         "200":
           description: OK
@@ -1206,6 +906,26 @@ paths:
             $ref: '#/definitions/app.Response'
       tags:
       - Front API
+  /gen/columns:
+    put:
+      description: 保存列配置
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /gen/config:
+    put:
+      description: 保存配置
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
   /shop/cate:
     delete:
       description: 删除商品分类
@@ -1236,6 +956,102 @@ paths:
       - Admin
     put:
       description: 修改商品分类
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /shop/deliver:
+    put:
+      description: 订单发货
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /shop/express:
+    get:
+      description: 快递列表
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+    post:
+      description: 快递添加
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+    put:
+      description: 快递修改
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /shop/express/:id:
+    delete:
+      description: 快递删除
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /shop/order:
+    get:
+      description: 订单列表
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+    post:
+      description: 创建订单
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+    put:
+      description: 订单修改
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /shop/order/:id:
+    delete:
+      description: 订单删除
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /shop/order/express:
+    post:
+      description: 订单快递查询
       responses:
         "200":
           description: OK
@@ -1332,6 +1148,134 @@ paths:
             $ref: '#/definitions/app.Response'
       tags:
       - Admin
+  /timing:
+    get:
+      description: 获取定时任务调度表列表
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+    post:
+      description: 添加定时任务调度表
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+    put:
+      description: 修改定时任务调度表
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /timing/:id:
+    delete:
+      description: 删除定时任务调度表
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /timing/exec/:id:
+    put:
+      description: 执行定时任务调度表
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /timing/stop/:id:
+    put:
+      description: 停止定时任务调度表
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /tools/gen/code:
+    get:
+      description: 代码生产
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /tools/gen/columns:
+    get:
+      description: 获取表的列信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /tools/gen/config/:name:
+    get:
+      description: 获取表的信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /tools/gen/import:
+    post:
+      description: 导入数据库表
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /tools/gen/preview:
+    get:
+      description: 代码预览
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /tools/gen/systables:
+    get:
+      description: 获取已经导入的表
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /tools/gen/tables:
+    get:
+      description: 获取所有表
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
   /upload:
     post:
       description: 上传图像
@@ -1342,6 +1286,64 @@ paths:
             $ref: '#/definitions/app.Response'
       tags:
       - Front API
+  /weixin/article:
+    get:
+      description: 文章列表
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+    post:
+      description: 文章添加
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+    put:
+      description: 文章修改
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /weixin/article/:id:
+    delete:
+      description: 文章删除
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /weixin/article/info/:id:
+    get:
+      description: 文章
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
+  /weixin/article/publish/:id:
+    get:
+      description: 发布文章
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - Admin
   /weixin/menu:
     get:
       description: 获取菜单

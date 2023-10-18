@@ -19,7 +19,7 @@ type GenController struct {
 // @Title 获取所有表
 // @Description 获取所有表
 // @Success 200 {object} app.Response
-// @router /admin/tools/gen/tables [get]
+// @router /tools/gen/tables [get]
 // @Tags Admin
 func (e *GenController) GetAllDBTables(c *gin.Context) {
 	var (
@@ -40,7 +40,7 @@ func (e *GenController) GetAllDBTables(c *gin.Context) {
 // @Title 导入数据库表
 // @Description 导入数据库表
 // @Success 200 {object} app.Response
-// @router /admin/tools/gen/import [post]
+// @router /tools/gen/import [post]
 // @Tags Admin
 func (e *GenController) ImportTable(c *gin.Context) {
 	var (
@@ -68,7 +68,7 @@ func (e *GenController) ImportTable(c *gin.Context) {
 // @Title 获取已经导入的表
 // @Description 获取已经导入的表
 // @Success 200 {object} app.Response
-// @router /admin/tools/gen/systables [get]
+// @router /tools/gen/systables [get]
 // @Tags Admin
 func (e *GenController) GetAllTables(c *gin.Context) {
 	var (
@@ -89,7 +89,7 @@ func (e *GenController) GetAllTables(c *gin.Context) {
 // @Title 获取表的信息
 // @Description 获取表的信息
 // @Success 200 {object} app.Response
-// @router /admin/tools/gen/config/:name [get]
+// @router /tools/gen/config/:name [get]
 // @Tags Admin
 func (e *GenController) GetTableInfo(c *gin.Context) {
 	var (
@@ -106,7 +106,7 @@ func (e *GenController) GetTableInfo(c *gin.Context) {
 // @Title 获取表的列信息
 // @Description 获取表的列信息
 // @Success 200 {object} app.Response
-// @router /admin/tools/gen/columns [get]
+// @router /tools/gen/columns [get]
 // @Tags Admin
 func (e *GenController) GetTableColumns(c *gin.Context) {
 	var (
@@ -123,7 +123,7 @@ func (e *GenController) GetTableColumns(c *gin.Context) {
 // @Title 保存配置
 // @Description 保存配置
 // @Success 200 {object} app.Response
-// @router /admin/gen/config [put]
+// @router /gen/config [put]
 // @Tags Admin
 func (e *GenController) ConfigPut(c *gin.Context) {
 	var (
@@ -150,7 +150,7 @@ func (e *GenController) ConfigPut(c *gin.Context) {
 // @Title 保存列配置
 // @Description 保存列配置
 // @Success 200 {object} app.Response
-// @router /admin/gen/columns [put]
+// @router /gen/columns [put]
 // @Tags Admin
 func (e *GenController) ColumnsPut(c *gin.Context) {
 	var (
@@ -177,7 +177,7 @@ func (e *GenController) ColumnsPut(c *gin.Context) {
 // @Title 代码预览
 // @Description 代码预览
 // @Success 200 {object} app.Response
-// @router /admin/tools/gen/preview [get]
+// @router /tools/gen/preview [get]
 // @Tags Admin
 func (e *GenController) Preview(c *gin.Context) {
 	var (
@@ -194,7 +194,7 @@ func (e *GenController) Preview(c *gin.Context) {
 // @Title 代码生产
 // @Description 代码生产
 // @Success 200 {object} app.Response
-// @router /admin/tools/gen/code [get]
+// @router /tools/gen/code [get]
 // @Tags Admin
 func (e *GenController) GenCode(c *gin.Context) {
 	var (

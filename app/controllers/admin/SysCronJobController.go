@@ -17,7 +17,7 @@ type SysCronJobController struct {
 // @Title 获取定时任务调度表列表
 // @Description 获取定时任务调度表列表
 // @Success 200 {object} app.Response
-// @router /admin/timing [get]
+// @router /tools/timing [get]
 // @Tags Admin
 func (e *SysCronJobController) GetAll(c *gin.Context) {
 	var (
@@ -38,7 +38,7 @@ func (e *SysCronJobController) GetAll(c *gin.Context) {
 // @Title 添加定时任务调度表
 // @Description 添加定时任务调度表
 // @Success 200 {object} app.Response
-// @router /admin/timing [post]
+// @router /tools/timing [post]
 // @Tags Admin
 func (e *SysCronJobController) Post(c *gin.Context) {
 	var (
@@ -65,7 +65,7 @@ func (e *SysCronJobController) Post(c *gin.Context) {
 // @Title 修改定时任务调度表
 // @Description 修改定时任务调度表
 // @Success 200 {object} app.Response
-// @router /admin/timing [put]
+// @router /tools/timing [put]
 // @Tags Admin
 func (e *SysCronJobController) Put(c *gin.Context) {
 	var (
@@ -92,7 +92,7 @@ func (e *SysCronJobController) Put(c *gin.Context) {
 // @Title 删除定时任务调度表
 // @Description 删除定时任务调度表
 // @Success 200 {object} app.Response
-// @router /admin/timing/:id [delete]
+// @router /tools/timing/:id [delete]
 // @Tags Admin
 func (e *SysCronJobController) Delete(c *gin.Context) {
 	var (
@@ -119,7 +119,7 @@ func (e *SysCronJobController) Delete(c *gin.Context) {
 // @Title 执行定时任务调度表
 // @Description 执行定时任务调度表
 // @Success 200 {object} app.Response
-// @router /admin/timing/exec/:id [put]
+// @router /tools/timing/exec/:id [put]
 // @Tags Admin
 func (e *SysCronJobController) Exec(c *gin.Context) {
 	var (
@@ -141,7 +141,7 @@ func (e *SysCronJobController) Exec(c *gin.Context) {
 // @Title 停止定时任务调度表
 // @Description 停止定时任务调度表
 // @Success 200 {object} app.Response
-// @router /admin/timing/stop/:id [put]
+// @router /tools/timing/stop/:id [put]
 // @Tags Admin
 func (e *SysCronJobController) Stop(c *gin.Context) {
 	var (
