@@ -276,9 +276,9 @@ func (d *Product) AddOrSaveProduct() (err error) {
 
 func (d *Product) GetProductInfo() map[string]interface{} {
 	var (
-		mapData           = make(map[string]interface{})
-		yshopStoreProduct models.StoreProduct
-		productDto        productDto.StoreProductInfo
+		mapData      = make(map[string]interface{})
+		storeProduct models.StoreProduct
+		productDto   productDto.StoreProductInfo
 	)
 	cateService := cate_service.Cate{}
 	catList := cateService.GetProductCate()
@@ -293,12 +293,12 @@ func (d *Product) GetProductInfo() map[string]interface{} {
 		return mapData
 	}
 
-	yshopStoreProduct = models.GetProduct(d.Id)
-	ee := copier.Copy(&productDto, yshopStoreProduct)
+	storeProduct = models.GetProduct(d.Id)
+	ee := copier.Copy(&productDto, storeProduct)
 	if ee != nil {
 		logging.Error(ee)
 	}
-	productDto.SliderImage = strings.Split(yshopStoreProduct.SliderImage, ",")
+	productDto.SliderImage = strings.Split(storeProduct.SliderImage, ",")
 	res := models.GetProductAttrResult(d.Id)
 	productDto.Attrs = res["value"]
 	productDto.Items = res["attr"]

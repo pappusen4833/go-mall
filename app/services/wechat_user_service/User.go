@@ -36,7 +36,7 @@ type User struct {
 
 	Ip string
 	//M *models.User
-	Dto *wechatUserDto.YshopUser
+	Dto *wechatUserDto.User
 
 	Money *userDto.UserMoney
 

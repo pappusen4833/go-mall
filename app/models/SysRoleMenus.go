@@ -32,7 +32,7 @@ func BatchRoleMenuAdd(menu dto2.RoleMenu) error {
 	var roleMenus []SysRolesMenus
 	var roles = GetOneRole(menu.Id)
 
-	cb := runtime.Runtime.GetCasbinKey(constant.YSHOP_CASBIN)
+	cb := runtime.Runtime.GetCasbinKey(constant.GOMALL_CASBIN)
 	cb.RemoveFilteredPolicy(0, roles.Permission)
 	for _, val := range menu.Menus {
 		var roleMenu = SysRolesMenus{RoleId: menu.Id, MenuId: val.Id}

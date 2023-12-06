@@ -16,15 +16,15 @@ type ProductParam struct {
 }
 
 func (p *AfterSalesParan) Valid(v *validation.Validation) {
-	if vv := v.Required(p.OrderCode, "yshop-warning"); !vv.Ok {
+	if vv := v.Required(p.OrderCode, "gomall-warning"); !vv.Ok {
 		vv.Message("单号错误")
 		return
 	}
-	if vv := v.Required(p.ServiceType, "yshop-warning"); !vv.Ok {
+	if vv := v.Required(p.ServiceType, "gomall-warning"); !vv.Ok {
 		vv.Message("请选择服务类型")
 		return
 	}
-	if vv := v.Required(p.ProductParamList, "yshop-warning"); !vv.Ok {
+	if vv := v.Required(p.ProductParamList, "gomall-warning"); !vv.Ok {
 		vv.Message("请选择要退货的商品")
 		return
 	}

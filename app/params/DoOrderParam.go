@@ -9,7 +9,7 @@ type DoOrderParam struct {
 }
 
 func (p *DoOrderParam) Valid(v *validation.Validation) {
-	if vv := v.Required(p.Uni, "yshop-warning"); !vv.Ok {
+	if vv := v.Required(p.Uni, "gomall-warning"); !vv.Ok {
 		vv.Message("参数有误")
 		return
 	}

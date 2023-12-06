@@ -9,7 +9,7 @@ type IdParam struct {
 }
 
 func (p *IdParam) Valid(v *validation.Validation) {
-	if vv := v.Required(p.Id, "yshop-warning"); !vv.Ok {
+	if vv := v.Required(p.Id, "gomall-warning"); !vv.Ok {
 		vv.Message("参数有误")
 		return
 	}

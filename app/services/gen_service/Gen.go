@@ -89,7 +89,7 @@ func (d *Gen) Insert() error {
 	}
 
 	sysTables.FunctionName = sysTables.TableComment
-	sysTables.FunctionAuthor = "yshop"
+	sysTables.FunctionAuthor = "gomall"
 
 	//添加表
 	err = tx.Model(&models.SysTables{}).Create(&sysTables).Error

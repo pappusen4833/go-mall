@@ -41,7 +41,7 @@ func GoPay(returnMap map[string]interface{}, orderId, payType, from string,
 			//expire := time.Now().Add(10 * time.Minute).Format(time.RFC3339)
 			bm := make(gopay.BodyMap)
 			bm.Set("nonce_str", util.RandomString(32)).
-				Set("body", "yshop-go pc支付").
+				Set("body", "gomall-go pc支付").
 				Set("out_trade_no", orderId).
 				Set("total_fee", orderInfo.PayPrice*100).
 				Set("spbill_create_ip", "127.0.0.1").

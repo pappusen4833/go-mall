@@ -38,7 +38,7 @@ func AddWechatMenu(m *WechatMenu) error {
 
 func UpdateByWechatMenu(m *WechatMenu) error {
 	var err error
-	err = db.Model(&WechatMenu{}).Where("key", constant.YSHOP_WEICHAT_MENU).Updates(m).Error
+	err = db.Model(&WechatMenu{}).Where("key", constant.GOMALL_WEICHAT_MENU).Updates(m).Error
 	if err != nil {
 		return err
 	}

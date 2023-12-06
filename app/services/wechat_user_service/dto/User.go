@@ -1,6 +1,6 @@
 package dto
 
-type YshopUser struct {
+type User struct {
 	Id       int64  `json:"id"`
 	RealName string `json:"real_name"`
 	Mark     string `json:"mark"`

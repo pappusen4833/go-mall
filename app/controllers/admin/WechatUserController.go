@@ -47,7 +47,7 @@ func (e *WechatUserController) GetAll(c *gin.Context) {
 // @Tags Admin
 func (e *WechatUserController) Put(c *gin.Context) {
 	var (
-		model dto3.YshopUser
+		model dto3.User
 		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)

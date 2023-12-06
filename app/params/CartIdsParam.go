@@ -9,7 +9,7 @@ type CartIdsParam struct {
 }
 
 func (p *CartIdsParam) Valid(v *validation.Validation) {
-	if vv := v.Required(p.Ids, "yshop-warning"); !vv.Ok {
+	if vv := v.Required(p.Ids, "gomall-warning"); !vv.Ok {
 		vv.Message("参数有误")
 		return
 	}

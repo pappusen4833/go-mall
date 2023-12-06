@@ -45,7 +45,7 @@ func GenerateAppToken(m *models.User, d time.Time) (string, error) {
 	stdClaims := jwt.StandardClaims{
 		ExpiresAt: d.Unix(),
 		Id:        strconv.FormatInt(m.Id, 10),
-		Issuer:    "YshopAppGo",
+		Issuer:    "GoMall",
 	}
 
 	var jwtUser = vo.JwtUser{
@@ -137,7 +137,7 @@ func GenerateToken(m *models.SysUser, d time.Duration) (string, error) {
 	stdClaims := jwt.StandardClaims{
 		ExpiresAt: expireTime.Unix(),
 		Id:        strconv.FormatInt(m.Id, 10),
-		Issuer:    "YshopGo",
+		Issuer:    "GoMall",
 	}
 
 	var (

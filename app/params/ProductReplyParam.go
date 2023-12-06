@@ -14,7 +14,7 @@ type ProductReplyParam struct {
 }
 
 func (p *ProductReplyParam) Valid(v *validation.Validation) {
-	if vv := v.Required(p.Comment, "yshop-warning"); !vv.Ok {
+	if vv := v.Required(p.Comment, "gomall-warning"); !vv.Ok {
 		vv.Message("请填写评价内容")
 		return
 	}

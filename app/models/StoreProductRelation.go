@@ -1,6 +1,6 @@
 package models
 
-type YshopStoreProductRelation struct {
+type StoreProductRelation struct {
 	Uid       int64         `json:"uid"`
 	ProductId int64         `json:"productId"`
 	Type      string        `json:"type"`
@@ -9,23 +9,23 @@ type YshopStoreProductRelation struct {
 	BaseModel
 }
 
-func (YshopStoreProductRelation) TableName() string {
+func (StoreProductRelation) TableName() string {
 	return "store_product_relation"
 }
 
 // get all
-func GetAllProductRelation(pageNUm int, pageSize int, maps interface{}) (int64, []YshopStoreProductRelation) {
+func GetAllProductRelation(pageNUm int, pageSize int, maps interface{}) (int64, []StoreProductRelation) {
 	var (
 		total int64
-		data  []YshopStoreProductRelation
+		data  []StoreProductRelation
 	)
-	db.Model(&YshopStoreProductRelation{}).Where(maps).Count(&total)
+	db.Model(&StoreProductRelation{}).Where(maps).Count(&total)
 	db.Where(maps).Offset(pageNUm).Limit(pageSize).Preload("Product").Order("id desc").Find(&data)
 
 	return total, data
 }
 
-func AddStoreProductRelation(m *YshopStoreProductRelation) error {
+func AddStoreProductRelation(m *StoreProductRelation) error {
 	var err error
 	if err = db.Create(m).Error; err != nil {
 		return err
@@ -34,7 +34,7 @@ func AddStoreProductRelation(m *YshopStoreProductRelation) error {
 	return err
 }
 
-func UpdateByStoreProductRelation(m *YshopStoreProductRelation) error {
+func UpdateByStoreProductRelation(m *StoreProductRelation) error {
 	var err error
 	err = db.Save(m).Error
 	if err != nil {
@@ -46,7 +46,7 @@ func UpdateByStoreProductRelation(m *YshopStoreProductRelation) error {
 
 func DelByStoreProductRelations(ids []int64) error {
 	var err error
-	err = db.Where("id in (?)", ids).Delete(&YshopStoreProductRelation{}).Error
+	err = db.Where("id in (?)", ids).Delete(&StoreProductRelation{}).Error
 	if err != nil {
 		return err
 	}

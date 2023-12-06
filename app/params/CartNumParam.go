@@ -14,7 +14,7 @@ func (p *CartNumParam) Valid(v *validation.Validation) {
 		vv.Message("数量只能1-999之间")
 		return
 	}
-	if vv := v.Required(p.Id, "yshop-warning"); !vv.Ok {
+	if vv := v.Required(p.Id, "gomall-warning"); !vv.Ok {
 		vv.Message("参数有误")
 		return
 	}

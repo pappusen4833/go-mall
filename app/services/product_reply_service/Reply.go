@@ -33,7 +33,7 @@ type Reply struct {
 //	if IsRelation(d.Param.Id,d.Uid) {
 //		return errors.New("已经收藏过")
 //	}
-//	model := &models.YshopStoreProductRelation{
+//	model := &models.StoreProductRelation{
 //		Uid: d.Uid,
 //		ProductId: d.Param.Id,
 //		Type: d.Param.Category,
@@ -50,7 +50,7 @@ type Reply struct {
 //		Where("uid = ?",d.Uid).
 //		Where("product_id = ?",d.Param.Id).
 //		Where("type = ?",relationEnum.COLLECT).
-//		Delete(&models.YshopStoreProductRelation{}).Error
+//		Delete(&models.StoreProductRelation{}).Error
 //	if err != nil {
 //		global.GOMALL_LOG.Error(err)
 //		return errors.New("取消失败")
@@ -64,7 +64,7 @@ type Reply struct {
 //		count int64
 //		error error
 //	)
-//	error = global.GOMALL_DB.Model(&models.YshopStoreProductRelation{}).
+//	error = global.GOMALL_DB.Model(&models.StoreProductRelation{}).
 //		Where("uid = ?",uid).
 //		Where("product_id = ?",productId).
 //		Where("type = ?",relationEnum.COLLECT).

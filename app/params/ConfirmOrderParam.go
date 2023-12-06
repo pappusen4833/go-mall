@@ -9,7 +9,7 @@ type ConfirmOrderParam struct {
 }
 
 func (p *ConfirmOrderParam) Valid(v *validation.Validation) {
-	if vv := v.Required(p.CartId, "yshop-warning"); !vv.Ok {
+	if vv := v.Required(p.CartId, "gomall-warning"); !vv.Ok {
 		vv.Message("提交购买的商品")
 		return
 	}

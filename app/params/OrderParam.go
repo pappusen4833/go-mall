@@ -22,7 +22,7 @@ type OrderParam struct {
 }
 
 func (p *OrderParam) Valid(v *validation.Validation) {
-	if vv := v.Required(p.AddressId, "yshop-warning"); !vv.Ok {
+	if vv := v.Required(p.AddressId, "gomall-warning"); !vv.Ok {
 		vv.Message("请选择地址")
 		return
 	}

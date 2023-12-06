@@ -7,11 +7,11 @@ import (
 type HLoginParam struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
-	Spread string `json:"spread"`
+	Spread   string `json:"spread"`
 }
 
-func (p *HLoginParam) Valid(v *validation.Validation)  {
-	if vv := v.Phone(p.Username,"yshop-warning"); !vv.Ok {
+func (p *HLoginParam) Valid(v *validation.Validation) {
+	if vv := v.Phone(p.Username, "gomall-warning"); !vv.Ok {
 		vv.Message("手机格式不对")
 	}
 }
