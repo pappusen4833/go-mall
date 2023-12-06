@@ -31,12 +31,12 @@ type Address struct {
 
 // del地址
 func (d *Address) DelAddress() error {
-	err := global.YSHOP_DB.
+	err := global.GOMALL_DB.
 		Where("uid = ?", d.Uid).
 		Where("id = ?", d.Id).
 		Delete(&models.UserAddress{}).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return errors.New("操作失败")
 	}
 
@@ -46,7 +46,7 @@ func (d *Address) DelAddress() error {
 // 设置默认地址
 func (d *Address) SetDefault() error {
 	var err error
-	tx := global.YSHOP_DB.Begin()
+	tx := global.GOMALL_DB.Begin()
 	defer func() {
 		if err != nil {
 			tx.Rollback()
@@ -57,13 +57,13 @@ func (d *Address) SetDefault() error {
 	err = tx.Model(&models.UserAddress{}).
 		Where("uid = ?", d.Uid).Update("is_default", 0).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return errors.New("操作失败")
 	}
 	err = tx.Model(&models.UserAddress{}).
 		Where("id = ?", d.Id).Update("is_default", 1).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return errors.New("操作失败")
 	}
 	return nil
@@ -83,7 +83,7 @@ func (d *Address) GetList() ([]models.UserAddress, int, int) {
 // add or update
 func (d *Address) AddOrUpdate() (int64, error) {
 	var err error
-	tx := global.YSHOP_DB.Begin()
+	tx := global.GOMALL_DB.Begin()
 	defer func() {
 		if err != nil {
 			tx.Rollback()
@@ -107,14 +107,14 @@ func (d *Address) AddOrUpdate() (int64, error) {
 		err = tx.Model(&models.UserAddress{}).
 			Where("uid = ?", d.Uid).Update("is_default", 0).Error
 		if err != nil {
-			global.YSHOP_LOG.Error(err)
+			global.GOMALL_LOG.Error(err)
 			return 0, errors.New("操作失败")
 		}
 	}
 	if d.Param.Id == 0 {
 		err = models.AddUserAddress(userAddress)
 		if err != nil {
-			global.YSHOP_LOG.Error(err)
+			global.GOMALL_LOG.Error(err)
 			return 0, errors.New("操作失败")
 		}
 	} else {
@@ -122,7 +122,7 @@ func (d *Address) AddOrUpdate() (int64, error) {
 			Where("id = ?", d.Param.Id).
 			Updates(userAddress).Error
 		if err != nil {
-			global.YSHOP_LOG.Error(err)
+			global.GOMALL_LOG.Error(err)
 			return 0, errors.New("操作失败")
 		}
 	}

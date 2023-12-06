@@ -58,11 +58,11 @@ type Product struct {
 // get stock
 func (d *Product) GetStock() int {
 	var productAttrValue models.StoreProductAttrValue
-	err := global.YSHOP_DB.Model(&models.StoreProductAttrValue{}).
+	err := global.GOMALL_DB.Model(&models.StoreProductAttrValue{}).
 		Where("`unique` = ?", d.Unique).
 		Where("product_id = ?", d.Id).First(&productAttrValue).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return 0
 	}
 	return productAttrValue.Stock
@@ -117,7 +117,7 @@ func (d *Product) GetList() ([]proVo.Product, int, int) {
 	total, list := models.GetFrontAllProduct(d.PageNum, d.PageSize, maps, order)
 	e := copier.Copy(&PrductListVo, list)
 	if e != nil {
-		global.YSHOP_LOG.Error(e)
+		global.GOMALL_LOG.Error(e)
 	}
 	totalNum := util.Int64ToInt(total)
 	totalPage := util.GetTotalPage(totalNum, d.PageSize)
@@ -130,24 +130,24 @@ func (d *Product) GetDetail() (*proVo.ProductDetail, error) {
 		productVo    proVo.Product
 		err          error
 	)
-	err = global.YSHOP_DB.Model(&models.StoreProduct{}).
+	err = global.GOMALL_DB.Model(&models.StoreProduct{}).
 		Where("id = ?", d.Id).
 		Where("is_show", 1).
 		First(&storeProduct).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return nil, errors.New("获取商品失败")
 	}
 	//获取sku
 	returnMap, err := getProductAttrDetail(d.Id)
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return nil, errors.New("获取商品sku失败")
 	}
 	err = copier.Copy(&productVo, storeProduct)
 	productVo.SliderImageArr = strings.Split(storeProduct.SliderImage, ",")
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return nil, errors.New("商品转化失败")
 	}
 	//此处处理登录的用户
@@ -179,22 +179,22 @@ func getProductAttrDetail(productId int64) (map[string]interface{}, error) {
 		storeProductAttrList []proVo.ProductAttr
 		err                  error
 	)
-	err = global.YSHOP_DB.Model(&models.StoreProductAttr{}).
+	err = global.GOMALL_DB.Model(&models.StoreProductAttr{}).
 		Where("product_id = ?", productId).
 		Order("attr_values asc").Find(&storeProductAttrs).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return nil, err
 	}
-	err = global.YSHOP_DB.Model(&models.StoreProductAttrValue{}).
+	err = global.GOMALL_DB.Model(&models.StoreProductAttrValue{}).
 		Where("product_id = ?", productId).
 		Find(&productAttrValues).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return nil, err
 	}
 	util.StructColumn(&mapp, productAttrValues, "", "Sku")
-	//global.YSHOP_LOG.Info(mapp)
+	//global.GOMALL_LOG.Info(mapp)
 
 	for _, attr := range storeProductAttrs {
 		stringList := strings.Split(attr.AttrValues, ",")
@@ -208,7 +208,7 @@ func getProductAttrDetail(productId int64) (map[string]interface{}, error) {
 		var attrVo proVo.ProductAttr
 		err = copier.Copy(&attrVo, attr)
 		if err != nil {
-			global.YSHOP_LOG.Error(err)
+			global.GOMALL_LOG.Error(err)
 			return nil, err
 		}
 		attrVo.AttrValue = attrValues

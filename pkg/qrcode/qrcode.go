@@ -36,17 +36,17 @@ func NewQrCode(url string, width, height int, level qr.ErrorCorrectionLevel, mod
 
 // GetQrCodePath get save path
 func GetQrCodePath() string {
-	return global.YSHOP_CONFIG.App.QrCodeSavePath
+	return global.GOMALL_CONFIG.App.QrCodeSavePath
 }
 
 // GetQrCodeFullPath get full save path
 func GetQrCodeFullPath() string {
-	return global.YSHOP_CONFIG.App.RuntimeRootPath + global.YSHOP_CONFIG.App.QrCodeSavePath
+	return global.GOMALL_CONFIG.App.RuntimeRootPath + global.GOMALL_CONFIG.App.QrCodeSavePath
 }
 
 // GetQrCodeFullUrl get the full access path
 func GetQrCodeFullUrl(name string) string {
-	return global.YSHOP_CONFIG.App.PrefixUrl + "/" + GetQrCodePath() + name
+	return global.GOMALL_CONFIG.App.PrefixUrl + "/" + GetQrCodePath() + name
 }
 
 // GetQrCodeFileName get qr file name

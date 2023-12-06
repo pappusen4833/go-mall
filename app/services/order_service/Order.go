@@ -98,7 +98,7 @@ func (d *Order) GetList() ([]ordervo.StoreOrder, int, int) {
 	total, list := models.GetAllOrder(d.PageNum, d.PageSize, maps)
 	e := copier.Copy(&ListVo, list)
 	if e != nil {
-		global.YSHOP_LOG.Error(e)
+		global.GOMALL_LOG.Error(e)
 	}
 	totalNum := util.Int64ToInt(total)
 	totalPage := util.GetTotalPage(totalNum, d.PageSize)
@@ -112,7 +112,7 @@ func (d *Order) GetList() ([]ordervo.StoreOrder, int, int) {
 // 取消订单
 func (d *Order) CancelOrder() error {
 	var err error
-	tx := global.YSHOP_DB.Begin()
+	tx := global.GOMALL_DB.Begin()
 	defer func() {
 		if err != nil {
 			tx.Rollback()
@@ -129,14 +129,14 @@ func (d *Order) CancelOrder() error {
 	}
 	err = RegressionStock(tx, order)
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return errors.New("取消失败-001")
 	}
 
 	//删除订单
 	err = tx.Where("id = ?", order.Id).Delete(&models.StoreOrder{}).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return errors.New("取消失败-002")
 	}
 
@@ -173,7 +173,7 @@ func RegressionStock(tx *gorm.DB, order *ordervo.StoreOrder) error {
 // 订单评价
 func (d *Order) OrderComment() error {
 	var err error
-	tx := global.YSHOP_DB.Begin()
+	tx := global.GOMALL_DB.Begin()
 	defer func() {
 		if err != nil {
 			tx.Rollback()
@@ -202,12 +202,12 @@ func (d *Order) OrderComment() error {
 	err = tx.Model(&models.StoreProductReply{}).Select("uid", "oid", "product_id",
 		"product_score", "service_score", "comment", "pics", "unique").Create(replys).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return errors.New("评价失败-0001")
 	}
 	err = tx.Model(&models.StoreOrder{}).Where("id = ?", order.Id).Update("status", 3).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return errors.New("评价失败-0002")
 	}
 	return nil
@@ -216,7 +216,7 @@ func (d *Order) OrderComment() error {
 // 收货
 func (d *Order) TakeOrder() error {
 	var err error
-	tx := global.YSHOP_DB.Begin()
+	tx := global.GOMALL_DB.Begin()
 	defer func() {
 		if err != nil {
 			tx.Rollback()
@@ -242,7 +242,7 @@ func (d *Order) TakeOrder() error {
 		err = tx.Exec("update user set integral = integral + ?"+
 			" where id = ?", order.Uid, order.GainIntegral).Error
 		if err != nil {
-			global.YSHOP_LOG.Error(err)
+			global.GOMALL_LOG.Error(err)
 			return err
 		}
 		//增加流水
@@ -251,7 +251,7 @@ func (d *Order) TakeOrder() error {
 		err = models.Income(tx, order.Uid, "购买商品赠送积分", "integral", "gain",
 			mark, com.ToStr(order.Id), number, number)
 		if err != nil {
-			global.YSHOP_LOG.Error(err)
+			global.GOMALL_LOG.Error(err)
 			return err
 		}
 	}
@@ -264,7 +264,7 @@ func (d *Order) TakeOrder() error {
 // 创建订单
 func (d *Order) CreateOrder() (*models.StoreOrder, error) {
 	var err error
-	tx := global.YSHOP_DB.Begin()
+	tx := global.GOMALL_DB.Begin()
 	defer func() {
 		if err != nil {
 			tx.Rollback()
@@ -292,7 +292,7 @@ func (d *Order) CreateOrder() (*models.StoreOrder, error) {
 		//integral = 0
 		gainIntegral = 0
 	)
-	err = global.YSHOP_DB.Model(&models.UserAddress{}).
+	err = global.GOMALL_DB.Model(&models.UserAddress{}).
 		Where("uid = ?", d.Uid).
 		Where("id = ?", d.OrderParam.AddressId).
 		First(&userAddress).Error
@@ -413,10 +413,10 @@ func (d *Order) GetOrderInfo() (*ordervo.StoreOrder, error) {
 	if d.Uid > 0 {
 		maps["uid"] = d.Uid
 	}
-	err := global.YSHOP_DB.Model(&models.StoreOrder{}).
+	err := global.GOMALL_DB.Model(&models.StoreOrder{}).
 		Where(maps).First(&order).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return nil, err
 	}
 	copier.Copy(&vo, order)
@@ -431,7 +431,7 @@ func HandleOrder(order *ordervo.StoreOrder) *ordervo.StoreOrder {
 		cart          cartVo.Cart
 		statusDto     orderDto.Status
 	)
-	global.YSHOP_DB.Model(&models.StoreOrderCartInfo{}).Where("oid = ?", order.Id).Find(&orderInfoList)
+	global.GOMALL_DB.Model(&models.StoreOrderCartInfo{}).Where("oid = ?", order.Id).Find(&orderInfoList)
 	cartInfo := make([]cartVo.Cart, 0)
 	for _, orderInfo := range orderInfoList {
 		json.Unmarshal([]byte(orderInfo.CartInfo), &cart)
@@ -490,7 +490,7 @@ func (d *Order) Check() (map[string]interface{}, error) {
 		return nil, errors.New("参数错误")
 	}
 	var order *models.StoreOrder
-	error := global.YSHOP_DB.Model(&models.StoreOrder{}).
+	error := global.GOMALL_DB.Model(&models.StoreOrder{}).
 		Where("`unique` = ?", d.Key).
 		Where("uid = ?", d.Uid).First(&order).Error
 	if error == nil {
@@ -511,7 +511,7 @@ func (d *Order) Check() (map[string]interface{}, error) {
 
 // 计算订单
 func (d *Order) ComputeOrder() (*ordervo.Compute, error) {
-	global.YSHOP_LOG.Info(d.ComputeParam)
+	global.GOMALL_LOG.Info(d.ComputeParam)
 	var (
 		payPostage     = 0.00
 		couponPrice    = 0.00
@@ -572,7 +572,7 @@ func (d *Order) ConfirmOrder() (*ordervo.ConfirmOrder, error) {
 		userAddress    models.UserAddress
 	)
 	//获取默认地址
-	global.YSHOP_DB.Model(&models.UserAddress{}).
+	global.GOMALL_DB.Model(&models.UserAddress{}).
 		Where("uid = ?", d.Uid).
 		Where("is_default = ?", 1).
 		First(&userAddress)
@@ -583,7 +583,7 @@ func (d *Order) ConfirmOrder() (*ordervo.ConfirmOrder, error) {
 
 	e := copier.Copy(&user, d.User)
 	if e != nil {
-		global.YSHOP_LOG.Error(e)
+		global.GOMALL_LOG.Error(e)
 	}
 	return &ordervo.ConfirmOrder{
 		AddressInfo:    userAddress,
@@ -705,7 +705,7 @@ func (d *Order) GetAll() vo.ResultList {
 		newList       []models.StoreOrder
 	)
 	for _, order := range list {
-		global.YSHOP_DB.Model(&models.StoreOrderCartInfo{}).Where("oid = ?", order.Id).Find(&orderInfoList)
+		global.GOMALL_DB.Model(&models.StoreOrderCartInfo{}).Where("oid = ?", order.Id).Find(&orderInfoList)
 		cartInfo := make([]cartVo.Cart, 0)
 		for _, orderInfo := range orderInfoList {
 			json.Unmarshal([]byte(orderInfo.CartInfo), &cart)
@@ -717,7 +717,7 @@ func (d *Order) GetAll() vo.ResultList {
 		order.OrderStatus = _status
 		order.OrderStatusName = orderStatusStr(order.Paid, order.Status, order.ShippingType, order.RefundStatus)
 		order.PayTypeName = payTypeName(order.PayType, order.Paid)
-		//global.YSHOP_LOG.Info(order.CartInfo)
+		//global.GOMALL_LOG.Info(order.CartInfo)
 
 		newList = append(newList, order)
 	}
@@ -803,11 +803,11 @@ func (d *Order) Deliver() error {
 		return errors.New("订单状态错误")
 	}
 	var express models.Express
-	err := global.YSHOP_DB.Model(&models.Express{}).Where("name = ?", d.M.DeliveryName).First(&express).Error
+	err := global.GOMALL_DB.Model(&models.Express{}).Where("name = ?", d.M.DeliveryName).First(&express).Error
 	if err != nil {
 		return errors.New("请先添加快递公司")
 	}
-	global.YSHOP_LOG.Info(d.M.DeliveryId)
+	global.GOMALL_LOG.Info(d.M.DeliveryId)
 	d.M.Status = 1
 	d.M.DeliverySn = express.Code
 	return models.UpdateByStoreOrder(d.M)

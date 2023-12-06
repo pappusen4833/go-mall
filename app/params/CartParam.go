@@ -16,7 +16,7 @@ type CartParam struct {
 }
 
 func (p *CartParam) Valid(v *validation.Validation) {
-	global.YSHOP_LOG.Info(p.CartNum)
+	global.GOMALL_LOG.Info(p.CartNum)
 	if vv := v.Range(p.CartNum, 1, 999, "购物车数量"); !vv.Ok {
 		vv.Message("数量只能1-999之间")
 		return

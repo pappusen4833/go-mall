@@ -54,7 +54,7 @@ func (u *User) GetUserInfo() *wechatUserVo.User {
 		userVO wechatUserVo.User
 		user   models.User
 	)
-	global.YSHOP_DB.Model(&models.User{}).Where("id = ?", u.Id).First(&user)
+	global.GOMALL_DB.Model(&models.User{}).Where("id = ?", u.Id).First(&user)
 	copier.Copy(&userVO, user)
 
 	return &userVO
@@ -65,7 +65,7 @@ func (u *User) GetUserDetail() *wechatUserVo.User {
 
 	e := copier.Copy(&user, u.User)
 	if e != nil {
-		global.YSHOP_LOG.Error(e)
+		global.GOMALL_LOG.Error(e)
 	}
 
 	return &user
@@ -76,7 +76,7 @@ func (u *User) Reg() error {
 		user models.User
 		err  error
 	)
-	err = global.YSHOP_DB.
+	err = global.GOMALL_DB.
 		Model(&models.User{}).
 		Where("username = ?", u.RegParam.Account).First(&user).Error
 	if err == nil {
@@ -111,7 +111,7 @@ func (u *User) Verify() (string, error) {
 		user models.User
 		err  error
 	)
-	err = global.YSHOP_DB.
+	err = global.GOMALL_DB.
 		Model(&models.User{}).
 		Where("username = ?", u.VerityParam.Phone).First(&user).Error
 	if err == nil {
@@ -181,12 +181,12 @@ func (u *User) Save() error {
 func (u *User) SaveMony() error {
 	var err error
 	if u.Money.Ptype == 1 {
-		err = global.YSHOP_DB.
+		err = global.GOMALL_DB.
 			Model(&models.User{}).
 			Where("id = ?", u.Money.Id).
 			Update("now_money", gorm.Expr("now_money + ?", u.Money.Money)).Error
 	} else {
-		err = global.YSHOP_DB.
+		err = global.GOMALL_DB.
 			Model(&models.User{}).
 			Where("id = ? and now_money >= ?", u.Money.Id, u.Money.Money).
 			Update("now_money", gorm.Expr("now_money - ?", u.Money.Money)).Error
@@ -199,7 +199,7 @@ func (u *User) HLogin() (*models.User, error) {
 		user models.User
 		err  error
 	)
-	err = global.YSHOP_DB.
+	err = global.GOMALL_DB.
 		Model(&models.User{}).
 		Where("username = ?", u.HLoginParam.Username).First(&user).Error
 	if err != nil {

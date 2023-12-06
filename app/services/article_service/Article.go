@@ -26,9 +26,9 @@ type Article struct {
 
 func (d *Article) Get() vo.ResultList {
 	var data models.WechatArticle
-	err := global.YSHOP_DB.Model(&models.WechatArticle{}).Where("id = ?", d.Id).First(&data).Error
+	err := global.GOMALL_DB.Model(&models.WechatArticle{}).Where("id = ?", d.Id).First(&data).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 	}
 	return vo.ResultList{Content: data, TotalElements: 0}
 }
@@ -45,22 +45,22 @@ func (d *Article) GetAll() vo.ResultList {
 
 func (d *Article) Pub() error {
 	var data models.WechatArticle
-	err := global.YSHOP_DB.Model(&models.WechatArticle{}).Where("id = ?", d.Id).First(&data).Error
+	err := global.GOMALL_DB.Model(&models.WechatArticle{}).Where("id = ?", d.Id).First(&data).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 	}
 	if data.IsPub == articleEnum.IS_PUB_1 {
 		return errors.New("已经发布过啦！")
 	}
-	official := global.YSHOP_OFFICIAL_ACCOUNT
+	official := global.GOMALL_OFFICIAL_ACCOUNT
 	m := official.GetMaterial()
-	ss := strings.Replace(data.Image, global.YSHOP_CONFIG.App.PrefixUrl+"/", global.YSHOP_CONFIG.App.RuntimeRootPath, 1)
+	ss := strings.Replace(data.Image, global.GOMALL_CONFIG.App.PrefixUrl+"/", global.GOMALL_CONFIG.App.RuntimeRootPath, 1)
 	mediaId, url, err := m.AddMaterial(material.MediaTypeThumb, ss)
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return err
 	}
-	global.YSHOP_LOG.Info(mediaId, url)
+	global.GOMALL_LOG.Info(mediaId, url)
 	art := &material.Article{
 		Title:            data.Title,
 		ThumbMediaID:     mediaId,
@@ -73,9 +73,9 @@ func (d *Article) Pub() error {
 	}
 	arts := []*material.Article{art}
 	id, err := m.AddNews(arts)
-	global.YSHOP_LOG.Info(id, err)
+	global.GOMALL_LOG.Info(id, err)
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return err
 	}
 

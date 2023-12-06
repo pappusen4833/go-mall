@@ -36,16 +36,16 @@ func Viper(path ...string) *viper.Viper {
 
 	v.OnConfigChange(func(in fsnotify.Event) {
 		fmt.Println("config file changed:", in.Name)
-		if err := v.Unmarshal(&global.YSHOP_CONFIG); err != nil {
+		if err := v.Unmarshal(&global.GOMALL_CONFIG); err != nil {
 			fmt.Println(err)
 		}
 	})
 
-	if err := v.Unmarshal(&global.YSHOP_CONFIG); err != nil {
+	if err := v.Unmarshal(&global.GOMALL_CONFIG); err != nil {
 		log.Printf("[err] err %s", err)
 		fmt.Println(err)
 	}
-	log.Print(global.YSHOP_CONFIG)
+	log.Print(global.GOMALL_CONFIG)
 
 	return v
 }

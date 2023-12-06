@@ -13,7 +13,7 @@ func GetPage(c *gin.Context) int {
 	page = page + 1
 
 	if page > 0 {
-		result = (page - 1) * global.YSHOP_CONFIG.App.PageSize
+		result = (page - 1) * global.GOMALL_CONFIG.App.PageSize
 	}
 
 	return result
@@ -26,7 +26,7 @@ func GetSize(c *gin.Context) int {
 	if size > 0 {
 		result = size
 	} else {
-		result = global.YSHOP_CONFIG.App.PageSize
+		result = global.GOMALL_CONFIG.App.PageSize
 	}
 
 	return result
@@ -39,7 +39,7 @@ func GetFrontPage(c *gin.Context) int {
 	//page = page + 1
 
 	if page > 0 {
-		result = (page - 1) * global.YSHOP_CONFIG.App.PageSize
+		result = (page - 1) * global.GOMALL_CONFIG.App.PageSize
 	}
 
 	return result
@@ -52,7 +52,7 @@ func GetFrontLimit(c *gin.Context) int {
 	if size > 0 {
 		result = size
 	} else {
-		result = global.YSHOP_CONFIG.App.PageSize
+		result = global.GOMALL_CONFIG.App.PageSize
 	}
 
 	return result

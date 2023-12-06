@@ -18,8 +18,8 @@ import (
 )
 
 func init() {
-	global.YSHOP_VP = base.Viper()
-	global.YSHOP_LOG = base.SetupLogger()
+	global.GOMALL_VP = base.Viper()
+	global.GOMALL_LOG = base.SetupLogger()
 	models.Setup()
 	logging.Setup()
 	redis.Setup()
@@ -36,10 +36,10 @@ func init() {
 // @in header
 // @name Authorization
 func main() {
-	gin.SetMode(global.YSHOP_CONFIG.Server.RunMode)
+	gin.SetMode(global.GOMALL_CONFIG.Server.RunMode)
 
 	routersInit := routers.InitRouter()
-	endPoint := fmt.Sprintf(":%d", global.YSHOP_CONFIG.Server.HttpPort)
+	endPoint := fmt.Sprintf(":%d", global.GOMALL_CONFIG.Server.HttpPort)
 	maxHeaderBytes := 1 << 20
 
 	server := &http.Server{
@@ -50,7 +50,7 @@ func main() {
 		MaxHeaderBytes: maxHeaderBytes,
 	}
 
-	global.YSHOP_LOG.Info("[info] start http server listening %s", server.Addr)
+	global.GOMALL_LOG.Info("[info] start http server listening %s", server.Addr)
 	log.Printf("[info] start http server listening %s", endPoint)
 	fmt.Println(`
  _____ _____     _____ _____ __    __    

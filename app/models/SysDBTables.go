@@ -20,9 +20,9 @@ func GetAllDBTables(pageNUm int, pageSize int, maps interface{}) (int64, []SysDB
 		lists []SysDBTables
 	)
 	table := new(gorm.DB)
-	table = global.YSHOP_DB.Table("information_schema.tables")
-	table = table.Where("TABLE_NAME not in (select table_name from `" + global.YSHOP_CONFIG.Database.Name + "`.sys_tables) ")
-	table = table.Where("table_schema= ? ", global.YSHOP_CONFIG.Database.Name)
+	table = global.GOMALL_DB.Table("information_schema.tables")
+	table = table.Where("TABLE_NAME not in (select table_name from `" + global.GOMALL_CONFIG.Database.Name + "`.sys_tables) ")
+	table = table.Where("table_schema= ? ", global.GOMALL_CONFIG.Database.Name)
 
 	table.Where(maps).Count(&total)
 	table.Where(maps).Offset(pageNUm).Limit(pageSize).Find(&lists)
@@ -35,8 +35,8 @@ func GetOneDBTable(name string) (SysDBTables, error) {
 		data SysDBTables
 	)
 	table := new(gorm.DB)
-	table = global.YSHOP_DB.Table("information_schema.tables")
-	table = table.Where("table_schema= ? ", global.YSHOP_CONFIG.Database.Name)
+	table = global.GOMALL_DB.Table("information_schema.tables")
+	table = table.Where("table_schema= ? ", global.GOMALL_CONFIG.Database.Name)
 	table = table.Where("TABLE_NAME = ? ", name)
 
 	if err := table.First(&data).Error; err != nil {

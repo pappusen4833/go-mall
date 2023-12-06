@@ -34,12 +34,12 @@ func (d *Menu) Insert() error {
 	}
 	jsonstr, _ := json.Marshal(button)
 	str := string(jsonstr)
-	global.YSHOP_LOG.Info(str)
-	official := global.YSHOP_OFFICIAL_ACCOUNT
+	global.GOMALL_LOG.Info(str)
+	official := global.GOMALL_OFFICIAL_ACCOUNT
 	m := official.GetMenu()
 	err := m.SetMenuByJSON(str)
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 	}
 
 	result, _ := json.Marshal(d.Dto.Buttons)

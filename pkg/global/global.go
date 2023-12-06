@@ -9,9 +9,9 @@ import (
 )
 
 var (
-	YSHOP_DB               *gorm.DB
-	YSHOP_VP               *viper.Viper
-	YSHOP_LOG              *zap.SugaredLogger
-	YSHOP_CONFIG           conf.Config
-	YSHOP_OFFICIAL_ACCOUNT *officialaccount.OfficialAccount
+	GOMALL_DB               *gorm.DB
+	GOMALL_VP               *viper.Viper
+	GOMALL_LOG              *zap.SugaredLogger
+	GOMALL_CONFIG           conf.Config
+	GOMALL_OFFICIAL_ACCOUNT *officialaccount.OfficialAccount
 )

@@ -45,12 +45,12 @@ func (d *Cart) ChangeCartNum() error {
 		cart models.StoreCart
 		err  error
 	)
-	err = global.YSHOP_DB.Model(&models.StoreCart{}).
+	err = global.GOMALL_DB.Model(&models.StoreCart{}).
 		Where("uid = ?", d.Uid).
 		Where("id = ?", d.NumParam.Id).
 		First(&cart).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return errors.New("当前购物车不存在")
 	}
 	err = CheckStock(cart.ProductId, d.NumParam.Number, cart.ProductAttrUnique)
@@ -61,11 +61,11 @@ func (d *Cart) ChangeCartNum() error {
 		return nil
 	}
 
-	err = global.YSHOP_DB.Model(&models.StoreCart{}).
+	err = global.GOMALL_DB.Model(&models.StoreCart{}).
 		Where("id = ?", cart.Id).
 		Update("cart_num", d.NumParam.Number).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return errors.New("修改失败")
 	}
 	return nil
@@ -91,10 +91,10 @@ func (d *Cart) GetCartList() map[string]interface{} {
 		invalid = make([]cartVo.Cart, 0)
 		error   error
 	)
-	error = global.YSHOP_DB.Model(&models.StoreCart{}).
+	error = global.GOMALL_DB.Model(&models.StoreCart{}).
 		Where(maps).Find(&carts).Error
 	if error != nil {
-		global.YSHOP_LOG.Error(error)
+		global.GOMALL_LOG.Error(error)
 		return gin.H{
 			"valid":   valid,
 			"invalid": invalid,
@@ -107,14 +107,14 @@ func (d *Cart) GetCartList() map[string]interface{} {
 			productVo    productVo.Product
 			cartVo       cartVo.Cart
 		)
-		err := global.YSHOP_DB.Model(&models.StoreProduct{}).
+		err := global.GOMALL_DB.Model(&models.StoreProduct{}).
 			Where("id = ?", cart.ProductId).
 			First(&storeProduct).Error
 		copier.Copy(&productVo, storeProduct)
 		copier.Copy(&cartVo, cart)
 		if err != nil {
-			global.YSHOP_LOG.Error(err)
-			global.YSHOP_DB.Where("id = ?", cart.Id).Delete(&models.StoreCart{})
+			global.GOMALL_LOG.Error(err)
+			global.GOMALL_DB.Where("id = ?", cart.Id).Delete(&models.StoreCart{})
 			continue
 		}
 		ee := CheckStock(cart.ProductId, cart.CartNum, cart.ProductAttrUnique)
@@ -125,7 +125,7 @@ func (d *Cart) GetCartList() map[string]interface{} {
 		}
 		//获取有效购物车
 		var productAttrValue models.StoreProductAttrValue
-		global.YSHOP_DB.Model(&models.StoreProductAttrValue{}).
+		global.GOMALL_DB.Model(&models.StoreProductAttrValue{}).
 			Where("`unique` = ?", cart.ProductAttrUnique).First(&productAttrValue)
 		productVo.AttrInfo = productAttrValue
 		cartVo.ProductInfo = productVo
@@ -145,12 +145,12 @@ func (d *Cart) GetCartList() map[string]interface{} {
 // get num
 func (d *Cart) GetUserCartNum() int {
 	var num int
-	err := global.YSHOP_DB.
+	err := global.GOMALL_DB.
 		Raw("select sum(cart_num) from store_cart "+
 			"where is_pay=0 and is_del = 0 and is_new = 0 and uid = ?", d.Uid).
 		Scan(&num).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return 0
 	}
 	return num
@@ -173,13 +173,13 @@ func (d *Cart) AddCart() (int64, error) {
 		CombinationId:     d.Param.CombinationId,
 		SeckillId:         d.Param.SeckillId,
 	}
-	err = global.YSHOP_DB.Model(&models.StoreCart{}).
+	err = global.GOMALL_DB.Model(&models.StoreCart{}).
 		Where(whereCart).
 		Where("is_new = ?", d.Param.IsNew).
 		Order("id desc").First(&cart).Error
 	if err != nil {
 		whereCart.CartNum = d.Param.CartNum
-		err = global.YSHOP_DB.Model(&models.StoreCart{}).Create(whereCart).Error
+		err = global.GOMALL_DB.Model(&models.StoreCart{}).Create(whereCart).Error
 		if err != nil {
 			return 0, errors.New("加入购物车失败")
 		}
@@ -189,7 +189,7 @@ func (d *Cart) AddCart() (int64, error) {
 		if cartEnum.NEW_O == d.Param.IsNew {
 			cart.CartNum = cart.CartNum + d.Param.CartNum
 		}
-		err = global.YSHOP_DB.Model(&models.StoreCart{}).
+		err = global.GOMALL_DB.Model(&models.StoreCart{}).
 			Where("id = ?", cart.Id).Save(cart).Error
 		if err != nil {
 			return 0, errors.New("加入购物车失败")
@@ -204,12 +204,12 @@ func CheckStock(productId int64, cartNum int, unique string) error {
 		storeProduct models.StoreProduct
 		err          error
 	)
-	err = global.YSHOP_DB.Model(&models.StoreProduct{}).
+	err = global.GOMALL_DB.Model(&models.StoreProduct{}).
 		Where("id = ?", productId).
 		Where("is_show", 1).
 		First(&storeProduct).Error
 	if err != nil {
-		global.YSHOP_LOG.Error(err)
+		global.GOMALL_LOG.Error(err)
 		return errors.New("该商品已下架或者删除")
 	}
 	productService := product_service.Product{

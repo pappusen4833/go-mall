@@ -35,7 +35,7 @@ type userStdClaims struct {
 }
 
 func Setup() {
-	jwtSecret = []byte(global.YSHOP_CONFIG.App.JwtSecret)
+	jwtSecret = []byte(global.GOMALL_CONFIG.App.JwtSecret)
 }
 
 func GenerateAppToken(m *models.User, d time.Time) (string, error) {
