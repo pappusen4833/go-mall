@@ -17,7 +17,7 @@ func Start(cmd func(), jobId int64, cronExpression string) error {
 	c := newWithSeconds()
 	_, err := c.AddFunc(cronExpression, cmd)
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		return err
 	}
 	c.Start()

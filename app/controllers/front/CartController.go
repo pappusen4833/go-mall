@@ -67,7 +67,7 @@ func (e *CartController) AddCart(c *gin.Context) {
 		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
 		return
 	}
-	global.GOMALL_LOG.Info(param)
+	global.LOG.Info(param)
 	uid, _ := jwt.GetAppUserId(c)
 	cartService := cart_service.Cart{
 		Param: &param,

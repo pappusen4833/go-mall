@@ -126,7 +126,7 @@ func (e *OrderController) Create(c *gin.Context) {
 		return
 	}
 
-	global.GOMALL_LOG.Info(order)
+	global.LOG.Info(order)
 	orderExtendDto := &orderDto.OrderExtend{
 		Key:     key,
 		OrderId: order.OrderId,
@@ -186,10 +186,10 @@ func (e *OrderController) NotifyPay(c *gin.Context) {
 	notifyReq, err := wechat.ParseNotifyToBodyMap(c.Request)
 	//支付成功后处理
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 	}
 
-	global.GOMALL_LOG.Info(notifyReq)
+	global.LOG.Info(notifyReq)
 
 }
 

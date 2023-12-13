@@ -46,13 +46,13 @@ type Reply struct {
 //	if !IsRelation(d.Param.Id,d.Uid) {
 //		return errors.New("已经取消过")
 //	}
-//	err := global.GOMALL_DB.
+//	err := global.DB.
 //		Where("uid = ?",d.Uid).
 //		Where("product_id = ?",d.Param.Id).
 //		Where("type = ?",relationEnum.COLLECT).
 //		Delete(&models.StoreProductRelation{}).Error
 //	if err != nil {
-//		global.GOMALL_LOG.Error(err)
+//		global.LOG.Error(err)
 //		return errors.New("取消失败")
 //	}
 //	return nil
@@ -64,13 +64,13 @@ type Reply struct {
 //		count int64
 //		error error
 //	)
-//	error = global.GOMALL_DB.Model(&models.StoreProductRelation{}).
+//	error = global.DB.Model(&models.StoreProductRelation{}).
 //		Where("uid = ?",uid).
 //		Where("product_id = ?",productId).
 //		Where("type = ?",relationEnum.COLLECT).
 //		Count(&count).Error
 //	if error != nil {
-//		global.GOMALL_LOG.Error(error)
+//		global.LOG.Error(error)
 //		return false
 //	}
 //	if count == 0 {
@@ -95,7 +95,7 @@ func (d *Reply) GetList() ([]vo2.ProductReply, int, int) {
 	total, list := models.GetAllProductReply(d.PageNum, d.PageSize, maps)
 	e := copier.Copy(&replyVo, list)
 	if e != nil {
-		global.GOMALL_LOG.Error(e)
+		global.LOG.Error(e)
 	}
 	totalNum := util.Int64ToInt(total)
 	totalPage := util.GetTotalPage(totalNum, d.PageSize)

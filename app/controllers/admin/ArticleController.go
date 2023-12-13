@@ -26,7 +26,7 @@ func (e *ArticleController) Get(c *gin.Context) {
 		appG = app.Gin{C: c}
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
-	global.GOMALL_LOG.Info(id)
+	global.LOG.Info(id)
 	articleService := article_service.Article{
 		Id: id,
 	}
@@ -144,7 +144,7 @@ func (e *ArticleController) Pub(c *gin.Context) {
 		appG = app.Gin{C: c}
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
-	global.GOMALL_LOG.Info(id)
+	global.LOG.Info(id)
 	articleService := article_service.Article{
 		Id: id,
 	}

@@ -50,7 +50,7 @@ func GetCacheParam(str string) string {
 	key := constant.CRON_KEY + str
 	res := redis.GetString(key)
 	if res == "" {
-		global.GOMALL_DB.Where("invoke_target= ?", str).First(&job)
+		global.DB.Where("invoke_target= ?", str).First(&job)
 		redis.SetString(key, job.JobParams, 0)
 
 		res = job.JobParams

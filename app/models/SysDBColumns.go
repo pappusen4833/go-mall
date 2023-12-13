@@ -24,7 +24,7 @@ func GetAllDBColumns(name string) ([]SysDBColumns, error) {
 	var data []SysDBColumns
 	table := new(gorm.DB)
 	table = db.Table("information_schema.columns")
-	table = table.Where("table_schema= ? ", global.GOMALL_CONFIG.Database.Name)
+	table = table.Where("table_schema= ? ", global.CONFIG.Database.Name)
 
 	table = table.Where("TABLE_NAME = ?", name).Order("ORDINAL_POSITION asc")
 

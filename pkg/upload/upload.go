@@ -15,7 +15,7 @@ import (
 
 // GetImageFullUrl get the full access path
 func GetImageFullUrl(name string) string {
-	return global.GOMALL_CONFIG.App.PrefixUrl + "/" + GetImagePath() + name
+	return global.CONFIG.App.PrefixUrl + "/" + GetImagePath() + name
 }
 
 // GetImageName get image name
@@ -29,18 +29,18 @@ func GetImageName(name string) string {
 
 // GetImagePath get save path
 func GetImagePath() string {
-	return global.GOMALL_CONFIG.App.ImageSavePath
+	return global.CONFIG.App.ImageSavePath
 }
 
 // GetImageFullPath get full save path
 func GetImageFullPath() string {
-	return global.GOMALL_CONFIG.App.RuntimeRootPath + GetImagePath()
+	return global.CONFIG.App.RuntimeRootPath + GetImagePath()
 }
 
 // CheckImageExt check image file ext
 func CheckImageExt(fileName string) bool {
 	ext := file.GetExt(fileName)
-	for _, allowExt := range global.GOMALL_CONFIG.App.ImageAllowExts {
+	for _, allowExt := range global.CONFIG.App.ImageAllowExts {
 		if strings.ToUpper(allowExt) == strings.ToUpper(ext) {
 			return true
 		}
@@ -58,7 +58,7 @@ func CheckImageSize(f multipart.File) bool {
 		return false
 	}
 
-	return size <= global.GOMALL_CONFIG.App.ImageMaxSize
+	return size <= global.CONFIG.App.ImageMaxSize
 }
 
 // CheckImage check if the file exists

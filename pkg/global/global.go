@@ -9,9 +9,9 @@ import (
 )
 
 var (
-	GOMALL_DB               *gorm.DB
-	GOMALL_VP               *viper.Viper
-	GOMALL_LOG              *zap.SugaredLogger
-	GOMALL_CONFIG           conf.Config
-	GOMALL_OFFICIAL_ACCOUNT *officialaccount.OfficialAccount
+	DB               *gorm.DB
+	VP               *viper.Viper
+	LOG              *zap.SugaredLogger
+	CONFIG           conf.Config
+	OFFICIAL_ACCOUNT *officialaccount.OfficialAccount
 )

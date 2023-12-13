@@ -28,10 +28,10 @@ type BaseModel struct {
 func Setup() {
 	var err error
 	var connStr = fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		global.GOMALL_CONFIG.Database.User,
-		global.GOMALL_CONFIG.Database.Password,
-		global.GOMALL_CONFIG.Database.Host,
-		global.GOMALL_CONFIG.Database.Name)
+		global.CONFIG.Database.User,
+		global.CONFIG.Database.Password,
+		global.CONFIG.Database.Host,
+		global.CONFIG.Database.Name)
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer（日志输出的目标，前缀和日志包含的内容——译者注）
 		logger.Config{
@@ -64,7 +64,7 @@ func Setup() {
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
-	global.GOMALL_DB = db
+	global.DB = db
 
 	casbin.InitCasbin(db)
 

@@ -58,13 +58,13 @@ func (d *Relation) DelRelation() error {
 	if !IsRelation(d.Param.Id, d.Uid) {
 		return errors.New("已经取消过")
 	}
-	err := global.GOMALL_DB.
+	err := global.DB.
 		Where("uid = ?", d.Uid).
 		Where("product_id = ?", d.Param.Id).
 		Where("type = ?", relationEnum.COLLECT).
 		Delete(&models.StoreProductRelation{}).Error
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		return errors.New("取消失败")
 	}
 	return nil
@@ -76,13 +76,13 @@ func IsRelation(productId, uid int64) bool {
 		count int64
 		error error
 	)
-	error = global.GOMALL_DB.Model(&models.StoreProductRelation{}).
+	error = global.DB.Model(&models.StoreProductRelation{}).
 		Where("uid = ?", uid).
 		Where("product_id = ?", productId).
 		Where("type = ?", relationEnum.COLLECT).
 		Count(&count).Error
 	if error != nil {
-		global.GOMALL_LOG.Error(error)
+		global.LOG.Error(error)
 		return false
 	}
 	if count == 0 {

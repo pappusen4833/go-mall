@@ -52,10 +52,10 @@ func GoPay(returnMap map[string]interface{}, orderId, payType, from string,
 			var ctx = context.Background()
 			wxRsp, err := client.UnifiedOrder(ctx, bm)
 			if err != nil {
-				global.GOMALL_LOG.Error(err)
+				global.LOG.Error(err)
 				return nil, err
 			}
-			global.GOMALL_LOG.Info(wxRsp)
+			global.LOG.Info(wxRsp)
 
 			jsConfig := gin.H{"codeUrl": wxRsp.CodeUrl}
 			dto.JsConfig = jsConfig
@@ -66,7 +66,7 @@ func GoPay(returnMap map[string]interface{}, orderId, payType, from string,
 	case "yue":
 		err := YuePay(orderId, uid)
 		if err != nil {
-			global.GOMALL_LOG.Error(err)
+			global.LOG.Error(err)
 			return nil, err
 		}
 		returnMap["payMsg"] = "余额支付成功"
@@ -79,7 +79,7 @@ func GoPay(returnMap map[string]interface{}, orderId, payType, from string,
 // 余额支付
 func YuePay(orderId string, uid int64) error {
 	var err error
-	tx := global.GOMALL_DB.Begin()
+	tx := global.DB.Begin()
 	defer func() {
 		if err != nil {
 			tx.Rollback()
@@ -99,19 +99,19 @@ func YuePay(orderId string, uid int64) error {
 		Id: uid,
 	}
 	userInfo := userService.GetUserInfo()
-	global.GOMALL_LOG.Info(userInfo.NowMoney, orderInfo.PayPrice)
+	global.LOG.Info(userInfo.NowMoney, orderInfo.PayPrice)
 	if userInfo.NowMoney < orderInfo.PayPrice {
 		return errors.New("余额不足")
 	}
 	err = tx.Exec("update user set now_money=now_money - ?"+
 		" where id = ?", orderInfo.PayPrice, uid).Error
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		return errors.New("余额支付失败-0001")
 	}
 	err = PaySuccess(tx, orderInfo.OrderId, "yue")
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		return errors.New("余额支付失败-0002")
 	}
 	return nil
@@ -135,7 +135,7 @@ func PaySuccess(tx *gorm.DB, orderId, payType string) error {
 	err = tx.Model(&models.StoreOrder{}).Where("order_id = ?", orderId).Updates(updateOrder).Error
 
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		return err
 	}
 
@@ -143,13 +143,13 @@ func PaySuccess(tx *gorm.DB, orderId, payType string) error {
 	err = tx.Exec("update user set pay_count = pay_count + 1"+
 		" where id = ?", orderInfo.Uid).Error
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		return err
 	}
 	//增加状态
 	err = models.AddStoreOrderStatus(tx, orderInfo.Id, "pay_success", "用户付款成功")
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		return err
 	}
 
@@ -164,7 +164,7 @@ func PaySuccess(tx *gorm.DB, orderId, payType string) error {
 	err = models.Expend(tx, orderInfo.Uid, "购买商品", "now_money", "pay_product",
 		mark, com.ToStr(orderInfo.Id), orderInfo.PayPrice, userInfo.NowMoney)
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		return err
 	}
 

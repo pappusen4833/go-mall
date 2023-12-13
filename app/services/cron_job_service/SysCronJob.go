@@ -49,10 +49,10 @@ func (d *SysCronJob) Del() error {
 
 func (d *SysCronJob) Exec() error {
 	var job models.SysCronJob
-	res := global.GOMALL_DB.Where("id = ?", d.Id).First(&job).RowsAffected
-	err := global.GOMALL_DB.Model(&models.SysCronJob{}).Where("id = ?", d.Id).Update("status", 0).Error
+	res := global.DB.Where("id = ?", d.Id).First(&job).RowsAffected
+	err := global.DB.Model(&models.SysCronJob{}).Where("id = ?", d.Id).Update("status", 0).Error
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 	}
 
 	if res == 0 {
@@ -71,9 +71,9 @@ func (d *SysCronJob) Exec() error {
 
 func (d *SysCronJob) Stop() error {
 	var job models.SysCronJob
-	res := global.GOMALL_DB.Where("id = ?", d.Id).First(&job).RowsAffected
-	global.GOMALL_DB.Model(&models.SysCronJob{}).Where("id = ?", d.Id).Update("status", 1)
-	global.GOMALL_LOG.Error(res)
+	res := global.DB.Where("id = ?", d.Id).First(&job).RowsAffected
+	global.DB.Model(&models.SysCronJob{}).Where("id = ?", d.Id).Update("status", 1)
+	global.LOG.Error(res)
 	if res == 0 {
 		return errors.New("数据不存在")
 	}

@@ -12,10 +12,10 @@ import (
 //@author: [liuhongdi](https://github.com/liuhongdi)
 
 func SetupLogger() *zap.SugaredLogger {
-	filepath := global.GOMALL_CONFIG.Zap.LogFilePath
-	infofilename := global.GOMALL_CONFIG.Zap.LogInfoFileName
-	warnfilename := global.GOMALL_CONFIG.Zap.LogWarnFileName
-	fileext := global.GOMALL_CONFIG.Zap.LogFileExt
+	filepath := global.CONFIG.Zap.LogFilePath
+	infofilename := global.CONFIG.Zap.LogInfoFileName
+	warnfilename := global.CONFIG.Zap.LogWarnFileName
+	fileext := global.CONFIG.Zap.LogFileExt
 
 	Logger, _ := getInitLogger(filepath, infofilename, warnfilename, fileext)
 

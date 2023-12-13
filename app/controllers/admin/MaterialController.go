@@ -114,7 +114,7 @@ func (e *MaterialController) Delete(c *gin.Context) {
 	materialService := material_service.Material{Ids: ids}
 
 	if err := materialService.Del(); err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}

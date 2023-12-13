@@ -18,25 +18,25 @@ type WechatController struct {
 // @router /api/v1/serve [get]
 // @Tags Front API
 func (e *WechatController) GetAll(c *gin.Context) {
-	official := global.GOMALL_OFFICIAL_ACCOUNT
+	official := global.OFFICIAL_ACCOUNT
 	server := official.GetServer(c.Request, c.Writer)
 
 	server.SetMessageHandler(func(msg *message.MixMessage) *message.Reply {
 		if msg.MsgType == message.MsgTypeEvent {
-			global.GOMALL_LOG.Info(msg.Event)
+			global.LOG.Info(msg.Event)
 			if msg.Event == message.EventSubscribe {
 				//存储用户
 				user := official.GetUser()
 				userInfo, e := user.GetUserInfo(msg.CommonToken.GetOpenID())
 				if e != nil {
-					global.GOMALL_LOG.Error(e)
+					global.LOG.Error(e)
 				}
 				ip := util.GetClientIP(c)
 				userSerive := wechat_user_service.User{UserInfo: userInfo, Ip: ip}
 				userSerive.Insert()
 			}
 		}
-		global.GOMALL_LOG.Info(msg.MsgType)
+		global.LOG.Info(msg.MsgType)
 		text := message.NewText(msg.Content)
 
 		return &message.Reply{MsgType: message.MsgTypeText, MsgData: text}
@@ -45,13 +45,13 @@ func (e *WechatController) GetAll(c *gin.Context) {
 	//处理消息接收以及回复
 	err := server.Serve()
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		return
 	}
 	//发送回复的消息
 	err = server.Send()
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		return
 	}
 

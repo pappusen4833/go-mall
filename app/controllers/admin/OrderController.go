@@ -119,7 +119,7 @@ func (e *OrderController) Deliver(c *gin.Context) {
 	}
 
 	if err := orderService.Deliver(); err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
 		return
 	}
@@ -143,7 +143,7 @@ func (e *OrderController) DeliverQuery(c *gin.Context) {
 		return
 	}
 
-	config := kdniao.NewKdniaoConfig(global.GOMALL_CONFIG.Express.EBusinessId, global.GOMALL_CONFIG.Express.AppKey)
+	config := kdniao.NewKdniaoConfig(global.CONFIG.Express.EBusinessId, global.CONFIG.Express.AppKey)
 	logger := kdniao.NewKdniaoLogger()
 
 	expressQuerySdk := sdk.NewExpressQuery(config, logger)
@@ -151,7 +151,7 @@ func (e *OrderController) DeliverQuery(c *gin.Context) {
 	resp, err := expressQuerySdk.GetResponse(req)
 
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 	}
 	//
 	if resp.Success == false {

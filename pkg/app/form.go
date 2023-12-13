@@ -16,14 +16,14 @@ import (
 func BindAndValid(c *gin.Context, form interface{}) (int, int) {
 	err := c.Bind(form)
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		return http.StatusBadRequest, constant.INVALID_PARAMS
 	}
 
 	valid := validation.Validation{}
 	check, err := valid.Valid(form)
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 		return http.StatusInternalServerError, constant.ERROR
 	}
 	if !check {

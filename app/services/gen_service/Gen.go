@@ -50,7 +50,7 @@ func (d *Gen) Insert() error {
 	)
 
 	var err error
-	tx := global.GOMALL_DB.Begin()
+	tx := global.DB.Begin()
 	defer func() {
 		if err != nil {
 			tx.Rollback()
@@ -94,8 +94,8 @@ func (d *Gen) Insert() error {
 	//添加表
 	err = tx.Model(&models.SysTables{}).Create(&sysTables).Error
 
-	global.GOMALL_LOG.Error(sysTables)
-	global.GOMALL_LOG.Error(err)
+	global.LOG.Error(sysTables)
+	global.LOG.Error(err)
 	if err != nil {
 		return err
 	}
@@ -180,7 +180,7 @@ func (d *Gen) GetTableInfo() vo.ResultList {
 		maps["table_name"] = d.Name
 	}
 	var data models.SysTables
-	global.GOMALL_DB.Where(maps).First(&data)
+	global.DB.Where(maps).First(&data)
 	return vo.ResultList{Content: data}
 }
 
@@ -191,10 +191,10 @@ func (d *Gen) GetTableColumns() vo.ResultList {
 		maps["table_name"] = d.Name
 	}
 	var data models.SysTables
-	global.GOMALL_DB.Where(maps).First(&data)
+	global.DB.Where(maps).First(&data)
 
 	var list []models.SysColumns
-	global.GOMALL_DB.Where("table_id = ?", data.Id).Find(&list)
+	global.DB.Where("table_id = ?", data.Id).Find(&list)
 
 	return vo.ResultList{Content: list}
 }
@@ -207,7 +207,7 @@ func (d *Gen) ColumnSave() error {
 	for _, val := range d.Columns {
 		err := models.UpdateByColumn(&val)
 		if err != nil {
-			global.GOMALL_LOG.Error(err)
+			global.LOG.Error(err)
 			return err
 		}
 	}
@@ -222,32 +222,32 @@ func (d *Gen) Preview() map[string]interface{} {
 	//读取模板
 	controllerTemp, err := template.ParseFiles("templates/controller.go.template")
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 	}
 	modeleTemp, err := template.ParseFiles("templates/model.go.template")
 	if err != nil {
-		global.GOMALL_LOG.Error(err, modeleTemp)
+		global.LOG.Error(err, modeleTemp)
 	}
 
 	serviceTemp, err := template.ParseFiles("templates/services.go.template")
 	if err != nil {
-		global.GOMALL_LOG.Error(err, serviceTemp)
+		global.LOG.Error(err, serviceTemp)
 	}
 
 	vueTemp, err := template.ParseFiles("templates/vue.go.template")
 	if err != nil {
-		global.GOMALL_LOG.Error(err, vueTemp)
+		global.LOG.Error(err, vueTemp)
 	}
 	jsTemp, err := template.ParseFiles("templates/js.go.template")
 	if err != nil {
-		global.GOMALL_LOG.Error(err, jsTemp)
+		global.LOG.Error(err, jsTemp)
 	}
 	var (
 		data models.SysTables
 		list []models.SysColumns
 	)
-	global.GOMALL_DB.Where("table_name = ?", d.Name).First(&data)
-	global.GOMALL_DB.Where("table_id = ?", data.Id).Find(&list)
+	global.DB.Where("table_name = ?", d.Name).First(&data)
+	global.DB.Where("table_id = ?", data.Id).Find(&list)
 	data.Columns = list
 
 	//绑定数据
@@ -282,32 +282,32 @@ func (d *Gen) GenCode() {
 	//读取模板
 	controllerTemp, err := template.ParseFiles("templates/controller.go.template")
 	if err != nil {
-		global.GOMALL_LOG.Error(err)
+		global.LOG.Error(err)
 	}
 	modeleTemp, err := template.ParseFiles("templates/model.go.template")
 	if err != nil {
-		global.GOMALL_LOG.Error(err, modeleTemp)
+		global.LOG.Error(err, modeleTemp)
 	}
 
 	serviceTemp, err := template.ParseFiles("templates/services.go.template")
 	if err != nil {
-		global.GOMALL_LOG.Error(err, serviceTemp)
+		global.LOG.Error(err, serviceTemp)
 	}
 
 	vueTemp, err := template.ParseFiles("templates/vue.go.template")
 	if err != nil {
-		global.GOMALL_LOG.Error(err, vueTemp)
+		global.LOG.Error(err, vueTemp)
 	}
 	jsTemp, err := template.ParseFiles("templates/js.go.template")
 	if err != nil {
-		global.GOMALL_LOG.Error(err, jsTemp)
+		global.LOG.Error(err, jsTemp)
 	}
 	var (
 		data models.SysTables
 		list []models.SysColumns
 	)
-	global.GOMALL_DB.Where("table_name = ?", d.Name).First(&data)
-	global.GOMALL_DB.Where("table_id = ?", data.Id).Find(&list)
+	global.DB.Where("table_name = ?", d.Name).First(&data)
+	global.DB.Where("table_id = ?", data.Id).Find(&list)
 	data.Columns = list
 
 	//绑定数据
