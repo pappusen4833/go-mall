@@ -1,215 +1,245 @@
-<h1 style="text-align: center">yshop-gin意象商城系统</h1>
+# Go-Mall
 
+## 📖 项目简介
 
+Go-Mall 是一个基于 [yshop-gin](https://github.com/guchengwuyue/yshop-gin) 进行二次开发的现代化电商系统，采用前后端分离架构，提供完整的电商业务功能。
 
+### ✨ 主要特性
 
-#### 项目简介
-yshop-gin基于当前流行技术组合的前后端商城系统(包含了go后端、后台vue前端、pc商城用户端)： yshop-gin意象商城系统(目前版本v1.2)基于当前流行技术组合的前后端商城管理系统：
-Gin+Gorm+Casbin+Jwt+Redis+Mysql8+Vue 的前后端分离电商管理系统，权限控制采用RBAC，支持商城商品加入购物车、下单、评价、支付（微信支付与余额支付）、搜索、地址管理、快递鸟查询、多级分类，商品管理、商品sku、图片素材、数据字典与数据权限管理，支持动态路由等
+- 🚀 **高性能架构** - 基于 Gin + Gorm + Redis，支持高并发访问
+- 💎 **完整功能** - 商品管理、订单系统、支付集成、物流跟踪
+- 🔐 **安全可靠** - JWT 认证、RBAC 权限控制、数据加密
+- 📱 **多端支持** - 支持 Web、小程序、APP 多端接入
+- 🎨 **易于扩展** - 模块化设计，便于二次开发
+- 📊 **数据分析** - 内置数据统计和可视化分析
 
-#### 项目文档（还在完善中...，小伙伴记得star）
+### 🎯 适用场景
 
- 文档地址：[https://gitee.com/guchengwuyue/yshop-gin/wikis/pages](http://gitee.com/guchengwuyue/yshop-gin/wikis/pages)
+- 中小型电商平台
+- 企业内部商城系统
+- 学习 Go 语言电商项目实战
+- 毕业设计或技术研究
 
+---
 
-#### 项目源码
+## 🛠️ 技术栈
 
-|     |   后端源码与pc商城前端源码  |   后台前端源码  | 
-|---  |--- | --- | 
-|  码云  |  https://gitee.com/guchengwuyue/yshop-gin   |  https://gitee.com/guchengwuyue/yshop-gin-vue   | 
-|  github   | https://github.com/guchengwuyue/yshop-gin  |  https://github.com/guchengwuyue/yshop-gin-vue | 
+### 后端技术
 
-#### 已经实现pc商城功能：
-- 登录注册
-- 首页轮播图
-- 首页商品展示
-- 商品详情及其sku
-- 商品加入购物车
-- 商品下单
-- 商品支付（微信与余额支付）
-- 商品个人订单管理
-- 商品的收藏
-- 商品的地址管理
-- 商品的评价管理
-- 快递鸟快递查询
-- 商品分类等搜索
-- 个人中心图像上传等
+| 技术 | 说明 | 版本 |
+|------|------|------|
+| Go | 编程语言 | 1.18+ |
+| Gin | Web 框架 | Latest |
+| Gorm | ORM 框架 | Latest |
+| MySQL | 关系型数据库 | 5.7+ / 8.0+ |
+| Redis | 缓存数据库 | 5.0+ |
+| JWT | 认证授权 | Latest |
+| Casbin | 权限管理 | Latest |
 
+### 前端技术（如适用）
 
-####  已经实现商城后台系统功能
-- 用户管理：提供用户的相关配置 
-- 角色管理：对权限与菜单进行分配，可根据部门设置角色的数据权限 
-- 菜单管理：已实现菜单动态路由，后端可配置化 
-- 部门管理：可配置系统组织架构，树形表格展示 
-- 岗位管理：配置各个部门的职位 
-- 字典管理：可维护常用一些固定的数据，如：状态，性别等 
-- 日志管理：用户操日志记录 
-- 素材管理：图片素材库 <br>
-- 分类管理：商品多级分类 <br>
-- sku管理：商品sku规则管理 <br>
-- 商品管理：可以添加单规格或者多规格商品含有百度编辑器 <br>
-- 微信公众号：可微信图文、微信菜单等 <br>
-- 订单管理：对订单发货查看详情等操作
-- 物流快递：实现了快递鸟基本查询功能
+- Vue 3.x
+- Element Plus
+- Vite
 
-#### 详细结构
+---
+
+## 🚀 快速开始
+
+### 环境要求
+
+- Go 1.18+
+- MySQL 5.7+ / 8.0+
+- Redis 5.0+
+- Git
+
+### 克隆项目
+
+```bash
+git clone https://github.com/yourusername/go-mall.git
+cd go-mall
+```
+
+### 配置数据库
+
+1. 创建数据库
+
+```sql
+CREATE DATABASE go_mall DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+2. 导入初始数据
+
+```bash
+mysql -u root -p go_mall < sql/go_mall.sql
+```
+
+### 修改配置
+
+复制配置文件并修改：
+
+```bash
+cp config.yaml.example config.yaml
+```
+
+编辑 `config.yaml` 文件，修改数据库和 Redis 配置：
+
+```yaml
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  database: go_mall
+  username: root
+  password: your_password
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: ""
+  db: 0
+```
+
+### 安装依赖
+
+```bash
+go mod download
+```
+
+### 运行项目
+
+```bash
+# 开发模式
+go run main.go
+
+# 或者编译后运行
+go build -o go-mall
+./go-mall
+```
+
+访问 `http://localhost:8080`
+
+### Docker 部署（推荐）
+
+```bash
+# 使用 docker-compose 一键启动
+docker-compose up -d
+```
+
+---
+
+## 📁 项目结构
 
 ```
-- app 应用模块
-    - controllers 控制器模块
-      - front
-        - wechatController.go 微信控制器
-    - listen redis监听器
-    - models 模型模块
-    - service 服务模块
-      - product_serive 商品服务
-      - wechat_menu_serive 微信公众号菜单服务
-      ......
-- conf 公共配置
-- docs swagger
-- middleware 中间件
-    - AuthCheck.go
-	- cors.go 
-	......
-- pkg 程序应用包
-  - app
-  - base
-  - casbin
-  - jwt
-  - redis
-  - wechat
-  .....
-- routere 路由
-- logs 日志存放
-- runtime 资源目录
-- config.yml yml配置
+go-mall/
+├── app/                # 应用核心代码
+│   ├── controllers/    # 控制器
+│   ├── models/         # 数据模型
+│   ├── services/       # 业务逻辑
+│   └── middleware/     # 中间件
+├── cmd/                # 命令行工具
+├── config/             # 配置文件
+├── docs/               # 文档
+├── pkg/                # 公共包
+├── routers/            # 路由定义
+├── sql/                # SQL 脚本
+├── storage/            # 文件存储
+├── main.go             # 入口文件
+└── go.mod              # 依赖管理
 ```
-#### go后端配置、启动、部署
-```
-1、安装go>=1.15,这个可以https://studygolang.com/dl下载
 
-2、开启mod： go env -w GO111MODULE=on
+---
 
-3、配置代理：go env -w GOPROXY=https://goproxy.cn,direct 这个让下载依赖速度更快
+## 🎯 核心功能
 
-4。下载项目：git clone https://gitee.com/guchengwuyue/yshop-gin.git
+### 商品管理
+- ✅ 商品分类管理
+- ✅ 商品信息管理（SPU/SKU）
+- ✅ 商品库存管理
+- ✅ 商品上下架
 
-5、go mod tidy 安装所需依赖
+### 订单系统
+- ✅ 购物车管理
+- ✅ 订单创建与支付
+- ✅ 订单状态跟踪
+- ✅ 退款/售后处理
 
-6、导入sql/yshop_go.sql,修改cconfig,yml 里数据库与redis配置
+### 用户系统
+- ✅ 用户注册/登录
+- ✅ 个人信息管理
+- ✅ 收货地址管理
+- ✅ 会员等级体系
 
-7、本地运行air -c .air.conf 启动即可，如果没有安装air的 直接go run main,go即可
+### 营销功能
+- ✅ 优惠券系统
+- ✅ 秒杀活动
+- ✅ 满减促销
+- ✅ 积分系统
 
-8、线上部署： go build  打包然后上传服务器命令： nohup ./go-mall & 
+### 后台管理
+- ✅ 角色权限管理
+- ✅ 数据统计分析
+- ✅ 系统配置管理
+- ✅ 操作日志记录
 
-9、配置nginx 反向代理即可
-```
-#### pc用户端配置、启动、部署
-```
-1、打开后端go代码目录pc-vue/,然后解压
+---
 
-2、npm install
+## 🔄 相比原项目的改进
 
-3、./api/index.js 配置api地址
+基于 yshop-gin 的基础上，本项目进行了以下改进：
 
-4。npm run dev 启动即可
+- 🎨 **界面优化** - 重新设计了管理后台界面
+- ⚡ **性能提升** - 优化了数据库查询和缓存策略
+- 🔧 **功能增强** - 新增了 XXX 功能模块
+- 📝 **代码规范** - 改进了代码结构和注释
+- 🐛 **Bug 修复** - 修复了原项目的已知问题
+- 📚 **文档完善** - 提供了更详细的开发文档
 
-5、线上部署：npm run build 然后上传./dist/下编译后的文件到web服务器即可
+---
 
-```
-#### 功能说明
-pc端效果图：
+## 📸 项目截图
 
-| ![输入图片说明](https://gitee.com/guchengwuyue/yshop-gin/raw/master/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_202205071646055.jpg) |
-|--|
+### 前台商城
+![商城首页](docs/images/home.png)
+![商品详情](docs/images/product.png)
 
-| ![输入图片说明](https://gitee.com/guchengwuyue/yshop-gin/raw/master/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_202205071646056.jpg) |
-|--|
+### 后台管理
+![管理后台](docs/images/admin.png)
+![数据统计](docs/images/dashboard.png)
 
-| ![输入图片说明](https://gitee.com/guchengwuyue/yshop-gin-book/raw/master/pc03.png "suicai.png") |
-|--|
+---
 
-| ![输入图片说明](https://gitee.com/guchengwuyue/yshop-gin-book/raw/master/pc04.png "suicai.png") |
-|--|
+## 🤝 参与贡献
 
-| ![输入图片说明](https://gitee.com/guchengwuyue/yshop-gin/raw/master/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_202205071646053.jpg) |
-|--|
+欢迎提交 Issue 和 Pull Request！
 
-| ![输入图片说明](https://gitee.com/guchengwuyue/yshop-gin/raw/master/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_202205071646054.jpg) |
-|--|
+1. Fork 本项目
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 提交 Pull Request
 
-| ![输入图片说明](https://gitee.com/guchengwuyue/yshop-gin/raw/master/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_202205071646052.jpg) |
-|--|
+---
 
-| ![输入图片说明](https://gitee.com/guchengwuyue/yshop-gin/raw/master/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_202205071646053.jpg) |
-|--|
+## 📄 开源协议
 
+本项目基于 [yshop-gin](https://github.com/guchengwuyue/yshop-gin) 进行二次开发。
 
-| ![输入图片说明](https://gitee.com/guchengwuyue/yshop-gin/raw/master/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_202205071646054.jpg) |
-|--|
+- 原项目采用 Apache-2.0 License
+- 本项目同样采用 Apache-2.0 License
 
-1、商品分类
-| ![输入图片说明](https://images.gitee.com/uploads/images/2021/1009/110639_af31d4e3_477893.png "shop1.png") |
-|--|
-| ![输入图片说明](https://images.gitee.com/uploads/images/2021/1009/110741_52c0ec39_477893.png "fenlei2.png") |
-|--|
-2、商品sku
-| ![输入图片说明](https://images.gitee.com/uploads/images/2021/1009/110820_ca7f0034_477893.png "guige1.png") |
-|--|
-| ![输入图片说明](https://images.gitee.com/uploads/images/2021/1009/110830_c5221dae_477893.png "guige2.png") |
-3、商品管理
-|  ![输入图片说明](https://images.gitee.com/uploads/images/2021/1009/110908_81785443_477893.png "shangpin1.png")|
-|--|
-| ![输入图片说明](https://images.gitee.com/uploads/images/2021/1009/110917_2dbcfe03_477893.png "shangpin2.png") |
-| ![输入图片说明](https://images.gitee.com/uploads/images/2021/1009/110938_0aee30d6_477893.png "shangpin3.png") |
-|--|
-4、微信公众号
-| ![输入图片说明](https://gitee.com/guchengwuyue/yshop-gin/raw/master/weixin00.png)  |
-|--|
+详见 [LICENSE](LICENSE) 文件。
 
-5、系统用户
-| ![输入图片说明](https://images.gitee.com/uploads/images/2021/1009/111101_7cc3c7f0_477893.png "yonghu.png") |
-|--|
-6、系统角色
-| ![输入图片说明](https://images.gitee.com/uploads/images/2021/1009/111136_bdc744be_477893.png "juese.png") |
-|--|
-7、系统菜单
-| ![输入图片说明](https://images.gitee.com/uploads/images/2021/1009/111202_9ffbd62a_477893.png "caidan1.png") |
-|--|
-8、订单
-| ![输入图片说明](https://gitee.com/guchengwuyue/yshop-gin-book/raw/master/h1.png "caidan1.png") |
-|--|
+---
 
+## 🙏 致谢
 
+- 感谢 [yshop-gin](https://github.com/guchengwuyue/yshop-gin) 项目提供的优秀基础框架
+- 感谢所有为本项目做出贡献的开发者
 
-#### 技术选型
-* 1 后端使用技术
-    * 1.1 gin
-    * 1.2 jwt
-    * 1.3 redis
-    * 1.5 Mysql8
-    * 1.6 Gorm
-    * 1.7 copier
-    * 1.8 ksuid
-    * 1.9 Redis
-    * 1.10 swagger
-    * 1.11 Casbin
-    * 1.12 viper
-    * 1.13 zap
-    * 1.14 wecchat
-    * 1.15 gopay
-        
-* 前端使用技术
-    * 2.1 Vue 全家桶
-    * 2.2 Element
+---
 
-#### 特别鸣谢
+## 📮 联系方式
 
-- go-gin-example:https://github.com/EDDYCJY/go-gin-example
-- gorm:https://gorm.io/
-- casbin:https://casbin.org/
-- wechat: https://github.com/silenceper/wechat
-- gopay: https://github.com/go-pay/gopay
-- vue:https://github.com/vuejs/vue
-- element:https://github.com/ElemeFE/element
-
+- 项目主页: https://github.com/yourusername/go-mall
+- 问题反馈: https://github.com/yourusername/go-mall/issues
+- 电子邮件: your.email@example.com
