@@ -6,14 +6,32 @@ yshop
 *.exe
 yshop.tar.gz
 go-mall.iml
-tmp/// Updated: 2024-02-21 18:59:00
-// Updated: 2024-12-21 14:15:00
-// Updated: 2024-12-03 23:33:00
-// Updated: 2024-03-28 09:53:00
-// Updated: 2024-11-05 04:33:00
-// Updated: 2024-03-31 08:05:00
-// Updated: 2024-01-25 16:09:00
-// Updated: 2024-05-09 02:36:00
-// Updated: 2024-07-17 08:30:00
-// Updated: 2024-04-16 20:41:00
-// Updated: 2024-05-20 23:38:00
+tmp/
+templates/code
+
+# Sensitive configuration files
+config.yaml
+*.env
+.env
+.env.*
+
+# Security sensitive files
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+*.crt
+*.der
+
+# Database files with sensitive data (optional - uncomment if needed)
+# sql/go-mall.sql
+# *.sql
+
+# Runtime and logs
+runtime/
+logs/
+*.log
+
+# Upload directories
+upload/
