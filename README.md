@@ -74,30 +74,25 @@ CREATE DATABASE go_mall DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
 mysql -u root -p go_mall < sql/go_mall.sql
 ```
 
-### 修改配置
+### 配置项目
 
-复制配置文件并修改：
+⚠️ **重要**: 本项目包含敏感配置信息,请务必先阅读 [SECURITY_SETUP.md](SECURITY_SETUP.md) 进行安全配置。
+
+1. 复制配置文件:
 
 ```bash
-cp config.yaml.example config.yaml
+cp config.example.yaml config.yaml
 ```
 
-编辑 `config.yaml` 文件，修改数据库和 Redis 配置：
+2. 编辑 `config.yaml` 文件,配置必要的信息:
+   - 数据库连接信息
+   - Redis 连接信息
+   - 微信公众号/小程序凭据
+   - 微信支付凭据
+   - JWT 密钥
+   - 快递 API 凭据
 
-```yaml
-mysql:
-  host: 127.0.0.1
-  port: 3306
-  database: go_mall
-  username: root
-  password: your_password
-
-redis:
-  host: 127.0.0.1
-  port: 6379
-  password: ""
-  db: 0
-```
+详细配置说明请查看 [SECURITY_SETUP.md](SECURITY_SETUP.md)
 
 ### 安装依赖
 
@@ -243,53 +238,3 @@ go-mall/
 - 项目主页: https://github.com/yourusername/go-mall
 - 问题反馈: https://github.com/yourusername/go-mall/issues
 - 电子邮件: your.email@example.com
-
-<!-- Updated on 2024-04-05 16:09:00 -->
-
-<!-- Updated on 2024-09-02 06:14:00 -->
-
-<!-- Updated on 2024-03-15 22:01:00 -->
-
-<!-- Updated on 2024-04-05 01:34:00 -->
-
-<!-- Updated on 2024-06-07 05:52:00 -->
-
-<!-- Updated on 2024-11-09 18:03:00 -->
-
-<!-- Updated on 2024-08-21 07:38:00 -->
-
-<!-- Updated on 2024-07-02 00:13:00 -->
-
-<!-- Updated on 2024-10-24 20:14:00 -->
-
-<!-- Updated on 2024-02-01 02:32:00 -->
-
-<!-- Updated on 2024-03-19 19:28:00 -->
-
-<!-- Updated on 2024-04-03 19:36:00 -->
-
-<!-- Updated on 2024-02-15 07:45:00 -->
-
-<!-- Updated on 2024-12-15 17:28:00 -->
-
-<!-- Updated on 2024-01-21 20:36:00 -->
-
-<!-- Updated on 2024-01-07 21:06:00 -->
-
-<!-- Updated on 2024-06-01 10:12:00 -->
-
-<!-- Updated on 2024-09-29 04:37:00 -->
-
-<!-- Updated on 2024-06-24 09:06:00 -->
-
-<!-- Updated on 2024-06-15 02:11:00 -->
-
-<!-- Updated on 2024-06-25 16:35:00 -->
-
-<!-- Updated on 2024-03-16 19:32:00 -->
-
-<!-- Updated on 2024-08-02 01:40:00 -->
-
-<!-- Updated on 2024-09-13 01:00:00 -->
-
-<!-- Updated on 2024-09-26 22:31:00 -->
