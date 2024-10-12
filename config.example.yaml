@@ -1,0 +1,63 @@
+server:
+  run-mode: 'release'
+  http-port: 8000
+  read-timeout: 60
+  write-timeout: 60
+
+app:
+  page-size: 10
+  jwt-secret: your_jwt_secret_here_change_me
+  prefix-url: 'http://127.0.0.1:8000'
+  frontend-base-url: 'https://your-frontend-domain.com'
+  runtime-root-path: 'runtime/'
+  image-save-path: 'upload/images/'
+  # MB
+  image-max-size: 5242880
+  image-allow-exts: ['.jpg','.jpeg','.png']
+  export-save-path: 'export/'
+  qrcode-save-path: 'qrcode/'
+  font-save-path: 'fonts/'
+  log-save-path: 'logs/'
+  Log-save-name: 'log'
+  Log-file-ext: 'log'
+  time-format: 20060102
+
+database:
+  type: 'mysql'
+  user: 'your_database_user'
+  password: 'your_database_password'
+  host: '127.0.0.1:3306'
+  name: 'gomall'
+  table_prefix:
+
+redis:
+  host: '127.0.0.1:6379'
+  password: 'your_redis_password_if_needed'
+  max_idle: 30
+  max_active: 30
+  idle_timeout: 200
+
+zap:
+  log-filepath: 'runtime/logs'
+  log-info-filename: 'info'
+  log-warn-filename: 'warn'
+  log-fiile-ext: 'log'
+
+wechat:
+  app_id: your_wechat_app_id
+  app_secret: your_wechat_app_secret
+  token: your_wechat_token
+  encoding_aes_key: your_encoding_aes_key_if_needed
+  base_url: https://your-backend-domain.com
+  redirect_uri: https://your-backend-domain.com/weixin/verify
+
+express:
+  eBusinessId: your_express_business_id
+  appKey: your_express_app_key
+
+wxpay:
+  mch_id: your_wechat_pay_merchant_id
+  api_key: your_wechat_pay_api_key
+  notify_url: https://your-domain.com/wxPay/notify
+  return_url: /
+  qr_service_url: https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=  # QR code generation service
