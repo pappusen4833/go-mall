@@ -1,14 +1,15 @@
 package conf
 
 type App struct {
-	JwtSecret string `mapstructure:"jwt-secret" yaml:"jwt-secret"`
-	PageSize  int  `mapstructure:"page-size" yaml:"page-size"`
-	PrefixUrl string  `mapstructure:"prefix-url" yaml:"prefix-url"`
+	JwtSecret       string `mapstructure:"jwt-secret" yaml:"jwt-secret"`
+	PageSize        int    `mapstructure:"page-size" yaml:"page-size"`
+	PrefixUrl       string `mapstructure:"prefix-url" yaml:"prefix-url"`
+	FrontendBaseURL string `mapstructure:"frontend-base-url" yaml:"frontend-base-url"` // frontend application base URL
 
-	RuntimeRootPath string  `mapstructure:"runtime-root-path" yaml:"runtime-root-path"`
+	RuntimeRootPath string `mapstructure:"runtime-root-path" yaml:"runtime-root-path"`
 
-	ImageSavePath  string `mapstructure:"image-save-path" yaml:"image-save-path"`
-	ImageMaxSize   int `mapstructure:"image-max-size" yaml:"image-max-size"`
+	ImageSavePath  string   `mapstructure:"image-save-path" yaml:"image-save-path"`
+	ImageMaxSize   int      `mapstructure:"image-max-size" yaml:"image-max-size"`
 	ImageAllowExts []string `mapstructure:"image-allow-exts" yaml:"image-allow-exts"`
 
 	ExportSavePath string `mapstructure:"export-save-path" yaml:"export-save-path"`
