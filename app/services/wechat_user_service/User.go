@@ -106,6 +106,41 @@ func (u *User) Reg() error {
 
 }
 
+func (u *User) SilentReg() error {
+	var (
+		user models.User
+		err  error
+	)
+	err = global.DB.
+		Model(&models.User{}).
+		Where("username = ?", u.RegParam.Account).First(&user).Error
+	if err == nil {
+		return errors.New("用户已经存在")
+	}
+	codeKey := constant.SMS_CODE + u.RegParam.Account
+	code := redis.GetString(codeKey)
+	if code != u.RegParam.Captcha {
+		return errors.New("验证码不对")
+	}
+
+	uu := models.User{
+		Username: u.RegParam.Account,
+		Nickname: u.RegParam.Account,
+		Password: util.HashAndSalt([]byte(u.RegParam.Password)),
+		RealName: u.RegParam.Account,
+		Avatar:   "",
+		AddIp:    u.Ip,
+		LastIp:   u.Ip,
+		UserType: userEnum.PC,
+		Phone:    u.RegParam.Account,
+	}
+	err = models.AddWechatUser(&uu)
+	//注册成功删除验证码缓存
+	redis.Delete(code)
+	return err
+
+}
+
 func (u *User) Verify() (string, error) {
 	var (
 		user models.User
@@ -178,7 +213,7 @@ func (u *User) Save() error {
 	return models.UpdateByWechatUsere(u.Dto.Id, &user)
 }
 
-func (u *User) SaveMony() error {
+func (u *User) SaveMoney() error {
 	var err error
 	if u.Money.Ptype == 1 {
 		err = global.DB.
