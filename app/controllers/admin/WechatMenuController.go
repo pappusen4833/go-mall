@@ -6,6 +6,7 @@ import (
 	dto2 "go-mall/app/services/wechat_menu_service/dto"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"net/http"
 )
 
@@ -19,12 +20,9 @@ type WechatMenuController struct {
 // @router /weixin/menu [get]
 // @Tags Admin
 func (e *WechatMenuController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	meuService := wechat_menu_service.Menu{}
 	vo := meuService.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 菜单更新
@@ -34,12 +32,11 @@ func (e *WechatMenuController) GetAll(c *gin.Context) {
 // @Tags Admin
 func (e *WechatMenuController) Post(c *gin.Context) {
 	var (
-		dto  dto2.WechatMenu
-		appG = app.Gin{C: c}
+		dto dto2.WechatMenu
 	)
 	httpCode, errCode := app.BindAndValid(c, &dto)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	meuService := wechat_menu_service.Menu{
@@ -47,10 +44,10 @@ func (e *WechatMenuController) Post(c *gin.Context) {
 	}
 
 	if err := meuService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 
 }

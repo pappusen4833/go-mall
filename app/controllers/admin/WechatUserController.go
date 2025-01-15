@@ -7,6 +7,7 @@ import (
 	dto3 "go-mall/app/services/wechat_user_service/dto"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/util"
 	"net/http"
 )
@@ -21,9 +22,6 @@ type WechatUserController struct {
 // @router /weixin/user [get]
 // @Tags Admin
 func (e *WechatUserController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	value := c.DefaultQuery("value", "")
 	myType := c.DefaultQuery("type", "")
 	userType := c.DefaultQuery("userType", "")
@@ -37,7 +35,7 @@ func (e *WechatUserController) GetAll(c *gin.Context) {
 	}
 
 	vo := userService.GetUserAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 用户编辑
@@ -48,11 +46,10 @@ func (e *WechatUserController) GetAll(c *gin.Context) {
 func (e *WechatUserController) Put(c *gin.Context) {
 	var (
 		model dto3.User
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	userService := wechat_user_service.User{
@@ -60,11 +57,11 @@ func (e *WechatUserController) Put(c *gin.Context) {
 	}
 
 	if err := userService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 用户余额修改
@@ -75,21 +72,20 @@ func (e *WechatUserController) Put(c *gin.Context) {
 func (e *WechatUserController) Money(c *gin.Context) {
 	var (
 		model dto2.UserMoney
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	userService := wechat_user_service.User{
 		Money: &model,
 	}
 
-	if err := userService.SaveMony(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+	if err := userService.SaveMoney(); err != nil {
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
