@@ -1,0 +1,207 @@
+@import "mixin";
+@import "variables";
+@import "common";
+
+// 总体body
+body {
+  height: 100%;
+  // -webkit-user-select:none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+label {
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+  -webkit-font-smoothing:antialiased;
+  font-size: 16px;
+}
+
+#app {
+  //height: 100%;
+  min-height: 100%;
+  color: #333333;
+  // background-color: #F6F6F8;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+dl{
+  /*We will be adding our own margin to these elements as needed.*/
+  margin: 0;
+  /*You'll want to set font-size as needed.*/
+  font-size: 1rem;
+  /*No bold for h tags unless you want it*/
+  font-weight: 400;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+// 分页器颜色
+.el-pagination.is-background{
+  .el-pager{
+    .number{
+      border-radius: 0;
+    }
+    li:not(.disabled).active{
+      background-color: #333333;
+    }
+    li:not(.disabled).active:hover{
+      color: #FFFFFF;
+    }
+    li:not(.disabled):hover{
+      color: #666666;
+    }
+  }
+  .el-pagination__jump{
+    .el-input__inner{
+      border-radius: 0;
+      border-color: #666666;
+    }
+  }
+} 
+
+button {
+  border: 0;
+  outline:none;
+}
+
+input,
+fieldset {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  /*inputs and fieldset defaults to having a min-width equal to its content in Chrome and Firefox (https://code.google.com/p/chromium/issues/detail?id=560762), we may not want that*/
+  min-width: 0;
+  /*Reset the font size and family*/
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+/* Switching user-select on for inputs and contenteditable specifically for Safari (see bug link above)*/
+input[type],
+[contenteditable] {
+  user-select: text;
+}
+
+/* For IE, we want to remove the default cross ('X') that appears in input fields when a user starts typing - Make sure you add your own! */
+input::-ms-clear {
+  display: none;
+}
+
+/*This switches the default outline off when an input receives focus (really important for users tabbing through with a keyboard) so ensure you put something decent in for your input focus instead!!*/
+input:focus {
+  outline: 0;
+}
+
+input[type="number"] {
+  /*Mozilla shows the spinner UI on number inputs unless we use this:*/
+  -moz-appearance: textfield;
+}
+
+/*Removes the little spinner controls for number type inputs (WebKit browsers/forks only)*/
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  appearance: none;
+}
+
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.no-padding {
+  padding: 0px !important;
+}
+
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+.w100{width: 100%;}
+
+// 盒子
+.box-container {
+  padding: 15px;
+}
+
+// 边框1px
+@media (-webkit-device-pixel-ratio: 2) {
+  .border-1px:after{
+    height: 1px;
+    content: '';
+    width: 100%;
+    border-bottom: 1px solid #e1e1e1;
+    position: absolute;
+    bottom: -1px;
+    right: 0;
+    transform: scaleY(0.5);
+    -webkit-transform: scaleY(0.5);
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio: 2){
+  .border-bottom::after {
+    border-bottom-width: 1px;
+  }
+  .border-1px:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: -100%;
+    bottom: -100%;
+    left: 0;
+    border: 0 solid #e1e1e1;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    pointer-events: none;
+    -webkit-transform: scale(.5);
+    transform: scale(.5);
+    width: 200%;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+}
