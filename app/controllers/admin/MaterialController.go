@@ -8,6 +8,7 @@ import (
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	"go-mall/pkg/global"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/jwt"
 	"go-mall/pkg/logging"
 	"go-mall/pkg/upload"
@@ -25,9 +26,6 @@ type MaterialController struct {
 // @router /admin/material [get]
 // @Tags Admin
 func (e *MaterialController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	groupId := com.StrTo(c.DefaultQuery("groupId", "-1")).MustInt64()
 	name := c.DefaultQuery("blurry", "")
 	materialService := material_service.Material{
@@ -37,7 +35,7 @@ func (e *MaterialController) GetAll(c *gin.Context) {
 		PageNum:  util.GetPage(c),
 	}
 	vo := materialService.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 素材添加
@@ -48,11 +46,10 @@ func (e *MaterialController) GetAll(c *gin.Context) {
 func (e *MaterialController) Post(c *gin.Context) {
 	var (
 		model models.SysMaterial
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	uid, _ := jwt.GetAdminUserId(c)
@@ -62,11 +59,11 @@ func (e *MaterialController) Post(c *gin.Context) {
 	}
 
 	if err := materialService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 素材修改
@@ -77,11 +74,10 @@ func (e *MaterialController) Post(c *gin.Context) {
 func (e *MaterialController) Put(c *gin.Context) {
 	var (
 		model models.SysMaterial
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	uid, _ := jwt.GetAdminUserId(c)
@@ -91,11 +87,11 @@ func (e *MaterialController) Put(c *gin.Context) {
 	}
 
 	if err := materialService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 素材删除
@@ -105,8 +101,7 @@ func (e *MaterialController) Put(c *gin.Context) {
 // @Tags Admin
 func (e *MaterialController) Delete(c *gin.Context) {
 	var (
-		ids  []int64
-		appG = app.Gin{C: c}
+		ids []int64
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	ids = append(ids, id)
@@ -115,11 +110,11 @@ func (e *MaterialController) Delete(c *gin.Context) {
 
 	if err := materialService.Del(); err != nil {
 		global.LOG.Error(err)
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 上传图像
@@ -128,16 +123,15 @@ func (e *MaterialController) Delete(c *gin.Context) {
 // @router /admin/material/upload [post]
 // @Tags Admin
 func (e *MaterialController) Upload(c *gin.Context) {
-	appG := app.Gin{C: c}
 	file, image, err := c.Request.FormFile("file")
 	if err != nil {
 		logging.Warn(err)
-		appG.Response(http.StatusInternalServerError, constant.ERROR, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR, constant.GetMsg(constant.ERROR), nil, c)
 		return
 	}
 
 	if image == nil {
-		appG.Response(http.StatusBadRequest, constant.INVALID_PARAMS, nil)
+		response.Error(http.StatusBadRequest, constant.INVALID_PARAMS, constant.GetMsg(constant.INVALID_PARAMS), nil, c)
 		return
 	}
 
@@ -147,26 +141,26 @@ func (e *MaterialController) Upload(c *gin.Context) {
 	src := fullPath + imageName
 
 	if !upload.CheckImageExt(imageName) || !upload.CheckImageSize(file) {
-		appG.Response(http.StatusBadRequest, constant.ERROR_UPLOAD_CHECK_IMAGE_FORMAT, nil)
+		response.Error(http.StatusBadRequest, constant.ERROR_UPLOAD_CHECK_IMAGE_FORMAT, constant.GetMsg(constant.ERROR_UPLOAD_CHECK_IMAGE_FORMAT), nil, c)
 		return
 	}
 
 	err = upload.CheckImage(fullPath)
 	if err != nil {
 		logging.Warn(err)
-		appG.Response(http.StatusInternalServerError, constant.ERROR_UPLOAD_CHECK_IMAGE_FAIL, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR_UPLOAD_CHECK_IMAGE_FAIL, constant.GetMsg(constant.ERROR_UPLOAD_CHECK_IMAGE_FAIL), nil, c)
 		return
 	}
 
 	if err := c.SaveUploadedFile(image, src); err != nil {
 		logging.Warn(err)
-		appG.Response(http.StatusInternalServerError, constant.ERROR_UPLOAD_SAVE_IMAGE_FAIL, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR_UPLOAD_SAVE_IMAGE_FAIL, constant.GetMsg(constant.ERROR_UPLOAD_SAVE_IMAGE_FAIL), nil, c)
 		return
 	}
 
 	imageUrl := upload.GetImageFullUrl(imageName)
 	//imageSaveUrl := avePath + imageName
 
-	appG.Response(http.StatusOK, constant.SUCCESS, imageUrl)
+	response.OkWithData(imageUrl, c)
 
 }

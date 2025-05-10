@@ -7,6 +7,7 @@ import (
 	"go-mall/app/services/job_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/util"
 	"net/http"
 )
@@ -21,9 +22,6 @@ type JobController struct {
 // @router /admin/job [get]
 // @Tags Admin
 func (e *JobController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	enabled := com.StrTo(c.DefaultQuery("enabled", "-1")).MustInt()
 	name := c.DefaultQuery("blurry", "")
 	jobService := job_service.Job{
@@ -33,7 +31,7 @@ func (e *JobController) GetAll(c *gin.Context) {
 		PageNum:  util.GetPage(c),
 	}
 	vo := jobService.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 岗位添加
@@ -44,11 +42,10 @@ func (e *JobController) GetAll(c *gin.Context) {
 func (e *JobController) Post(c *gin.Context) {
 	var (
 		model models.SysJob
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	jobService := job_service.Job{
@@ -56,11 +53,11 @@ func (e *JobController) Post(c *gin.Context) {
 	}
 
 	if err := jobService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 
 }
 
@@ -72,11 +69,10 @@ func (e *JobController) Post(c *gin.Context) {
 func (e *JobController) Put(c *gin.Context) {
 	var (
 		model models.SysJob
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	jobService := job_service.Job{
@@ -84,11 +80,11 @@ func (e *JobController) Put(c *gin.Context) {
 	}
 
 	if err := jobService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 岗位删除
@@ -98,16 +94,15 @@ func (e *JobController) Put(c *gin.Context) {
 // @Tags Admin
 func (e *JobController) Delete(c *gin.Context) {
 	var (
-		ids  []int64
-		appG = app.Gin{C: c}
+		ids []int64
 	)
 	c.BindJSON(&ids)
 	jobService := job_service.Job{Ids: ids}
 
 	if err := jobService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }

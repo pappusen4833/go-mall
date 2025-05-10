@@ -8,6 +8,7 @@ import (
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	"go-mall/pkg/global"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/util"
 	"net/http"
 )
@@ -22,16 +23,13 @@ type ArticleController struct {
 // @router /weixin/article/info/:id [get]
 // @Tags Admin
 func (e *ArticleController) Get(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	global.LOG.Info(id)
 	articleService := article_service.Article{
 		Id: id,
 	}
 	vo := articleService.Get()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 文章列表
@@ -40,9 +38,6 @@ func (e *ArticleController) Get(c *gin.Context) {
 // @router /weixin/article [get]
 // @Tags Admin
 func (e *ArticleController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	enabled := com.StrTo(c.DefaultQuery("enabled", "-1")).MustInt()
 	name := c.DefaultQuery("blurry", "")
 	articleService := article_service.Article{
@@ -52,7 +47,7 @@ func (e *ArticleController) GetAll(c *gin.Context) {
 		PageNum:  util.GetPage(c),
 	}
 	vo := articleService.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 文章添加
@@ -63,12 +58,11 @@ func (e *ArticleController) GetAll(c *gin.Context) {
 func (e *ArticleController) Post(c *gin.Context) {
 	var (
 		model models.WechatArticle
-		appG  = app.Gin{C: c}
 	)
 
 	paramErr := app.BindAndValidate(c, &model)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 
@@ -77,11 +71,11 @@ func (e *ArticleController) Post(c *gin.Context) {
 	}
 
 	if err := articleService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 
 }
 
@@ -93,11 +87,10 @@ func (e *ArticleController) Post(c *gin.Context) {
 func (e *ArticleController) Put(c *gin.Context) {
 	var (
 		model models.WechatArticle
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	articleService := article_service.Article{
@@ -105,11 +98,11 @@ func (e *ArticleController) Put(c *gin.Context) {
 	}
 
 	if err := articleService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 文章删除
@@ -119,19 +112,18 @@ func (e *ArticleController) Put(c *gin.Context) {
 // @Tags Admin
 func (e *ArticleController) Delete(c *gin.Context) {
 	var (
-		ids  []int64
-		appG = app.Gin{C: c}
+		ids []int64
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	ids = append(ids, id)
 	articleService := article_service.Article{Ids: ids}
 
 	if err := articleService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 发布文章
@@ -140,17 +132,14 @@ func (e *ArticleController) Delete(c *gin.Context) {
 // @router /weixin/article/publish/:id [get]
 // @Tags Admin
 func (e *ArticleController) Pub(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	global.LOG.Info(id)
 	articleService := article_service.Article{
 		Id: id,
 	}
 	if err := articleService.Pub(); err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }

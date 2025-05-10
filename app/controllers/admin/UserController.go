@@ -8,6 +8,7 @@ import (
 	dto2 "go-mall/app/services/user_service/dto"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/jwt"
 	"go-mall/pkg/logging"
 	"go-mall/pkg/upload"
@@ -25,9 +26,6 @@ type UserController struct {
 // @router /admin/user [get]
 // @Tags Admin
 func (e *UserController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	deptId := com.StrTo(c.DefaultQuery("deptId", "-1")).MustInt64()
 	enabled := com.StrTo(c.DefaultQuery("enabled", "-1")).MustInt()
 	blurry := c.DefaultQuery("blurry", "")
@@ -41,7 +39,7 @@ func (e *UserController) GetAll(c *gin.Context) {
 	}
 
 	vo := userService.GetUserAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 用户添加
@@ -52,11 +50,10 @@ func (e *UserController) GetAll(c *gin.Context) {
 func (e *UserController) Post(c *gin.Context) {
 	var (
 		model models.SysUser
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	userService := user_service.User{
@@ -64,11 +61,11 @@ func (e *UserController) Post(c *gin.Context) {
 	}
 
 	if err := userService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 
 }
 
@@ -80,11 +77,10 @@ func (e *UserController) Post(c *gin.Context) {
 func (e *UserController) Put(c *gin.Context) {
 	var (
 		model models.SysUser
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	userService := user_service.User{
@@ -92,11 +88,11 @@ func (e *UserController) Put(c *gin.Context) {
 	}
 
 	if err := userService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 用户删除
@@ -106,18 +102,17 @@ func (e *UserController) Put(c *gin.Context) {
 // @Tags Admin
 func (e *UserController) Delete(c *gin.Context) {
 	var (
-		ids  []int64
-		appG = app.Gin{C: c}
+		ids []int64
 	)
 	c.BindJSON(&ids)
 	userService := user_service.User{Ids: ids}
 
 	if err := userService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 
 }
 
@@ -127,16 +122,15 @@ func (e *UserController) Delete(c *gin.Context) {
 // @router /admin/updateAvatar [post]
 // @Tags Admin
 func (e *UserController) Avatar(c *gin.Context) {
-	appG := app.Gin{C: c}
 	file, image, err := c.Request.FormFile("file")
 	if err != nil {
 		logging.Warn(err)
-		appG.Response(http.StatusInternalServerError, constant.ERROR, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR, constant.GetMsg(constant.ERROR), nil, c)
 		return
 	}
 
 	if image == nil {
-		appG.Response(http.StatusBadRequest, constant.INVALID_PARAMS, nil)
+		response.Error(http.StatusBadRequest, constant.INVALID_PARAMS, constant.GetMsg(constant.INVALID_PARAMS), nil, c)
 		return
 	}
 
@@ -145,31 +139,31 @@ func (e *UserController) Avatar(c *gin.Context) {
 	src := fullPath + imageName
 
 	if !upload.CheckImageExt(imageName) || !upload.CheckImageSize(file) {
-		appG.Response(http.StatusBadRequest, constant.ERROR_UPLOAD_CHECK_IMAGE_FORMAT, nil)
+		response.Error(http.StatusBadRequest, constant.ERROR_UPLOAD_CHECK_IMAGE_FORMAT, constant.GetMsg(constant.ERROR_UPLOAD_CHECK_IMAGE_FORMAT), nil, c)
 		return
 	}
 
 	err = upload.CheckImage(fullPath)
 	if err != nil {
 		logging.Warn(err)
-		appG.Response(http.StatusInternalServerError, constant.ERROR_UPLOAD_CHECK_IMAGE_FAIL, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR_UPLOAD_CHECK_IMAGE_FAIL, constant.GetMsg(constant.ERROR_UPLOAD_CHECK_IMAGE_FAIL), nil, c)
 		return
 	}
 
 	if err := c.SaveUploadedFile(image, src); err != nil {
 		logging.Warn(err)
-		appG.Response(http.StatusInternalServerError, constant.ERROR_UPLOAD_SAVE_IMAGE_FAIL, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR_UPLOAD_SAVE_IMAGE_FAIL, constant.GetMsg(constant.ERROR_UPLOAD_SAVE_IMAGE_FAIL), nil, c)
 		return
 	}
 
 	uid, _ := jwt.GetAdminUserId(c)
 	userService := user_service.User{ImageUrl: upload.GetImageFullUrl(imageName), Id: uid}
 	if err := userService.UpdateImage(); err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 用户修改密码
@@ -180,21 +174,20 @@ func (e *UserController) Avatar(c *gin.Context) {
 func (e *UserController) Pass(c *gin.Context) {
 	var (
 		model dto2.UserPass
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	uid, _ := jwt.GetAdminUserId(c)
 	userService := user_service.User{UserPass: model, Id: uid}
 	if err := userService.UpdatePass(); err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 用户修改个人信息
@@ -205,21 +198,20 @@ func (e *UserController) Pass(c *gin.Context) {
 func (e *UserController) Center(c *gin.Context) {
 	var (
 		model dto2.UserPost
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	uid, _ := jwt.GetAdminUserId(c)
 	userService := user_service.User{UserPost: model, Id: uid}
 	if err := userService.UpdateProfile(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Summary Import Image
@@ -230,16 +222,15 @@ func (e *UserController) Center(c *gin.Context) {
 // @router /admin/upload [post]
 // @Tags Admin
 func UploadImage(c *gin.Context) {
-	appG := app.Gin{C: c}
 	file, image, err := c.Request.FormFile("image")
 	if err != nil {
 		logging.Warn(err)
-		appG.Response(http.StatusInternalServerError, constant.ERROR, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR, constant.GetMsg(constant.ERROR), nil, c)
 		return
 	}
 
 	if image == nil {
-		appG.Response(http.StatusBadRequest, constant.INVALID_PARAMS, nil)
+		response.Error(http.StatusBadRequest, constant.INVALID_PARAMS, constant.GetMsg(constant.INVALID_PARAMS), nil, c)
 		return
 	}
 
@@ -249,25 +240,25 @@ func UploadImage(c *gin.Context) {
 	src := fullPath + imageName
 
 	if !upload.CheckImageExt(imageName) || !upload.CheckImageSize(file) {
-		appG.Response(http.StatusBadRequest, constant.ERROR_UPLOAD_CHECK_IMAGE_FORMAT, nil)
+		response.Error(http.StatusBadRequest, constant.ERROR_UPLOAD_CHECK_IMAGE_FORMAT, constant.GetMsg(constant.ERROR_UPLOAD_CHECK_IMAGE_FORMAT), nil, c)
 		return
 	}
 
 	err = upload.CheckImage(fullPath)
 	if err != nil {
 		logging.Warn(err)
-		appG.Response(http.StatusInternalServerError, constant.ERROR_UPLOAD_CHECK_IMAGE_FAIL, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR_UPLOAD_CHECK_IMAGE_FAIL, constant.GetMsg(constant.ERROR_UPLOAD_CHECK_IMAGE_FAIL), nil, c)
 		return
 	}
 
 	if err := c.SaveUploadedFile(image, src); err != nil {
 		logging.Warn(err)
-		appG.Response(http.StatusInternalServerError, constant.ERROR_UPLOAD_SAVE_IMAGE_FAIL, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR_UPLOAD_SAVE_IMAGE_FAIL, constant.GetMsg(constant.ERROR_UPLOAD_SAVE_IMAGE_FAIL), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, map[string]string{
+	response.OkWithData(map[string]string{
 		"image_url":      upload.GetImageFullUrl(imageName),
 		"image_save_url": savePath + imageName,
-	})
+	}, c)
 }

@@ -7,6 +7,7 @@ import (
 	dto2 "go-mall/app/services/product_service/dto"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/util"
 	"net/http"
 )
@@ -21,9 +22,6 @@ type StoreProductRuleController struct {
 // @router /shop/rule [get]
 // @Tags Admin
 func (e *StoreProductRuleController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	enabled := com.StrTo(c.DefaultQuery("enabled", "-1")).MustInt()
 	name := c.DefaultQuery("blurry", "")
 	ruleService := product_rule_service.Rule{
@@ -33,7 +31,7 @@ func (e *StoreProductRuleController) GetAll(c *gin.Context) {
 		PageNum:  util.GetPage(c),
 	}
 	vo := ruleService.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 商品规格sku添加
@@ -43,13 +41,12 @@ func (e *StoreProductRuleController) GetAll(c *gin.Context) {
 // @Tags Admin
 func (e *StoreProductRuleController) Post(c *gin.Context) {
 	var (
-		dto  dto2.ProductRule
-		appG = app.Gin{C: c}
+		dto dto2.ProductRule
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	httpCode, errCode := app.BindAndValid(c, &dto)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	ruleService := product_rule_service.Rule{
@@ -58,11 +55,11 @@ func (e *StoreProductRuleController) Post(c *gin.Context) {
 	}
 
 	if err := ruleService.AddOrSave(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 
 }
 
@@ -73,16 +70,15 @@ func (e *StoreProductRuleController) Post(c *gin.Context) {
 // @Tags Admin
 func (e *StoreProductRuleController) Delete(c *gin.Context) {
 	var (
-		ids  []int64
-		appG = app.Gin{C: c}
+		ids []int64
 	)
 	c.BindJSON(&ids)
 	ruleService := product_rule_service.Rule{Ids: ids}
 
 	if err := ruleService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }

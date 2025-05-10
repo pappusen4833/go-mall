@@ -3,8 +3,8 @@ package admin
 import (
 	"github.com/gin-gonic/gin"
 	"go-mall/app/services/log_service"
-	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/util"
 	"net/http"
 )
@@ -19,9 +19,6 @@ type LogController struct {
 // @router /admin/logs [get]
 // @Tags Admin
 func (e *LogController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	blurry := c.DefaultQuery("blurry", "")
 	logService := log_service.Log{
 		Des:      blurry,
@@ -29,7 +26,7 @@ func (e *LogController) GetAll(c *gin.Context) {
 		PageNum:  util.GetPage(c),
 	}
 	vo := logService.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 日志删除
@@ -39,16 +36,15 @@ func (e *LogController) GetAll(c *gin.Context) {
 // @Tags Admin
 func (e *LogController) Delete(c *gin.Context) {
 	var (
-		ids  []int64
-		appG = app.Gin{C: c}
+		ids []int64
 	)
 	c.BindJSON(&ids)
 	logService := log_service.Log{Ids: ids}
 
 	if err := logService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }

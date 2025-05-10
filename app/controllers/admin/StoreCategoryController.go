@@ -7,6 +7,7 @@ import (
 	"go-mall/app/services/cate_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"net/http"
 )
 
@@ -20,14 +21,11 @@ type StoreCategoryController struct {
 // @router /shop/cate [get]
 // @Tags Admin
 func (e *StoreCategoryController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	name := c.DefaultQuery("name", "")
 	enabled := com.StrTo(c.DefaultQuery("enabled", "-1")).MustInt()
 	cateService := cate_service.Cate{Name: name, Enabled: enabled}
 	vo := cateService.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 添加商品分类
@@ -38,11 +36,10 @@ func (e *StoreCategoryController) GetAll(c *gin.Context) {
 func (e *StoreCategoryController) Post(c *gin.Context) {
 	var (
 		model models.StoreCategory
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	cateService := cate_service.Cate{
@@ -50,11 +47,11 @@ func (e *StoreCategoryController) Post(c *gin.Context) {
 	}
 
 	if err := cateService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 修改商品分类
@@ -65,11 +62,10 @@ func (e *StoreCategoryController) Post(c *gin.Context) {
 func (e *StoreCategoryController) Put(c *gin.Context) {
 	var (
 		model models.StoreCategory
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	cateService := cate_service.Cate{
@@ -77,11 +73,11 @@ func (e *StoreCategoryController) Put(c *gin.Context) {
 	}
 
 	if err := cateService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 删除商品分类
@@ -91,16 +87,15 @@ func (e *StoreCategoryController) Put(c *gin.Context) {
 // @Tags Admin
 func (e *StoreCategoryController) Delete(c *gin.Context) {
 	var (
-		ids  []int64
-		appG = app.Gin{C: c}
+		ids []int64
 	)
 	c.BindJSON(&ids)
 	cateService := cate_service.Cate{Ids: ids}
 
 	if err := cateService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }

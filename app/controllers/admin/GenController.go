@@ -8,6 +8,7 @@ import (
 	"go-mall/app/services/gen_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/util"
 	"net/http"
 )
@@ -22,9 +23,6 @@ type GenController struct {
 // @router /tools/gen/tables [get]
 // @Tags Admin
 func (e *GenController) GetAllDBTables(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	enabled := com.StrTo(c.DefaultQuery("enabled", "-1")).MustInt()
 	name := c.DefaultQuery("blurry", "")
 	genService := gen_service.Gen{
@@ -34,7 +32,7 @@ func (e *GenController) GetAllDBTables(c *gin.Context) {
 		PageNum:  util.GetPage(c),
 	}
 	vo := genService.GetDBTablesAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 导入数据库表
@@ -45,11 +43,10 @@ func (e *GenController) GetAllDBTables(c *gin.Context) {
 func (e *GenController) ImportTable(c *gin.Context) {
 	var (
 		param admin.GenTableParan
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &param)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	genService := gen_service.Gen{
@@ -57,11 +54,11 @@ func (e *GenController) ImportTable(c *gin.Context) {
 	}
 
 	if err := genService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 
 }
 
@@ -71,9 +68,6 @@ func (e *GenController) ImportTable(c *gin.Context) {
 // @router /tools/gen/systables [get]
 // @Tags Admin
 func (e *GenController) GetAllTables(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	enabled := com.StrTo(c.DefaultQuery("enabled", "-1")).MustInt()
 	name := c.DefaultQuery("blurry", "")
 	genService := gen_service.Gen{
@@ -83,7 +77,7 @@ func (e *GenController) GetAllTables(c *gin.Context) {
 		PageNum:  util.GetPage(c),
 	}
 	vo := genService.GetTablesAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 获取表的信息
@@ -92,15 +86,12 @@ func (e *GenController) GetAllTables(c *gin.Context) {
 // @router /tools/gen/config/:name [get]
 // @Tags Admin
 func (e *GenController) GetTableInfo(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	name := c.Param("name")
 	genService := gen_service.Gen{
 		Name: name,
 	}
 	vo := genService.GetTableInfo()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 获取表的列信息
@@ -109,15 +100,12 @@ func (e *GenController) GetTableInfo(c *gin.Context) {
 // @router /tools/gen/columns [get]
 // @Tags Admin
 func (e *GenController) GetTableColumns(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	name := c.DefaultQuery("tableName", "")
 	genService := gen_service.Gen{
 		Name: name,
 	}
 	vo := genService.GetTableColumns()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 保存配置
@@ -128,11 +116,10 @@ func (e *GenController) GetTableColumns(c *gin.Context) {
 func (e *GenController) ConfigPut(c *gin.Context) {
 	var (
 		model models.SysTables
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	genService := gen_service.Gen{
@@ -140,11 +127,11 @@ func (e *GenController) ConfigPut(c *gin.Context) {
 	}
 
 	if err := genService.TableSave(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 保存列配置
@@ -155,10 +142,9 @@ func (e *GenController) ConfigPut(c *gin.Context) {
 func (e *GenController) ColumnsPut(c *gin.Context) {
 	var (
 		model []models.SysColumns
-		appG  = app.Gin{C: c}
 	)
 	if err := c.ShouldBindJSON(&model); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
@@ -167,11 +153,11 @@ func (e *GenController) ColumnsPut(c *gin.Context) {
 	}
 
 	if err := genService.ColumnSave(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 代码预览
@@ -180,15 +166,12 @@ func (e *GenController) ColumnsPut(c *gin.Context) {
 // @router /tools/gen/preview [get]
 // @Tags Admin
 func (e *GenController) Preview(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	name := c.Param("name")
 	genService := gen_service.Gen{
 		Name: name,
 	}
 	vo := genService.Preview()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 代码生产
@@ -197,13 +180,11 @@ func (e *GenController) Preview(c *gin.Context) {
 // @router /tools/gen/code [get]
 // @Tags Admin
 func (e *GenController) GenCode(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	name := c.Param("name")
 	genService := gen_service.Gen{
 		Name: name,
 	}
 	genService.GenCode()
-	appG.Response(http.StatusOK, "代码已经成功生成在根目录template下", nil)
+	//appG.Response(http.StatusOK, "代码已经成功生成在根目录template下", nil)
+	response.OkWithData("代码已经成功生成在根目录template下", c)
 }

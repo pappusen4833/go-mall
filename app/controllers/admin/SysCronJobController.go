@@ -7,6 +7,7 @@ import (
 	"go-mall/app/services/cron_job_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/util"
 	"net/http"
 )
@@ -20,9 +21,6 @@ type SysCronJobController struct {
 // @router /tools/timing [get]
 // @Tags Admin
 func (e *SysCronJobController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	enabled := com.StrTo(c.DefaultQuery("enabled", "-1")).MustInt()
 	name := c.DefaultQuery("blurry", "")
 	service := cron_job_service.SysCronJob{
@@ -32,7 +30,7 @@ func (e *SysCronJobController) GetAll(c *gin.Context) {
 		PageNum:  util.GetPage(c),
 	}
 	vo := service.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 添加定时任务调度表
@@ -43,11 +41,10 @@ func (e *SysCronJobController) GetAll(c *gin.Context) {
 func (e *SysCronJobController) Post(c *gin.Context) {
 	var (
 		model models.SysCronJob
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	service := cron_job_service.SysCronJob{
@@ -55,11 +52,11 @@ func (e *SysCronJobController) Post(c *gin.Context) {
 	}
 
 	if err := service.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 修改定时任务调度表
@@ -70,11 +67,10 @@ func (e *SysCronJobController) Post(c *gin.Context) {
 func (e *SysCronJobController) Put(c *gin.Context) {
 	var (
 		model models.SysCronJob
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	service := cron_job_service.SysCronJob{
@@ -82,11 +78,11 @@ func (e *SysCronJobController) Put(c *gin.Context) {
 	}
 
 	if err := service.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 删除定时任务调度表
@@ -96,8 +92,7 @@ func (e *SysCronJobController) Put(c *gin.Context) {
 // @Tags Admin
 func (e *SysCronJobController) Delete(c *gin.Context) {
 	var (
-		ids  []int64
-		appG = app.Gin{C: c}
+		ids []int64
 	)
 
 	if strId := c.Param("id"); strId != "" {
@@ -109,11 +104,11 @@ func (e *SysCronJobController) Delete(c *gin.Context) {
 
 	service := cron_job_service.SysCronJob{Ids: ids}
 	if err := service.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 执行定时任务调度表
@@ -122,20 +117,17 @@ func (e *SysCronJobController) Delete(c *gin.Context) {
 // @router /tools/timing/exec/:id [put]
 // @Tags Admin
 func (e *SysCronJobController) Exec(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	service := cron_job_service.SysCronJob{
 		Id: id,
 	}
 
 	if err := service.Exec(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, err.Error())
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), err.Error(), c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 停止定时任务调度表
@@ -144,18 +136,15 @@ func (e *SysCronJobController) Exec(c *gin.Context) {
 // @router /tools/timing/stop/:id [put]
 // @Tags Admin
 func (e *SysCronJobController) Stop(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	service := cron_job_service.SysCronJob{
 		Id: id,
 	}
 
 	if err := service.Stop(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, err.Error())
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), err.Error(), c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }

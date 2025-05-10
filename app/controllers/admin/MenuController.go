@@ -8,6 +8,7 @@ import (
 	"go-mall/app/services/menu_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/jwt"
 	"net/http"
 )
@@ -22,14 +23,11 @@ type MenuController struct {
 // @router /admin/menu [get]
 // @Tags Admin
 func (e *MenuController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	name := c.DefaultQuery("blurry", "")
 	enabled := com.StrTo(c.DefaultQuery("enabled", "-1")).MustInt()
 	menuService := menu_service.Menu{Name: name, Enabled: enabled}
 	vo := menuService.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 菜单添加
@@ -40,11 +38,10 @@ func (e *MenuController) GetAll(c *gin.Context) {
 func (e *MenuController) Post(c *gin.Context) {
 	var (
 		model models.SysMenu
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	menuService := menu_service.Menu{
@@ -52,11 +49,11 @@ func (e *MenuController) Post(c *gin.Context) {
 	}
 
 	if err := menuService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 菜单修改
@@ -67,11 +64,10 @@ func (e *MenuController) Post(c *gin.Context) {
 func (e *MenuController) Put(c *gin.Context) {
 	var (
 		model models.SysMenu
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	menuService := menu_service.Menu{
@@ -79,11 +75,11 @@ func (e *MenuController) Put(c *gin.Context) {
 	}
 
 	if err := menuService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 菜单删除
@@ -93,18 +89,17 @@ func (e *MenuController) Put(c *gin.Context) {
 // @Tags Admin
 func (e *MenuController) Delete(c *gin.Context) {
 	var (
-		ids  []int64
-		appG = app.Gin{C: c}
+		ids []int64
 	)
 	c.BindJSON(&ids)
 	menuService := menu_service.Menu{Ids: ids}
 
 	if err := menuService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 菜单构建
@@ -113,14 +108,11 @@ func (e *MenuController) Delete(c *gin.Context) {
 // @router /admin/menu/build [get]
 // @Tags Admin
 func (e *MenuController) Build(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	uid, _ := jwt.GetAdminUserId(c)
 	menuService := menu_service.Menu{Uid: uid}
 	logs.Info(uid)
 	menus := menuService.BuildMenus()
-	appG.Response(http.StatusOK, constant.SUCCESS, menus)
+	response.OkWithData(menus, c)
 }
 
 // @Title 菜单树形
@@ -129,10 +121,7 @@ func (e *MenuController) Build(c *gin.Context) {
 // @router /admin/menu/tree [get]
 // @Tags Admin
 func (e *MenuController) GetTree(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	menuService := menu_service.Menu{}
 	vo := menuService.GetTree()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }

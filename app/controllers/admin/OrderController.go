@@ -12,6 +12,7 @@ import (
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	"go-mall/pkg/global"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/util"
 	"net/http"
 )
@@ -26,9 +27,6 @@ type OrderController struct {
 // @router /shop/order [get]
 // @Tags Admin
 func (e *OrderController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	enabled := com.StrTo(c.DefaultQuery("enabled", "-1")).MustInt()
 	name := c.DefaultQuery("blurry", "")
 	orderService := order_service.Order{
@@ -39,7 +37,7 @@ func (e *OrderController) GetAll(c *gin.Context) {
 		IntType:  com.StrTo(c.Query("orderStatus")).MustInt(),
 	}
 	vo := orderService.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 创建订单
@@ -50,12 +48,11 @@ func (e *OrderController) GetAll(c *gin.Context) {
 func (e *OrderController) Post(c *gin.Context) {
 	var (
 		model models.WechatArticle
-		appG  = app.Gin{C: c}
 	)
 
 	paramErr := app.BindAndValidate(c, &model)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 
@@ -64,11 +61,11 @@ func (e *OrderController) Post(c *gin.Context) {
 	}
 
 	if err := articleService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 
 }
 
@@ -80,11 +77,10 @@ func (e *OrderController) Post(c *gin.Context) {
 func (e *OrderController) Put(c *gin.Context) {
 	var (
 		model models.StoreOrder
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	orderService := order_service.Order{
@@ -92,11 +88,11 @@ func (e *OrderController) Put(c *gin.Context) {
 	}
 
 	if err := orderService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 订单发货
@@ -107,11 +103,10 @@ func (e *OrderController) Put(c *gin.Context) {
 func (e *OrderController) Deliver(c *gin.Context) {
 	var (
 		model models.StoreOrder
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	orderService := order_service.Order{
@@ -120,11 +115,11 @@ func (e *OrderController) Deliver(c *gin.Context) {
 
 	if err := orderService.Deliver(); err != nil {
 		global.LOG.Error(err)
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 订单快递查询
@@ -135,11 +130,10 @@ func (e *OrderController) Deliver(c *gin.Context) {
 func (e *OrderController) DeliverQuery(c *gin.Context) {
 	var (
 		model dto.Express
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 
@@ -155,11 +149,11 @@ func (e *OrderController) DeliverQuery(c *gin.Context) {
 	}
 	//
 	if resp.Success == false {
-		appG.Response(http.StatusInternalServerError, resp.Reason, nil)
+		response.Error(http.StatusInternalServerError, 9999, resp.Reason, nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, resp.Traces)
+	response.OkWithData(resp.Traces, c)
 }
 
 // @Title 订单删除
@@ -169,17 +163,16 @@ func (e *OrderController) DeliverQuery(c *gin.Context) {
 // @Tags Admin
 func (e *OrderController) Delete(c *gin.Context) {
 	var (
-		ids  []int64
-		appG = app.Gin{C: c}
+		ids []int64
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	ids = append(ids, id)
 	orderService := order_service.Order{Ids: ids}
 
 	if err := orderService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }

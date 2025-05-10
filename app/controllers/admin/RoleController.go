@@ -8,6 +8,7 @@ import (
 	"go-mall/app/services/role_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/logging"
 	"go-mall/pkg/util"
 	"net/http"
@@ -24,15 +25,12 @@ type RoleController struct {
 // @router /admin/roles/:id [get]
 // @Tags Admin
 func (e *RoleController) GetOne(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	roleService := role_service.Role{
 		Id: id,
 	}
 	vo := roleService.GetOneRole()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 角色列表
@@ -41,9 +39,6 @@ func (e *RoleController) GetOne(c *gin.Context) {
 // @router /admin/roles [get]
 // @Tags Admin
 func (e *RoleController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	blurry := c.DefaultQuery("blurry", "")
 	roleService := role_service.Role{
 		Name:     blurry,
@@ -51,7 +46,7 @@ func (e *RoleController) GetAll(c *gin.Context) {
 		PageNum:  util.GetPage(c),
 	}
 	vo := roleService.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 角色添加
@@ -62,11 +57,10 @@ func (e *RoleController) GetAll(c *gin.Context) {
 func (e *RoleController) Post(c *gin.Context) {
 	var (
 		model models.SysRole
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	roleService := role_service.Role{
@@ -74,11 +68,11 @@ func (e *RoleController) Post(c *gin.Context) {
 	}
 
 	if err := roleService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @router /admin/roles [put]
@@ -86,11 +80,10 @@ func (e *RoleController) Post(c *gin.Context) {
 func (e *RoleController) Put(c *gin.Context) {
 	var (
 		model models.SysRole
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	roleService := role_service.Role{
@@ -98,11 +91,11 @@ func (e *RoleController) Put(c *gin.Context) {
 	}
 
 	if err := roleService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 角色删除
@@ -112,18 +105,17 @@ func (e *RoleController) Put(c *gin.Context) {
 // @Tags Admin
 func (e *RoleController) Delete(c *gin.Context) {
 	var (
-		ids  []int64
-		appG = app.Gin{C: c}
+		ids []int64
 	)
 	c.BindJSON(&ids)
 	roleService := role_service.Role{Ids: ids}
 
 	if err := roleService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 角色菜单更新
@@ -134,21 +126,20 @@ func (e *RoleController) Delete(c *gin.Context) {
 func (e *RoleController) Menu(c *gin.Context) {
 	var (
 		model dto2.RoleMenu
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	logging.Info(model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 
 	roleService := role_service.Role{Dto: model}
 	if err := roleService.BatchRoleMenuAdd(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 
 }

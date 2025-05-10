@@ -8,6 +8,7 @@ import (
 	"go-mall/app/services/user_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/jwt"
 	"go-mall/pkg/logging"
 	"go-mall/pkg/util"
@@ -37,7 +38,6 @@ var store = base64Captcha.DefaultMemStore
 func (e *LoginController) Login(c *gin.Context) {
 	var (
 		authUser dto.AuthUser
-		appG     = app.Gin{C: c}
 	)
 
 	//body, _ := ioutil.ReadAll(c.Request.Body)
@@ -46,31 +46,31 @@ func (e *LoginController) Login(c *gin.Context) {
 	httpCode, errCode := app.BindAndValid(c, &authUser)
 	logging.Info(authUser)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 
 	userService := user_service.User{Username: authUser.Username}
 	currentUser, err := userService.GetUserOneByName()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, constant.ERROR_NOT_EXIST_USER, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR_NOT_EXIST_USER, constant.GetMsg(constant.ERROR_NOT_EXIST_USER), nil, c)
 		return
 	}
 
 	//校验验证码
 	if !store.Verify(authUser.Id, authUser.Code, true) {
-		appG.Response(http.StatusInternalServerError, constant.ERROR_CAPTCHA_USER, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR_CAPTCHA_USER, constant.GetMsg(constant.ERROR_CAPTCHA_USER), nil, c)
 		return
 	}
 	if !util.ComparePwd(currentUser.Password, []byte(authUser.Password)) {
-		appG.Response(http.StatusInternalServerError, constant.ERROR_PASS_USER, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR_PASS_USER, constant.GetMsg(constant.ERROR_PASS_USER), nil, c)
 		return
 	}
 	token, _ := jwt.GenerateToken(currentUser, time.Hour*24*100)
 	var loginVO = new(vo.LoginVo)
 	loginVO.Token = token
 	loginVO.User = currentUser
-	appG.Response(http.StatusOK, constant.SUCCESS, loginVO)
+	response.OkWithData(loginVO, c)
 
 }
 
@@ -80,10 +80,7 @@ func (e *LoginController) Login(c *gin.Context) {
 // @router /admin/info [get]
 // @Tags Admin
 func (e *LoginController) Info(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
-	appG.Response(http.StatusOK, constant.SUCCESS, jwt.GetAdminDetailUser(c))
+	response.OkWithData(jwt.GetAdminDetailUser(c), c)
 }
 
 // @Title 退出登录
@@ -92,16 +89,13 @@ func (e *LoginController) Info(c *gin.Context) {
 // @router /admin/logout [delete]
 // @Tags Admin
 func (e *LoginController) Logout(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	err := jwt.RemoveUser(c)
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_LOGOUT_USER, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_LOGOUT_USER, constant.GetMsg(constant.FAIL_LOGOUT_USER), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 获取验证码
@@ -115,7 +109,6 @@ func (e *LoginController) Captcha(c *gin.Context) {
 // 生成图形化验证码  ctx *context.Context
 func GenerateCaptcha(c *gin.Context) {
 	var (
-		appG         = app.Gin{C: c}
 		driver       base64Captcha.Driver
 		driverString base64Captcha.DriverMath
 	)
@@ -149,5 +142,5 @@ func GenerateCaptcha(c *gin.Context) {
 		Base64Blob: b64s,
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, captchaResult)
+	response.OkWithData(captchaResult, c)
 }

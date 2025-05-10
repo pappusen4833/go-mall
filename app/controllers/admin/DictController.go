@@ -7,6 +7,7 @@ import (
 	"go-mall/app/services/dict_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/util"
 	"net/http"
 )
@@ -21,9 +22,6 @@ type DictController struct {
 // @router /admin/dict [get]
 // @Tags Admin
 func (e *DictController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	enabled := com.StrTo(c.DefaultQuery("enabled", "-1")).MustInt()
 	name := c.DefaultQuery("blurry", "")
 	dictService := dict_service.Dict{
@@ -33,7 +31,7 @@ func (e *DictController) GetAll(c *gin.Context) {
 		PageNum:  util.GetPage(c),
 	}
 	vo := dictService.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 添加字典
@@ -44,11 +42,10 @@ func (e *DictController) GetAll(c *gin.Context) {
 func (e *DictController) Post(c *gin.Context) {
 	var (
 		model models.SysDict
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	dictService := dict_service.Dict{
@@ -56,11 +53,11 @@ func (e *DictController) Post(c *gin.Context) {
 	}
 
 	if err := dictService.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 修改字典
@@ -71,11 +68,10 @@ func (e *DictController) Post(c *gin.Context) {
 func (e *DictController) Put(c *gin.Context) {
 	var (
 		model models.SysDict
-		appG  = app.Gin{C: c}
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	dictService := dict_service.Dict{
@@ -83,11 +79,11 @@ func (e *DictController) Put(c *gin.Context) {
 	}
 
 	if err := dictService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 删除字典
@@ -97,17 +93,16 @@ func (e *DictController) Put(c *gin.Context) {
 // @Tags Admin
 func (e *DictController) Delete(c *gin.Context) {
 	var (
-		ids  []int64
-		appG = app.Gin{C: c}
+		ids []int64
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	ids = append(ids, id)
 
 	dictService := dict_service.Dict{Ids: ids}
 	if err := dictService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }

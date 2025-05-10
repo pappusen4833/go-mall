@@ -7,6 +7,7 @@ import (
 	"go-mall/app/services/canvas_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"net/http"
 )
 
@@ -20,15 +21,12 @@ type CanvasController struct {
 // @router /admin/canvas/getCanvas [get]
 // @Tags Admin
 func (e *CanvasController) Get(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	terminal := com.StrTo(c.DefaultQuery("terminal", "3")).MustInt()
 	canvasService := canvas_service.Canvas{
 		Terminal: terminal,
 	}
 	vo := canvasService.Get()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 画布添加/修改
@@ -39,11 +37,10 @@ func (e *CanvasController) Get(c *gin.Context) {
 func (e *CanvasController) Post(c *gin.Context) {
 	var (
 		model models.StoreCanvas
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &model)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 
@@ -52,10 +49,10 @@ func (e *CanvasController) Post(c *gin.Context) {
 	}
 
 	if err := canvasService.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 
 }

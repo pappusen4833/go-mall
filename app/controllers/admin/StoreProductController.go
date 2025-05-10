@@ -7,6 +7,7 @@ import (
 	dto2 "go-mall/app/services/product_service/dto"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/util"
 	"net/http"
 )
@@ -21,9 +22,6 @@ type StoreProductController struct {
 // @router /shop/product [get]
 // @Tags Admin
 func (e *StoreProductController) GetAll(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	enabled := com.StrTo(c.DefaultQuery("isShow", "-1")).MustInt()
 	name := c.DefaultQuery("blurry", "")
 	productService := product_service.Product{
@@ -33,7 +31,7 @@ func (e *StoreProductController) GetAll(c *gin.Context) {
 		PageNum:  util.GetPage(c),
 	}
 	vo := productService.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 获取商品信息
@@ -42,15 +40,12 @@ func (e *StoreProductController) GetAll(c *gin.Context) {
 // @router /shop/product/info/:id [get]
 // @Tags Admin
 func (e *StoreProductController) GetInfo(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	productService := product_service.Product{
 		Id: id,
 	}
 	vo := productService.GetProductInfo()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 商品添加
@@ -60,12 +55,11 @@ func (e *StoreProductController) GetInfo(c *gin.Context) {
 // @Tags Admin
 func (e *StoreProductController) Post(c *gin.Context) {
 	var (
-		dto  dto2.StoreProduct
-		appG = app.Gin{C: c}
+		dto dto2.StoreProduct
 	)
 	httpCode, errCode := app.BindAndValid(c, &dto)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
 	productService := product_service.Product{
@@ -73,11 +67,11 @@ func (e *StoreProductController) Post(c *gin.Context) {
 	}
 
 	if err := productService.AddOrSaveProduct(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 
 }
 
@@ -88,8 +82,7 @@ func (e *StoreProductController) Post(c *gin.Context) {
 // @Tags Admin
 func (e *StoreProductController) OnSale(c *gin.Context) {
 	var (
-		dto  dto2.OnSale
-		appG = app.Gin{C: c}
+		dto dto2.OnSale
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	productService := product_service.Product{
@@ -98,11 +91,11 @@ func (e *StoreProductController) OnSale(c *gin.Context) {
 	}
 
 	if err := productService.OnSaleByProduct(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 
 }
 
@@ -113,19 +106,18 @@ func (e *StoreProductController) OnSale(c *gin.Context) {
 // @Tags Admin
 func (e *StoreProductController) Delete(c *gin.Context) {
 	var (
-		ids  []int64
-		appG = app.Gin{C: c}
+		ids []int64
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	ids = append(ids, id)
 
 	productService := product_service.Product{Ids: ids}
 	if err := productService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 商品sku生成
@@ -135,7 +127,6 @@ func (e *StoreProductController) Delete(c *gin.Context) {
 // @Tags Admin
 func (e *StoreProductController) FormatAttr(c *gin.Context) {
 	var (
-		appG    = app.Gin{C: c}
 		jsonObj map[string]interface{}
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
@@ -145,5 +136,5 @@ func (e *StoreProductController) FormatAttr(c *gin.Context) {
 		JsonObj: jsonObj,
 	}
 	vo := productService.PublicFormatAttr()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
