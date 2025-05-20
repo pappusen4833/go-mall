@@ -5,9 +5,9 @@ import (
 	"github.com/unknwon/com"
 	"go-mall/app/services/canvas_service"
 	"go-mall/app/services/product_service"
-	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	productEnum "go-mall/pkg/enums/product"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/logging"
 	"go-mall/pkg/upload"
 	"net/http"
@@ -23,10 +23,6 @@ type IndexController struct {
 // @router /api/v1/index [get]
 // @Tags Front API
 func (e *IndexController) GetIndex(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
-
 	productService := product_service.Product{
 		Enabled:  1,
 		PageNum:  0,
@@ -53,7 +49,7 @@ func (e *IndexController) GetIndex(c *gin.Context) {
 		"firstList": vo3,
 		"benefit":   vo4,
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, res)
+	response.OkWithData(res, c)
 
 }
 
@@ -63,15 +59,12 @@ func (e *IndexController) GetIndex(c *gin.Context) {
 // @router /api/v1/getCanvas [get]
 // @Tags Front API
 func (e *IndexController) GetCanvas(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	terminal := com.StrTo(c.DefaultQuery("terminal", "3")).MustInt()
 	canvasService := canvas_service.Canvas{
 		Terminal: terminal,
 	}
 	vo := canvasService.Get()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 
 }
 
@@ -81,16 +74,15 @@ func (e *IndexController) GetCanvas(c *gin.Context) {
 // @router /upload [post]
 // @Tags Front API
 func (e *IndexController) Upload(c *gin.Context) {
-	appG := app.Gin{C: c}
 	file, image, err := c.Request.FormFile("file")
 	if err != nil {
 		logging.Warn(err)
-		appG.Response(http.StatusInternalServerError, constant.ERROR, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR, constant.GetMsg(constant.ERROR), nil, c)
 		return
 	}
 
 	if image == nil {
-		appG.Response(http.StatusBadRequest, constant.INVALID_PARAMS, nil)
+		response.Error(http.StatusBadRequest, constant.INVALID_PARAMS, constant.GetMsg(constant.INVALID_PARAMS), nil, c)
 		return
 	}
 
@@ -100,26 +92,26 @@ func (e *IndexController) Upload(c *gin.Context) {
 	src := fullPath + imageName
 
 	if !upload.CheckImageExt(imageName) || !upload.CheckImageSize(file) {
-		appG.Response(http.StatusBadRequest, constant.ERROR_UPLOAD_CHECK_IMAGE_FORMAT, nil)
+		response.Error(http.StatusBadRequest, constant.ERROR_UPLOAD_CHECK_IMAGE_FORMAT, constant.GetMsg(constant.ERROR_UPLOAD_CHECK_IMAGE_FORMAT), nil, c)
 		return
 	}
 
 	err = upload.CheckImage(fullPath)
 	if err != nil {
 		logging.Warn(err)
-		appG.Response(http.StatusInternalServerError, constant.ERROR_UPLOAD_CHECK_IMAGE_FAIL, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR_UPLOAD_CHECK_IMAGE_FAIL, constant.GetMsg(constant.ERROR_UPLOAD_CHECK_IMAGE_FAIL), nil, c)
 		return
 	}
 
 	if err := c.SaveUploadedFile(image, src); err != nil {
 		logging.Warn(err)
-		appG.Response(http.StatusInternalServerError, constant.ERROR_UPLOAD_SAVE_IMAGE_FAIL, nil)
+		response.Error(http.StatusInternalServerError, constant.ERROR_UPLOAD_SAVE_IMAGE_FAIL, constant.GetMsg(constant.ERROR_UPLOAD_SAVE_IMAGE_FAIL), nil, c)
 		return
 	}
 
 	imageUrl := upload.GetImageFullUrl(imageName)
 	//imageSaveUrl := avePath + imageName
 
-	appG.Response(http.StatusOK, constant.SUCCESS, imageUrl)
+	response.OkWithData(imageUrl, c)
 
 }

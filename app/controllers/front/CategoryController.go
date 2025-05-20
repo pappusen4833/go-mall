@@ -3,9 +3,7 @@ package front
 import (
 	"github.com/gin-gonic/gin"
 	"go-mall/app/services/cate_service"
-	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
-	"net/http"
+	"go-mall/pkg/http/response"
 )
 
 // category api
@@ -18,11 +16,8 @@ type CategoryController struct {
 // @router /api/v1/category [get]
 // @Tags Front API
 func (e *CategoryController) GetCateList(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	cateService := cate_service.Cate{Enabled: 1}
 	vo := cateService.GetAll()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 
 }

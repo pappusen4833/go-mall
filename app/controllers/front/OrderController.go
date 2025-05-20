@@ -9,8 +9,8 @@ import (
 	orderDto "go-mall/app/services/order_service/dto"
 	"go-mall/app/services/pay_service"
 	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
 	"go-mall/pkg/global"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/jwt"
 	"go-mall/pkg/util"
 	"net/http"
@@ -28,11 +28,10 @@ type OrderController struct {
 func (e *OrderController) Confirm(c *gin.Context) {
 	var (
 		param params.ConfirmOrderParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 
@@ -45,10 +44,10 @@ func (e *OrderController) Confirm(c *gin.Context) {
 	}
 	vo, err := orderService.ConfirmOrder()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 
 }
 
@@ -60,11 +59,10 @@ func (e *OrderController) Confirm(c *gin.Context) {
 func (e *OrderController) Compute(c *gin.Context) {
 	var (
 		param params.ComputeOrderParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 
@@ -77,23 +75,22 @@ func (e *OrderController) Compute(c *gin.Context) {
 	}
 	checkMap, err := orderService.Check()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
 	if checkMap != nil {
-		appG.Response(http.StatusOK, checkMap["msg"], checkMap)
+		response.OkWithDetailed(checkMap, checkMap["msg"].(string), c)
 		return
 	}
 	vo, err := orderService.ComputeOrder()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, gin.H{
+	response.OkWithData(gin.H{
 		"result": vo,
 		"status": "NONE",
-	})
-
+	}, c)
 }
 
 // @Title 订单创建
@@ -104,11 +101,10 @@ func (e *OrderController) Compute(c *gin.Context) {
 func (e *OrderController) Create(c *gin.Context) {
 	var (
 		param params.OrderParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 
@@ -122,7 +118,7 @@ func (e *OrderController) Create(c *gin.Context) {
 	}
 	order, err := orderService.CreateOrder()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
 
@@ -137,7 +133,7 @@ func (e *OrderController) Create(c *gin.Context) {
 		"createTune": order.CreateTime,
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, returnMap)
+	response.OkWithData(returnMap, c)
 
 }
 
@@ -149,11 +145,10 @@ func (e *OrderController) Create(c *gin.Context) {
 func (e *OrderController) Pay(c *gin.Context) {
 	var (
 		param params.PayParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 
@@ -169,10 +164,10 @@ func (e *OrderController) Pay(c *gin.Context) {
 
 	newMap, err := pay_service.GoPay(returnMap, param.Uni, param.PayType, param.From, uid, orderExtendDto)
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, newMap)
+	response.OkWithData(newMap, c)
 
 }
 
@@ -182,7 +177,6 @@ func (e *OrderController) Pay(c *gin.Context) {
 // @router /api/v1/order/notify [get]
 // @Tags Front API
 func (e *OrderController) NotifyPay(c *gin.Context) {
-
 	notifyReq, err := wechat.ParseNotifyToBodyMap(c.Request)
 	//支付成功后处理
 	if err != nil {
@@ -199,10 +193,6 @@ func (e *OrderController) NotifyPay(c *gin.Context) {
 // @router /api/v1/order/detail/:key [get]
 // @Tags Front API
 func (e *OrderController) OrderDetail(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
-
 	uid, _ := jwt.GetAppUserId(c)
 	//user,_:= jwt.GetAppDetailUser(c)
 	key := c.Param("key")
@@ -215,7 +205,7 @@ func (e *OrderController) OrderDetail(c *gin.Context) {
 
 	newOrder := order_service.HandleOrder(order)
 
-	appG.Response(http.StatusOK, constant.SUCCESS, newOrder)
+	response.OkWithData(newOrder, c)
 
 }
 
@@ -225,9 +215,6 @@ func (e *OrderController) OrderDetail(c *gin.Context) {
 // @router /api/v1/order [get]
 // @Tags Front API
 func (e *OrderController) GetList(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	uid, _ := jwt.GetAppUserId(c)
 	orderService := order_service.Order{
 		IntType:  com.StrTo(c.Query("type")).MustInt(),
@@ -237,7 +224,7 @@ func (e *OrderController) GetList(c *gin.Context) {
 	}
 
 	vo, total, page := orderService.GetList()
-	appG.ResponsePage(http.StatusOK, constant.SUCCESS, vo, total, page)
+	response.PageResult(0, vo, "ok", total, page, c)
 }
 
 // @Title 订单收货
@@ -248,11 +235,10 @@ func (e *OrderController) GetList(c *gin.Context) {
 func (e *OrderController) TakeOrder(c *gin.Context) {
 	var (
 		param params.DoOrderParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 
@@ -263,10 +249,10 @@ func (e *OrderController) TakeOrder(c *gin.Context) {
 	}
 
 	if err := orderService.TakeOrder(); err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, "success")
+	response.OkWithData("success", c)
 
 }
 
@@ -278,7 +264,6 @@ func (e *OrderController) TakeOrder(c *gin.Context) {
 func (e *OrderController) OrderComment(c *gin.Context) {
 	var (
 		param []params.ProductReplyParam
-		appG  = app.Gin{C: c}
 	)
 	c.ShouldBindJSON(&param)
 
@@ -290,10 +275,10 @@ func (e *OrderController) OrderComment(c *gin.Context) {
 	}
 
 	if err := orderService.OrderComment(); err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, "ok")
+	response.OkWithData("ok", c)
 
 }
 
@@ -305,11 +290,10 @@ func (e *OrderController) OrderComment(c *gin.Context) {
 func (e *OrderController) CancelOrder(c *gin.Context) {
 	var (
 		param params.HandleOrderParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 
@@ -320,9 +304,9 @@ func (e *OrderController) CancelOrder(c *gin.Context) {
 	}
 
 	if err := orderService.CancelOrder(); err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, "success")
+	response.OkWithData("success", c)
 
 }

@@ -7,6 +7,7 @@ import (
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	"go-mall/pkg/global"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/jwt"
 	"net/http"
 )
@@ -21,15 +22,12 @@ type CartController struct {
 // @router /api/v1/carts [get]
 // @Tags Front API
 func (e *CartController) CartList(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	uid, _ := jwt.GetAppUserId(c)
 	cartService := cart_service.Cart{
 		Uid: uid,
 	}
 	vo := cartService.GetCartList()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 
 }
 
@@ -39,16 +37,13 @@ func (e *CartController) CartList(c *gin.Context) {
 // @router /api/v1/cart/count [get]
 // @Tags Front API
 func (e *CartController) Count(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	uid, _ := jwt.GetAppUserId(c)
 	cartService := cart_service.Cart{
 		Uid: uid,
 	}
 	count := cartService.GetUserCartNum()
 
-	appG.Response(http.StatusOK, constant.SUCCESS, gin.H{"count": count})
+	response.OkWithData(gin.H{"count": count}, c)
 
 }
 
@@ -60,11 +55,10 @@ func (e *CartController) Count(c *gin.Context) {
 func (e *CartController) AddCart(c *gin.Context) {
 	var (
 		param params.CartParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 	global.LOG.Info(param)
@@ -75,10 +69,10 @@ func (e *CartController) AddCart(c *gin.Context) {
 	}
 	id, err := cartService.AddCart()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, gin.H{"cartId": id})
+	response.OkWithData(gin.H{"cartId": id}, c)
 
 }
 
@@ -90,11 +84,10 @@ func (e *CartController) AddCart(c *gin.Context) {
 func (e *CartController) CartNum(c *gin.Context) {
 	var (
 		param params.CartNumParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 	uid, _ := jwt.GetAppUserId(c)
@@ -103,10 +96,10 @@ func (e *CartController) CartNum(c *gin.Context) {
 		NumParam: &param,
 	}
 	if err := cartService.ChangeCartNum(); err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, "success")
+	response.OkWithData("success", c)
 
 }
 
@@ -118,11 +111,10 @@ func (e *CartController) CartNum(c *gin.Context) {
 func (e *CartController) DelCart(c *gin.Context) {
 	var (
 		param params.CartIdsParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 
@@ -132,9 +124,9 @@ func (e *CartController) DelCart(c *gin.Context) {
 		IdsParam: &param,
 	}
 	if err := cartService.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, "success")
+	response.OkWithData("success", c)
 
 }

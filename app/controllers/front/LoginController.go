@@ -6,7 +6,9 @@ import (
 	"go-mall/app/services/wechat_user_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/jwt"
+	"go-mall/pkg/util"
 	"net/http"
 	"time"
 )
@@ -24,27 +26,56 @@ type LoginController struct {
 func (e *LoginController) Login(c *gin.Context) {
 	var (
 		param params.HLoginParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 	userService := wechat_user_service.User{HLoginParam: &param}
 	user, err := userService.HLogin()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
 
 	d := time.Now().Add(time.Hour * 24 * 100)
 	token, _ := jwt.GenerateAppToken(user, d)
-	appG.Response(http.StatusOK, constant.SUCCESS, gin.H{
-		"token":        token,
-		"expires_time": d.Unix(),
-	})
+	response.OkWithData(
+		gin.H{
+			"token":        token,
+			"expires_time": d.Unix(),
+		}, c)
+}
 
+func (e *LoginController) AutoRegisterAndLogin(c *gin.Context) {
+	var (
+		param  params.RegParam
+		hparam params.HLoginParam
+	)
+
+	param.Account, param.Password = util.RandomString(10), util.RandomString(32)
+	hparam.Username, hparam.Password = param.Account, param.Password
+	userService := wechat_user_service.User{RegParam: &param, HLoginParam: &hparam, Ip: c.ClientIP()}
+
+	if err := userService.Reg(); err != nil {
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
+		return
+	}
+
+	user, err := userService.HLogin()
+	if err != nil {
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
+		return
+	}
+
+	d := time.Now().Add(time.Hour * 24 * 100)
+	token, _ := jwt.GenerateAppToken(user, d)
+	response.OkWithData(
+		gin.H{
+			"token":        token,
+			"expires_time": d.Unix(),
+		}, c)
 }
 
 // @Title 短信验证码
@@ -55,21 +86,20 @@ func (e *LoginController) Login(c *gin.Context) {
 func (e *LoginController) Verify(c *gin.Context) {
 	var (
 		param params.VerityParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 	userService := wechat_user_service.User{VerityParam: &param}
 	str, err := userService.Verify()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, str)
+	response.OkWithData(str, c)
 
 }
 
@@ -81,20 +111,19 @@ func (e *LoginController) Verify(c *gin.Context) {
 func (e *LoginController) Reg(c *gin.Context) {
 	var (
 		param params.RegParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 	userService := wechat_user_service.User{RegParam: &param, Ip: c.ClientIP()}
 	if err := userService.Reg(); err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, "success")
+	response.OkWithData("success", c)
 
 }
 
@@ -104,10 +133,7 @@ func (e *LoginController) Reg(c *gin.Context) {
 // @router /api/v1/info [get]
 // @Tags Front API
 func (e *LoginController) Info(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
-	appG.Response(http.StatusOK, constant.SUCCESS, jwt.GetAdminDetailUser(c))
+	response.OkWithData(jwt.GetAdminDetailUser(c), c)
 }
 
 // @Title 退出登录
@@ -116,14 +142,11 @@ func (e *LoginController) Info(c *gin.Context) {
 // @router /api/v1/logout [delete]
 // @Tags Front API
 func (e *LoginController) Logout(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	err := jwt.RemoveUser(c)
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_LOGOUT_USER, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_LOGOUT_USER, constant.GetMsg(constant.FAIL_LOGOUT_USER), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }

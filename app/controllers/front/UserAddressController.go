@@ -5,7 +5,7 @@ import (
 	"go-mall/app/params"
 	"go-mall/app/services/address_service"
 	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/jwt"
 	"go-mall/pkg/util"
 	"net/http"
@@ -23,11 +23,10 @@ type UserAddressController struct {
 func (e *UserAddressController) Del(c *gin.Context) {
 	var (
 		param params.IdParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 
@@ -38,10 +37,10 @@ func (e *UserAddressController) Del(c *gin.Context) {
 	}
 	err := addressService.DelAddress()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, "ok")
+	response.OkWithData("ok", c)
 
 }
 
@@ -53,11 +52,10 @@ func (e *UserAddressController) Del(c *gin.Context) {
 func (e *UserAddressController) SetDefault(c *gin.Context) {
 	var (
 		param params.IdParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 
@@ -68,10 +66,10 @@ func (e *UserAddressController) SetDefault(c *gin.Context) {
 	}
 	err := addressService.SetDefault()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, "ok")
+	response.OkWithData("ok", c)
 
 }
 
@@ -81,9 +79,6 @@ func (e *UserAddressController) SetDefault(c *gin.Context) {
 // @router /api/v1/address [get]
 // @Tags Front API
 func (e *UserAddressController) GetList(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	uid, _ := jwt.GetAppUserId(c)
 	addressService := address_service.Address{
 		Enabled:  1,
@@ -94,8 +89,7 @@ func (e *UserAddressController) GetList(c *gin.Context) {
 
 	vo, total, page := addressService.GetList()
 
-	appG.ResponsePage(http.StatusOK, constant.SUCCESS, vo, total, page)
-
+	response.PageResult(0, vo, "ok", total, page, c)
 }
 
 // @Title 添加or更新地址
@@ -106,11 +100,10 @@ func (e *UserAddressController) GetList(c *gin.Context) {
 func (e *UserAddressController) SaveAddress(c *gin.Context) {
 	var (
 		param params.AddressParan
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 
@@ -121,10 +114,10 @@ func (e *UserAddressController) SaveAddress(c *gin.Context) {
 	}
 	id, err := addressService.AddOrUpdate()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, gin.H{"id": id})
+	response.OkWithData(gin.H{"id": id}, c)
 
 }
 
@@ -134,11 +127,8 @@ func (e *UserAddressController) SaveAddress(c *gin.Context) {
 // @router /api/v1/city_list [get]
 // @Tags Front API
 func (e *UserAddressController) GetCityList(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
 	addressService := address_service.Address{Enabled: 1}
 	vo := addressService.GetCitys()
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 
 }

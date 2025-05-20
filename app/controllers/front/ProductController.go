@@ -8,8 +8,8 @@ import (
 	"go-mall/app/services/product_reply_service"
 	"go-mall/app/services/product_service"
 	"go-mall/pkg/app"
-	"go-mall/pkg/constant"
 	productEnum "go-mall/pkg/enums/product"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/jwt"
 	"go-mall/pkg/util"
 	"net/http"
@@ -25,10 +25,6 @@ type ProductController struct {
 // @router /api/v1/products [get]
 // @Tags Front API
 func (e *ProductController) GoodsList(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
-
 	productService := product_service.Product{
 		Name:       c.Query("keyword"),
 		Enabled:    1,
@@ -42,8 +38,7 @@ func (e *ProductController) GoodsList(c *gin.Context) {
 
 	vo, total, page := productService.GetList()
 
-	appG.ResponsePage(http.StatusOK, constant.SUCCESS, vo, total, page)
-
+	response.PageResult(0, vo, "ok", total, page, c)
 }
 
 // @Title 获取推荐商品
@@ -52,10 +47,6 @@ func (e *ProductController) GoodsList(c *gin.Context) {
 // @router /api/v1/product/hot [get]
 // @Tags Front API
 func (e *ProductController) GoodsRecommendList(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
-
 	productService := product_service.Product{
 		Enabled:  1,
 		PageNum:  0,
@@ -65,7 +56,7 @@ func (e *ProductController) GoodsRecommendList(c *gin.Context) {
 
 	vo, _, _ := productService.GetList()
 
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 
 }
 
@@ -76,8 +67,7 @@ func (e *ProductController) GoodsRecommendList(c *gin.Context) {
 // @Tags Front API
 func (e *ProductController) GoodDetail(c *gin.Context) {
 	var (
-		appG = app.Gin{C: c}
-		uid  int64
+		uid int64
 	)
 	id := com.StrTo(c.Param("id")).MustInt64()
 	user, err := jwt.GetAppDetailUser(c)
@@ -94,11 +84,11 @@ func (e *ProductController) GoodDetail(c *gin.Context) {
 
 	vo, err := productService.GetDetail()
 	if err != nil {
-		appG.Response(http.StatusBadRequest, err.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, err.Error(), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, vo)
+	response.OkWithData(vo, c)
 }
 
 // @Title 添加收藏
@@ -109,11 +99,10 @@ func (e *ProductController) GoodDetail(c *gin.Context) {
 func (e *ProductController) AddCollect(c *gin.Context) {
 	var (
 		param params.RelationParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 	uid, _ := jwt.GetAppUserId(c)
@@ -122,10 +111,10 @@ func (e *ProductController) AddCollect(c *gin.Context) {
 		Uid:   uid,
 	}
 	if err := relationService.AddRelation(); err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, "success")
+	response.OkWithData("success", c)
 
 }
 
@@ -137,11 +126,10 @@ func (e *ProductController) AddCollect(c *gin.Context) {
 func (e *ProductController) DelCollect(c *gin.Context) {
 	var (
 		param params.RelationParam
-		appG  = app.Gin{C: c}
 	)
 	paramErr := app.BindAndValidate(c, &param)
 	if paramErr != nil {
-		appG.Response(http.StatusBadRequest, paramErr.Error(), nil)
+		response.Error(http.StatusBadRequest, 9999, paramErr.Error(), nil, c)
 		return
 	}
 	uid, _ := jwt.GetAppUserId(c)
@@ -150,10 +138,10 @@ func (e *ProductController) DelCollect(c *gin.Context) {
 		Uid:   uid,
 	}
 	if err := relationService.DelRelation(); err != nil {
-		appG.Response(http.StatusInternalServerError, err.Error(), nil)
+		response.Error(http.StatusInternalServerError, 9999, err.Error(), nil, c)
 		return
 	}
-	appG.Response(http.StatusOK, constant.SUCCESS, "success")
+	response.OkWithData("success", c)
 
 }
 
@@ -163,10 +151,6 @@ func (e *ProductController) DelCollect(c *gin.Context) {
 // @router /api/v1/reply/list/:id [get]
 // @Tags Front API
 func (e *ProductController) ReplyList(c *gin.Context) {
-	var (
-		appG = app.Gin{C: c}
-	)
-
 	replyService := product_reply_service.Reply{
 		ProductId: com.StrTo(c.Param("id")).MustInt64(),
 		PageNum:   util.GetFrontPage(c),
@@ -176,5 +160,5 @@ func (e *ProductController) ReplyList(c *gin.Context) {
 
 	vo, total, page := replyService.GetList()
 
-	appG.ResponsePage(http.StatusOK, constant.SUCCESS, vo, total, page)
+	response.PageResult(0, vo, "ok", total, page, c)
 }
