@@ -2,8 +2,8 @@ package middlewares
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
+	"go-mall/pkg/http/response"
 	"go-mall/pkg/jwt"
 	"go-mall/pkg/logging"
 	"go-mall/pkg/runtime"
@@ -17,11 +17,9 @@ const bearerLength = len("Bearer ")
 func AppJwt() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var data interface{}
-		var appG = app.Gin{C: c}
-
 		mytoken := c.Request.Header.Get("Authorization")
 		if len(mytoken) < bearerLength {
-			appG.Response(http.StatusUnauthorized, constant.ERROR_AUTH, data)
+			response.Error(http.StatusUnauthorized, constant.ERROR_AUTH, constant.GetMsg(constant.ERROR_AUTH), data, c)
 			c.Abort()
 			return
 		}
@@ -29,7 +27,7 @@ func AppJwt() gin.HandlerFunc {
 		usr, err := jwt.ValidateToken(token)
 		if err != nil {
 			logging.Info(err)
-			appG.Response(http.StatusUnauthorized, constant.ERROR_AUTH_CHECK_TOKEN_FAIL, data)
+			response.Error(http.StatusUnauthorized, constant.ERROR_AUTH_CHECK_TOKEN_FAIL, constant.GetMsg(constant.ERROR_AUTH_CHECK_TOKEN_FAIL), data, c)
 			c.Abort()
 			return
 		}
@@ -44,8 +42,6 @@ func AppJwt() gin.HandlerFunc {
 func Jwt() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var data interface{}
-		var appG = app.Gin{C: c}
-
 		url := c.Request.URL.Path
 
 		method := strings.ToLower(c.Request.Method)
@@ -59,7 +55,7 @@ func Jwt() gin.HandlerFunc {
 
 		mytoken := c.Request.Header.Get("Authorization")
 		if len(mytoken) < bearerLength {
-			appG.Response(http.StatusUnauthorized, constant.ERROR_AUTH, data)
+			response.Error(http.StatusUnauthorized, constant.ERROR_AUTH, constant.GetMsg(constant.ERROR_AUTH), data, c)
 			c.Abort()
 			return
 		}
@@ -67,7 +63,7 @@ func Jwt() gin.HandlerFunc {
 		usr, err := jwt.ValidateToken(token)
 		if err != nil {
 			logging.Info(err)
-			appG.Response(http.StatusUnauthorized, constant.ERROR_AUTH_CHECK_TOKEN_FAIL, data)
+			response.Error(http.StatusUnauthorized, constant.ERROR_AUTH_CHECK_TOKEN_FAIL, constant.GetMsg(constant.ERROR_AUTH_CHECK_TOKEN_FAIL), data, c)
 			c.Abort()
 			return
 		}
@@ -95,7 +91,7 @@ func Jwt() gin.HandlerFunc {
 			//logging.Info(res)
 
 			if !res {
-				appG.Response(http.StatusForbidden, constant.ERROR_AUTH_CHECK_FAIL, data)
+				response.Error(http.StatusForbidden, constant.ERROR_AUTH_CHECK_FAIL, constant.GetMsg(constant.ERROR_AUTH_CHECK_FAIL), data, c)
 				c.Abort()
 				return
 			}

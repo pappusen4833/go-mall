@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"io"
+	"os"
 	"time"
 )
 
@@ -47,10 +48,15 @@ func getInitLogger(filepath, infofilename, warnfilename, fileext string) (*zap.S
 		return nil, err2
 	}
 
+	pe := zap.NewProductionEncoderConfig()
+	pe.EncodeTime = zapcore.ISO8601TimeEncoder
+	consoleEncoder := zapcore.NewConsoleEncoder(pe)
+
 	//创建具体的Logger
 	core := zapcore.NewTee(
 		zapcore.NewCore(encoder, infoWriter, infoLevel),
 		zapcore.NewCore(encoder, warnWriter, warnLevel),
+		zapcore.NewCore(consoleEncoder, zapcore.AddSync(os.Stdout), zap.DebugLevel),
 	)
 	loggerres := zap.New(core, zap.AddCaller())
 

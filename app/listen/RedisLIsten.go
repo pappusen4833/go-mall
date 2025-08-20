@@ -6,10 +6,9 @@ import (
 	"unsafe"
 )
 
-type PSubscribeCallback func (pattern, channel, message string)
+type PSubscribeCallback func(pattern, channel, message string)
 
 type PSubscriber struct {
-
 	client redis.PubSubConn
 
 	cbMap map[string]PSubscribeCallback
@@ -21,7 +20,7 @@ func PConnect(ip, password string) redis.Conn {
 		print("redis dial failed.")
 	}
 	if password != "" {
-		conn.Do("AUTH",password)
+		conn.Do("AUTH", password)
 	}
 
 	return conn
@@ -50,18 +49,15 @@ func (c *PSubscriber) ReceiveKeySpace(conn redis.Conn) {
 
 const expired = "__keyevent@0__:expired"
 
-func (c *PSubscriber)Psubscribe() {
+func (c *PSubscriber) Psubscribe() {
 	err := c.client.PSubscribe(expired)
-	if err != nil{
+	if err != nil {
 		print("redis Subscribe error.")
 	}
 	c.cbMap[expired] = PubCallback
 }
 
-func PubCallback(patter , channel, msg string){
-	print( "PubCallback patter : " + patter + " channel : ", channel, " message : ", msg)
+func PubCallback(patter, channel, msg string) {
+	print("PubCallback patter : "+patter+" channel : ", channel, " message : ", msg)
 	// TODO:拿到msg后进行后续的业务代码
 }
-
-
-

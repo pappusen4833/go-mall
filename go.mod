@@ -3,14 +3,20 @@ module go-mall
 go 1.15
 
 require (
-	github.com/PuerkitoBio/purell v1.2.0 // indirect
+	github.com/Andrew-M-C/go.jsonvalue v1.3.6
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
+	github.com/alibabacloud-go/darabonba-openapi/v2 v2.0.5
+	github.com/alibabacloud-go/green-20220302 v1.2.0
+	github.com/alibabacloud-go/tea v1.2.1
+	github.com/alibabacloud-go/tea-utils/v2 v2.0.4
+	github.com/aliyun/alibaba-cloud-sdk-go v1.62.643
+	github.com/anhao/go-ernie v1.0.8
+	github.com/asaskevich/EventBus v0.0.0-20200907212545-49d423059eef
 	github.com/astaxie/beego v1.12.3
 	github.com/boombuler/barcode v1.0.1
 	github.com/bytedance/sonic v1.10.2 // indirect
 	github.com/casbin/casbin/v2 v2.37.4
 	github.com/casbin/gorm-adapter/v3 v3.4.5
-	github.com/cpuguy83/go-md2man/v2 v2.0.3 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
 	github.com/fsnotify/fsnotify v1.5.1
@@ -23,24 +29,23 @@ require (
 	github.com/go-pay/gopay v1.5.77
 	github.com/go-playground/validator/v10 v10.15.5 // indirect
 	github.com/golang/mock v1.6.0 // indirect
-	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
 	github.com/jinzhu/copier v0.3.2
-	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
 	github.com/lestrrat/go-envload v0.0.0-20180220120943-6ed08b54a570 // indirect
 	github.com/lestrrat/go-file-rotatelogs v0.0.0-20180223000712-d3151e2a480f
 	github.com/lestrrat/go-strftime v0.0.0-20180220042222-ba3bf9c1d042 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
-	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/mapstructure v1.4.2 // indirect
 	github.com/mojocn/base64Captcha v1.3.1
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1
+	github.com/sashabaranov/go-openai v1.17.9
 	github.com/segmentio/ksuid v1.0.4
 	github.com/shiena/ansicolor v0.0.0-20200904210342-c7312218db18 // indirect
 	github.com/shopspring/decimal v1.3.1
@@ -56,8 +61,7 @@ require (
 	github.com/tebeka/strftime v0.1.5 // indirect
 	github.com/ttlv/kdniao v0.0.0-20220119131043-fcaba08b1873
 	github.com/unknwon/com v1.0.1
-	github.com/urfave/cli v1.20.0 // indirect
-	github.com/urfave/cli/v2 v2.25.7 // indirect
+	github.com/wleven/wxpay v1.3.2
 	go.uber.org/zap v1.19.1
 	golang.org/x/arch v0.5.0 // indirect
 	golang.org/x/crypto v0.14.0
@@ -65,10 +69,7 @@ require (
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/tools v0.14.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
-	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
-	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
-	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
-	gopkg.in/ini.v1 v1.63.2 // indirect
+	gopkg.in/ini.v1 v1.67.0 // indirect
 	gorm.io/datatypes v1.0.4
 	gorm.io/driver/mysql v1.2.1
 	gorm.io/gorm v1.22.4

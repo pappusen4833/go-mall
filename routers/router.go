@@ -35,6 +35,8 @@ func InitRouter() *gin.Engine {
 	materialController := admin.MaterialController{}
 	materialGroupController := admin.MaterialGroupController{}
 	canvasController := admin.CanvasController{}
+	vipRecordController := admin.VipRecordController{}
+	vipProductController := admin.VipProductController{}
 	adminRouter := r.Group("/admin")
 	adminRouter.Use(middlewares.Jwt()).Use(middlewares.Log())
 
@@ -100,6 +102,16 @@ func InitRouter() *gin.Engine {
 
 		adminRouter.GET("/canvas/getCanvas", canvasController.Get)
 		adminRouter.POST("/canvas/saveCanvas", canvasController.Post)
+
+		adminRouter.GET("/vipProduct", vipProductController.GetAll)
+		adminRouter.PUT("/vipProduct", vipRecordController.Put)
+		adminRouter.POST("/vipProduct", vipRecordController.Post)
+		adminRouter.DELETE("/vipProduct", vipRecordController.Delete)
+
+		adminRouter.GET("/vipRecord", vipRecordController.GetAll)
+		adminRouter.PUT("/vipRecord", vipRecordController.Put)
+		adminRouter.POST("/vipRecord", vipRecordController.Post)
+		adminRouter.DELETE("/vipRecord", vipRecordController.Delete)
 	}
 
 	cateController := admin.StoreCategoryController{}
@@ -190,11 +202,13 @@ func InitRouter() *gin.Engine {
 	ApiProductControler := new(front.ProductController)
 	ApiAddressController := new(front.UserAddressController)
 	ApiOrderController := new(front.OrderController)
+	ApiWxPayController := new(front.WxPayController)
 	apiv1 := r.Group("/api/v1")
 	{
 		apiv1.Any("/serve", ApiWechatController.GetAll)
 		apiv1.POST("/login", ApiLoginController.Login)
 		apiv1.POST("/register", ApiLoginController.Reg)
+		apiv1.GET("/autoLogin", ApiLoginController.AutoRegisterAndLogin)
 		apiv1.POST("/register/verify", ApiLoginController.Verify)
 		apiv1.GET("/getCanvas", ApiIndexController.GetCanvas)
 		apiv1.GET("/category", ApiCategoryControler.GetCateList)
@@ -206,7 +220,17 @@ func InitRouter() *gin.Engine {
 		apiv1.GET("/city_list", ApiAddressController.GetCityList)
 		apiv1.POST("/upload", ApiIndexController.Upload)
 		apiv1.Any("/order/notify", ApiOrderController.NotifyPay)
+		apiv1.GET("/weixin/loginUrl", ApiWechatController.LoginUrl)
+		apiv1.GET("/weixin/verify", ApiWechatController.Verify)
+		apiv1.GET("/weixin/login/result", ApiWechatController.LoginResult)
 	}
+
+	r.GET("/weixin/loginUrl", ApiWechatController.LoginUrl)
+	r.GET("/weixin/verify", ApiWechatController.Verify)
+	r.POST("/wxPay/notify", ApiWxPayController.Notify)
+	r.GET("/weixin/login/result", ApiWechatController.LoginResult)
+	r.GET("/test")
+
 	//需要授权
 	ApiUserController := new(front.UserController)
 	ApiCartController := new(front.CartController)
@@ -235,7 +259,11 @@ func InitRouter() *gin.Engine {
 		authApiv1.POST("/order/comments/:key", ApiOrderController.OrderComment)
 		authApiv1.POST("/order/cancel", ApiOrderController.CancelOrder)
 		authApiv1.GET("/collect/user", ApiUserController.CollectUser)
+		authApiv1.GET("/user/info", ApiUserController.Info)
 	}
+	r.GET("/wxPay/pay", ApiWxPayController.Pay)
+	r.GET("/wxpay/pay", ApiWxPayController.Pay)
+	r.GET("/wxPay/queryOrder", ApiWxPayController.Query)
 
 	return r
 }

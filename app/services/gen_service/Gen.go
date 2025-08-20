@@ -229,7 +229,7 @@ func (d *Gen) Preview() map[string]interface{} {
 		global.LOG.Error(err, modeleTemp)
 	}
 
-	serviceTemp, err := template.ParseFiles("templates/services.go.template")
+	serviceTemp, err := template.ParseFiles("templates/service.go.template")
 	if err != nil {
 		global.LOG.Error(err, serviceTemp)
 	}
@@ -289,7 +289,7 @@ func (d *Gen) GenCode() {
 		global.LOG.Error(err, modeleTemp)
 	}
 
-	serviceTemp, err := template.ParseFiles("templates/services.go.template")
+	serviceTemp, err := template.ParseFiles("templates/service.go.template")
 	if err != nil {
 		global.LOG.Error(err, serviceTemp)
 	}

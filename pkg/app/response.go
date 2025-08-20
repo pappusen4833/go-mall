@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/gin-gonic/gin"
 	"go-mall/pkg/constant"
+	"net/http"
 )
 
 type Gin struct {
@@ -10,9 +11,11 @@ type Gin struct {
 }
 
 type Response struct {
-	Code int         `json:"status"`
-	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
+	ErrCode int         `json:"code"`
+	Code    int         `json:"status"`
+	Msg     string      `json:"msg"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
 }
 
 type ResponsePage struct {
@@ -28,10 +31,15 @@ func (g *Gin) Response(httpCode int, errCode interface{}, data interface{}) {
 	switch errCode.(type) {
 	case int:
 		intCode := errCode.(int)
+		theErrCode := intCode
+		if intCode == 200 {
+			theErrCode = 0
+		}
 		g.C.JSON(httpCode, Response{
-			Code: intCode,
-			Msg:  constant.GetMsg(intCode),
-			Data: data,
+			Code:    intCode,
+			Msg:     constant.GetMsg(intCode),
+			Data:    data,
+			ErrCode: theErrCode,
 		})
 	case string:
 		strCode := errCode.(string)
@@ -42,6 +50,24 @@ func (g *Gin) Response(httpCode int, errCode interface{}, data interface{}) {
 		})
 	}
 
+	return
+}
+
+func (g *Gin) Success(data interface{}) {
+	g.C.JSON(http.StatusOK, map[string]interface{}{
+		"code":    0,
+		"message": "success",
+		"data":    data,
+	})
+	return
+}
+
+func (g *Gin) Error(errCode int, message string) {
+	g.C.JSON(http.StatusOK, map[string]interface{}{
+		"code":    errCode,
+		"message": message,
+		"data":    nil,
+	})
 	return
 }
 

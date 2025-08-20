@@ -124,15 +124,16 @@
 </template>
 
 <script>
-import crudDept from '@/api/system/{.BusinessName}}'
+import crud{{.ClassName}} from '@/api/system/{{.ModuleName}}'
+import Treeselect from '@riophae/vue-treeselect'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '{{.TableComment}}', url: 'admin/{{.BusinessName}}', crudMethod: { ...crudDept }})
-const defaultForm = { {{ range .Columns }} {{.JsonField}}:"" {{ end }}   }
+const defaultCrud = CRUD({ title: '{{.TableComment}}', url: 'admin/{{.BusinessName}}', crudMethod: { ...crud{{.ClassName}} }})
+const defaultForm = { {{ range .Columns }} {{.JsonField}}:"", {{ end }}   }
 export default {
   name: '{{.ClassName}}',
   components: { Treeselect, crudOperation, rrOperation, udOperation },
@@ -147,16 +148,16 @@ export default {
 	          delete node.children;
 	        }
       },
-      depts: [],
+      records: [],
       rules: {
         name: [
           { required: true, message: '请输入名称', trigger: 'blur' }
         ]
       },
       permission: {
-        add: ['admin', '{.BusinessName}}:add'],
-        edit: ['admin', '{.BusinessName}}:edit'],
-        del: ['admin', '{.BusinessName}}:del']
+        add: ['admin', '{{.BusinessName}}:add'],
+        edit: ['admin', '{{.BusinessName}}:edit'],
+        del: ['admin', '{{.BusinessName}}:del']
       },
       enabledTypeOptions: [
         { key: 1, display_name: '正常' },
@@ -165,10 +166,10 @@ export default {
     }
   },
   methods: {
-    getDeptDatas(tree, treeNode, resolve) {
+    get{{.ClassName}}Datas(tree, treeNode, resolve) {
       const params = { pid: tree.id }
       setTimeout(() => {
-        crudDept.getDepts(params).then(res => {
+        crud{{.ClassName}}.get{{.ClassName}}(params).then(res => {
           resolve(res.content)
         })
       }, 100)
@@ -182,32 +183,32 @@ export default {
       }
      // form.enabled = `${form.enabled}`
       if (form.id != null) {
-        this.getSupDepts(form.id)
+        this.getSup{{.ClassName}}(form.id)
       } else {
-        this.getDepts()
+        this.get{{.ClassName}}()
       }
     },
-    getSupDepts(id) {
+    getSup{{.ClassName}}(id) {
       var data={"pid":id};
-      crudDept.getDeptSuperior(data).then(res => {
+      crud{{.ClassName}}.get{{.ClassName}}Superior(data).then(res => {
         const date = res.data.content
-        this.buildDepts(date)
-        this.depts = date
+        this.build{{.ClassName}}(date)
+        this.records = date
       })
     },
-    buildDepts(depts) {
-      (depts || []).forEach(data => {
+    build{{.ClassName}}(records) {
+      (records || []).forEach(data => {
         if (data.children) {
-          this.buildDepts(data.children)
+          this.build{{.ClassName}}(data.children)
         }
         if (data.hasChildren && !data.children) {
           data.children = null
         }
       })
     },
-    getDepts() {
-      crudDept.getDepts({ enabled: 1 }).then(res => {
-        this.depts = res.data.content.map(function(obj) {
+    get{{.ClassName}}() {
+      crud{{.ClassName}}.get{{.ClassName}}({ enabled: 1 }).then(res => {
+        this.records = res.data.content.map(function(obj) {
           if (obj.hasChildren) {
             obj.children = null
           }
@@ -216,9 +217,9 @@ export default {
       })
     },
     // 获取弹窗内部门数据
-    loadDepts({ action, parentNode, callback }) {
+    load{{.ClassName}}({ action, parentNode, callback }) {
       if (action === LOAD_CHILDREN_OPTIONS) {
-        crudDept.getDepts({ enabled: true, pid: parentNode.id }).then(res => {
+        crud{{.ClassName}}.get{{.ClassName}}({ enabled: true, pid: parentNode.id }).then(res => {
           parentNode.children = res.content.map(function(obj) {
             if (obj.hasChildren) {
               obj.children = null
@@ -254,7 +255,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        crudDept.edit(data).then(res => {
+        crud{{.ClassName}}.edit(data).then(res => {
           this.crud.notify(this.dict.label.dept_status[val] + '成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
         }).catch(err => {
           data.enabled = !data.enabled

@@ -1,5 +1,5 @@
 
-package {{.BusinessName}}_service
+package {{.TBName}}_service
 
 import (
 	"go-mall/app/models"

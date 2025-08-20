@@ -8,7 +8,7 @@ import (
 	"github.com/unknwon/com"
 	"net/http"
 	"go-mall/app/models"
-	"go-mall/app/service/{{.BusinessName}}_service"
+	"go-mall/app/services/{{.TBName}}_service"
 	"go-mall/pkg/app"
 	"go-mall/pkg/constant"
 	"go-mall/pkg/util"
@@ -23,18 +23,18 @@ type {{.ClassName}}Controller struct {
 // @router / [get]
 func (e *{{.ClassName}}Controller) GetAll(c *gin.Context) {
 	var (
-		appG = app.Gin{C: c}
+
 	)
 	enabled := com.StrTo(c.DefaultQuery("enabled","-1")).MustInt()
 	name := c.DefaultQuery("blurry","")
-	service := {{.BusinessName}}_service.{{.ClassName}}{
+	service := {{.TBName}}_service.{{.ClassName}}{
 		Enabled: enabled,
 		Name: name,
 		PageSize: util.GetSize(c),
 		PageNum: util.GetPage(c),
 	}
 	vo := service.GetAll()
-	appG.Response(http.StatusOK,constant.SUCCESS,vo)
+	response.OkWithData(vo, c)
 }
 
 
@@ -45,23 +45,23 @@ func (e *{{.ClassName}}Controller) GetAll(c *gin.Context) {
 func (e *{{.ClassName}}Controller) Post(c *gin.Context) {
 	var (
 		model models.{{.ClassName}}
-		appG  = app.Gin{C: c}
+
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
-	service := {{.BusinessName}}_service.{{.ClassName}}{
+	service := {{.TBName}}_service.{{.ClassName}}{
 		M: &model,
 	}
 
 	if err := service.Insert(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 修改{{.TableComment}}
@@ -71,23 +71,23 @@ func (e *{{.ClassName}}Controller) Post(c *gin.Context) {
 func (e *{{.ClassName}}Controller) Put(c *gin.Context) {
 	var (
 		model models.{{.ClassName}}
-		appG  = app.Gin{C: c}
+
 	)
 	httpCode, errCode := app.BindAndValid(c, &model)
 	if errCode != constant.SUCCESS {
-		appG.Response(httpCode, errCode, nil)
+		response.Error(httpCode, errCode, constant.GetMsg(errCode), nil, c)
 		return
 	}
-	service := {{.BusinessName}}_service.{{.ClassName}}{
+	service := {{.TBName}}_service.{{.ClassName}}{
 		M: &model,
 	}
 
 	if err := service.Save(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 // @Title 删除{{.TableComment}}
@@ -97,7 +97,7 @@ func (e *{{.ClassName}}Controller) Put(c *gin.Context) {
 func (e *{{.ClassName}}Controller) Delete(c *gin.Context) {
 	var (
 		ids  []int64
-		appG = app.Gin{C: c}
+
 	)
 	if strId := c.Param("id") ; strId != "" {
         id := com.StrTo(strId).MustInt64()
@@ -106,13 +106,13 @@ func (e *{{.ClassName}}Controller) Delete(c *gin.Context) {
         c.BindJSON(&ids)
     }
 
-	service := {{.BusinessName}}_service.{{.ClassName}}{Ids: ids}
+	service := {{.TBName}}_service.{{.ClassName}}{Ids: ids}
 	if err := service.Del(); err != nil {
-		appG.Response(http.StatusInternalServerError, constant.FAIL_ADD_DATA, nil)
+		response.Error(http.StatusInternalServerError, constant.FAIL_ADD_DATA, constant.GetMsg(constant.FAIL_ADD_DATA), nil, c)
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, nil)
+	response.OkWithData(nil, c)
 }
 
 
