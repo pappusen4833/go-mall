@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"go-mall/app/events"
 	"go-mall/app/listen"
 	"go-mall/app/models"
 	"go-mall/pkg/base"
@@ -14,6 +15,7 @@ import (
 	"go-mall/routers"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -26,6 +28,7 @@ func init() {
 	jwt.Setup()
 	listen.Setup()
 	wechat.InitWechat()
+	events.Setup()
 }
 
 // @title GO-MALL API
@@ -52,14 +55,16 @@ func main() {
 
 	global.LOG.Info("[info] start http server listening %s", server.Addr)
 	log.Printf("[info] start http server listening %s", endPoint)
-	fmt.Println(`
- _____ _____     _____ _____ __    __    
-|   __|     |___|     |  _  |  |  |  |   
-|  |  |  |  |___| | | |     |  |__|  |__ 
-|_____|_____|   |_|_|_|__|__|_____|_____|
-`)
-	fmt.Printf(`
 
+	// Print banner from file
+	if banner, err := os.ReadFile("banner.txt"); err == nil {
+		fmt.Println(string(banner))
+	} else {
+		// Fallback banner if file not found
+		fmt.Println("GO-MALL")
+	}
+
+	fmt.Printf(`
 欢迎使用 go-mall
 默认自动化文档地址:http://127.0.0.1%s/swagger/index.html
 默认前端文件运行地址:http://127.0.0.1:8080
