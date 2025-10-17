@@ -24,9 +24,9 @@ id_rsa*
 *.crt
 *.der
 
-# Database files with sensitive data (optional - uncomment if needed)
-# sql/go-mall.sql
-# *.sql
+# Database files with sensitive data
+sql/go-mall.sql
+sql/*.sql
 
 # Runtime and logs
 runtime/
