@@ -235,6 +235,5 @@ go-mall/
 
 ## 📮 联系方式
 
-- 项目主页: https://github.com/yourusername/go-mall
-- 问题反馈: https://github.com/yourusername/go-mall/issues
-- 电子邮件: your.email@example.com
+- 项目主页: https://github.com/liiijz/go-mall
+- 问题反馈: https://github.com/liiijz/go-mall/issues
